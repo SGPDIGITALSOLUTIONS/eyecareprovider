@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: 'triage@icareservices.co.uk',
-        to: ['petru@icareservices.co.uk'], // Replace with Petru's actual email
+        to: ['petru@eyecareserviceprovider.co.uk', 'techadmin@eyecareserviceprovider.co.uk'],
         subject: `URGENT: Medical Triage - ${triageData.patientName}`,
         text: emailContent,
         html: emailContent.replace(/\n/g, '<br>')
