@@ -6,12 +6,6 @@
     <title>Contact Us - I Care Services Providers Ltd</title>
     <link rel="stylesheet" href="css/styles.css">
     <meta name="description" content="Contact I Care Services for professional eye care appointments, consultations, and inquiries. Book your home visit or clinic appointment today.">
-    <script>
-        // Check authentication on page load
-        if (sessionStorage.getItem('authenticated') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -828,8 +822,8 @@
             };
             
             try {
-                // Replace this webhook URL with Petru's actual webhook endpoint
-                const webhookUrl = 'https://hooks.zapier.com/hooks/catch/YOUR_WEBHOOK_ID/'; // Update this URL
+                // Vercel webhook endpoint for medical triage
+                const webhookUrl = '/api/triage-webhook';
                 
                 // If there's a photo, we need to handle file upload separately
                 if (formData.get('symptomPhoto') && formData.get('symptomPhoto').size > 0) {
