@@ -6,6 +6,12 @@
     <title>Hoya Lenses - I Care Services Providers Ltd</title>
     <link rel="stylesheet" href="css/styles.css">
     <meta name="description" content="Hoya premium lens technology including Hi-Vision Meiryo coatings, Sensity photochromic lenses, PNX impact-resistant lenses, and specialized occupational solutions.">
+    <script>
+        // Check authentication on page load
+        if (sessionStorage.getItem('authenticated') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
