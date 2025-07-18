@@ -833,26 +833,37 @@
                     triageData.photoType = formData.get('symptomPhoto').type;
                 }
                 
+                // Log what we're sending for debugging
+                console.log('Sending triage data to Zapier:', triageData);
+                console.log('Zapier webhook URL:', webhookUrl);
+                
+                // Convert data to FormData for Zapier compatibility
+                const zapierFormData = new FormData();
+                Object.keys(triageData).forEach(key => {
+                    if (triageData[key] !== null && triageData[key] !== undefined) {
+                        zapierFormData.append(key, triageData[key]);
+                    }
+                });
+                
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(triageData)
+                    body: zapierFormData // Send as FormData, not JSON
                 });
                 
                 if (response.ok) {
                     alert('Assessment submitted successfully! Petru will review your symptoms and contact you within 2 hours during business hours.');
                     closeTriageModal();
                 } else {
-                    throw new Error('Failed to submit assessment');
+                    console.error('Zapier response:', response.status, response.statusText);
+                    throw new Error(`Failed to submit assessment: ${response.status}`);
                 }
                 
             } catch (error) {
                 console.error('Error submitting triage form:', error);
+                console.error('Triage data that failed:', triageData);
                 
-                // Fallback: send via email (you can implement this with a different service)
-                alert('There was an issue submitting your assessment. Please call our emergency line at 07700 123456 for immediate assistance.');
+                // More detailed error message for debugging
+                alert(`There was an issue submitting your assessment. Error: ${error.message}. Please call our emergency line at 07700 123456 for immediate assistance.`);
             }
             
             // Reset button state
