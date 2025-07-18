@@ -630,9 +630,15 @@
                 // Zapier webhook URL for contact form
                 const contactWebhookUrl = 'https://hooks.zapier.com/hooks/catch/23742018/u2c7enk/';
                 
+                // Convert FormData to URL-encoded string for Zapier
+                const urlEncodedData = new URLSearchParams(formData).toString();
+                
                 const response = await fetch(contactWebhookUrl, {
                     method: 'POST',
-                    body: formData // Send as FormData, not JSON
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: urlEncodedData
                 });
                 
                 if (response.ok) {
@@ -877,9 +883,20 @@
                     }
                 });
                 
+                // Convert FormData to URL-encoded string for Zapier
+                const urlEncodedData = new URLSearchParams();
+                Object.keys(triageData).forEach(key => {
+                    if (triageData[key] !== null && triageData[key] !== undefined) {
+                        urlEncodedData.append(key, triageData[key]);
+                    }
+                });
+                
                 const response = await fetch(webhookUrl, {
                     method: 'POST',
-                    body: zapierFormData // Send as FormData, not JSON
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: urlEncodedData.toString()
                 });
                 
                 if (response.ok) {
