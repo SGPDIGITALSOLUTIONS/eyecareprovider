@@ -7,6 +7,16 @@ export default async function handler(req, res) {
   try {
     const triageData = req.body;
     
+    // Log the triage data for debugging
+    console.log('=== NEW MEDICAL TRIAGE SUBMISSION ===');
+    console.log('Patient:', triageData.patientName);
+    console.log('Phone:', triageData.patientPhone);
+    console.log('Email:', triageData.patientEmail);
+    console.log('Symptoms:', triageData.symptoms);
+    console.log('Pain Level:', triageData.painScale);
+    console.log('Timestamp:', triageData.timestamp);
+    console.log('========================================');
+    
     // Format the triage data for email
     const emailContent = `
     NEW MEDICAL TRIAGE SUBMISSION
@@ -38,24 +48,34 @@ export default async function handler(req, res) {
     Photo Attached: ${triageData.hasPhoto ? 'Yes' : 'No'}
     `;
 
-    // Send email using a service (Resend is popular with Vercel)
-    const emailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'triage@icareservices.co.uk',
-        to: ['petru@eyecareserviceprovider.co.uk', 'techadmin@eyecareserviceprovider.co.uk'],
-        subject: `URGENT: Medical Triage - ${triageData.patientName}`,
-        text: emailContent,
-        html: emailContent.replace(/\n/g, '<br>')
-      }),
-    });
+    // Try to send email only if API key is available
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'onboarding@resend.dev', // Use default Resend domain for testing
+            to: ['petru@eyecareserviceprovider.co.uk', 'techadmin@eyecareserviceprovider.co.uk'],
+            subject: `URGENT: Medical Triage - ${triageData.patientName}`,
+            text: emailContent,
+            html: emailContent.replace(/\n/g, '<br>')
+          }),
+        });
 
-    if (!emailResponse.ok) {
-      throw new Error('Failed to send email');
+        if (emailResponse.ok) {
+          console.log('Email sent successfully');
+        } else {
+          console.log('Email failed, but continuing...');
+        }
+      } catch (emailError) {
+        console.log('Email sending failed:', emailError.message);
+      }
+    } else {
+      console.log('No RESEND_API_KEY found, skipping email');
     }
 
     return res.status(200).json({ 
