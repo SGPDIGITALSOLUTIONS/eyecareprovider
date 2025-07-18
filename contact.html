@@ -614,6 +614,50 @@
             }
         });
         
+        // Add method to submit form data to Zapier
+        HTMLFormElement.prototype.submitToZapier = async function(submitBtn, btnText, btnLoading) {
+            try {
+                // Collect all form data
+                const formData = new FormData(this);
+                
+                // Add timestamp
+                formData.append('timestamp', new Date().toISOString());
+                formData.append('formType', 'contact');
+                
+                // Log what we're sending for debugging
+                console.log('Sending contact form data to Zapier...');
+                
+                // Zapier webhook URL for contact form
+                const contactWebhookUrl = 'https://hooks.zapier.com/hooks/catch/23742018/u2c7enk/';
+                
+                const response = await fetch(contactWebhookUrl, {
+                    method: 'POST',
+                    body: formData // Send as FormData, not JSON
+                });
+                
+                if (response.ok) {
+                    alert('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
+                    this.reset();
+                    
+                    // Clear all validation errors
+                    clearValidationError('email');
+                    clearValidationError('phone');
+                } else {
+                    console.error('Zapier response:', response.status, response.statusText);
+                    throw new Error(`Failed to submit inquiry: ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('Error submitting contact form:', error);
+                alert(`There was an issue submitting your inquiry. Error: ${error.message}. Please try again or call us directly at 01234 567 890.`);
+            }
+            
+            // Reset button state
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+            submitBtn.disabled = false;
+        };
+
         // Enhanced form handling with validation
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -655,20 +699,8 @@
             btnLoading.style.display = 'inline';
             submitBtn.disabled = true;
             
-            // Simulate form submission (replace with actual submission logic)
-            setTimeout(() => {
-                alert('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
-                this.reset();
-                
-                // Clear all validation errors
-                clearValidationError('email');
-                clearValidationError('phone');
-                
-                // Reset button state
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
-                submitBtn.disabled = false;
-            }, 2000);
+            // Send form data to Zapier webhook
+            this.submitToZapier(submitBtn, btnText, btnLoading);
         });
         
         // Format phone number as user types (optional enhancement)
