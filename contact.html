@@ -822,8 +822,8 @@
             };
             
             try {
-                // Vercel webhook endpoint for medical triage
-                const webhookUrl = '/api/triage-webhook';
+                // Zapier webhook endpoint for medical triage
+                const webhookUrl = 'https://hooks.zapier.com/hooks/catch/23742018/u3nujo8/';
                 
                 // If there's a photo, we need to handle file upload separately
                 if (formData.get('symptomPhoto') && formData.get('symptomPhoto').size > 0) {
