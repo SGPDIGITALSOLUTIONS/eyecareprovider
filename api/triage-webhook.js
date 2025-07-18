@@ -58,7 +58,7 @@ export default async function handler(req, res) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'onboarding@resend.dev', // Use default Resend domain for testing
+            from: 'triage@icareservices.co.uk', // Custom verified domain
             to: ['petru@eyecareserviceprovider.co.uk', 'techadmin@eyecareserviceprovider.co.uk'],
             subject: `URGENT: Medical Triage - ${triageData.patientName}`,
             text: emailContent,
