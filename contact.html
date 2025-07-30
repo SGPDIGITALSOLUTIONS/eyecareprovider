@@ -11,10 +11,7 @@
     <!-- Navigation -->
     <nav class="main-nav">
         <div class="nav-container">
-            <div class="logo">
-                <h2>I Care Services</h2>
-                <span>Providers Ltd</span>
-            </div>
+
             <button class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">
                 <span></span>
                 <span></span>
@@ -23,7 +20,7 @@
             <div class="nav-links">
                 <a href="index.html" class="nav-item">Home</a>
                 <a href="about.html" class="nav-item">About</a>
-                <a href="services.html" class="nav-item">Services</a>
+                <a href="services.html" class="nav-item">Eyecare</a>
                 <a href="advanced-eyecare-plan.html" class="nav-item">Advanced Plan</a>
                 <a href="products.html" class="nav-item">Products</a>
                 <a href="contact.html" class="nav-item active">Contact</a>
@@ -46,16 +43,16 @@
     <!-- Emergency Triage Section -->
     <section class="emergency-triage-section">
         <div class="container">
-            <div class="triage-alert">
-                <div class="triage-content">
-                    <div class="triage-icon">⚠️</div>
-                    <div class="triage-text">
-                        <h2>Worried About Your Eye Symptoms?</h2>
-                        <p>If you're experiencing concerning eye symptoms, our quick triage form can help determine the urgency of your situation and get you the right care quickly.</p>
-                        <button class="btn-primary triage-btn" onclick="openTriageModal()">
-                            Complete Symptom Assessment
-                        </button>
-                    </div>
+            <div class="triage-card">
+                <div class="triage-card-header">
+                    <div class="triage-icon-card">⚠️</div>
+                    <h3>Worried About Your Eye Symptoms?</h3>
+                </div>
+                <div class="triage-card-content">
+                    <p>If you're experiencing concerning eye symptoms, our quick triage form can help determine the urgency of your situation and get you the right care quickly.</p>
+                    <button class="btn-primary triage-btn" onclick="openTriageModal()">
+                        Complete Symptom Assessment
+                    </button>
                 </div>
             </div>
         </div>
@@ -359,6 +356,40 @@
                                 <option value="more-3-years">More than 3 years ago</option>
                                 <option value="never">Never had an eye test</option>
                             </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Are the symptoms constant or intermittent? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="symptomPattern" value="constant" required>
+                                    <span class="radio-mark"></span>
+                                    Constant (ongoing)
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="symptomPattern" value="intermittent" required>
+                                    <span class="radio-mark"></span>
+                                    Intermittent (comes and goes)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Have you had similar symptoms in the past? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="similarPast" value="yes" required>
+                                    <span class="radio-mark"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="similarPast" value="no" required>
+                                    <span class="radio-mark"></span>
+                                    No
+                                </label>
+                            </div>
                         </div>
                     </div>
                     
@@ -842,6 +873,8 @@
                 symptoms: formData.get('symptoms'),
                 symptomStart: formData.get('symptomStart'),
                 lastEyeTest: formData.get('lastEyeTest'),
+                symptomPattern: formData.get('symptomPattern'),
+                similarPast: formData.get('similarPast'),
                 eyeRed: formData.get('eyeRed'),
                 eyePainful: formData.get('eyePainful'),
                 painScale: formData.get('eyePainful') === 'yes' ? formData.get('painScale') : null,
