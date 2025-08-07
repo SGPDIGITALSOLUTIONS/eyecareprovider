@@ -3051,19 +3051,8 @@ body {
 }
 
 .service-item {
-    padding: var(--spacing-xl);
-    background: linear-gradient(145deg, var(--white) 0%, var(--light-gray) 100%);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    padding: 0;
     transition: all 0.3s ease;
-    text-align: center;
-    border: 1px solid rgba(75, 138, 138, 0.1);
-}
-
-.service-item:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--cta);
 }
 
 .service-icon {
@@ -3074,7 +3063,6 @@ body {
 
 .service-item:hover .service-icon {
     color: var(--warm-teal);
-    transform: scale(1.1);
 }
 
 .service-item h3 {
@@ -3128,26 +3116,17 @@ body {
 }
 
 .testimonial {
-    background: var(--white);
-    padding: var(--spacing-xl);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg) 0;
     position: relative;
     transition: all 0.3s ease;
-    border-left: 4px solid var(--cta);
-}
-
-.testimonial:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
 }
 
 .testimonial-quote-icon {
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
+    float: left;
+    margin-right: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
     color: var(--cta);
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 .testimonial blockquote {
@@ -3156,13 +3135,14 @@ body {
     color: var(--text-warm);
     line-height: 1.6;
     font-size: 1.125rem;
-    padding-top: var(--spacing-sm);
+    padding-left: var(--spacing-xl);
 }
 
 .testimonial-author {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
+    padding-left: var(--spacing-xl);
 }
 
 .author-avatar {
@@ -3223,19 +3203,8 @@ body {
 }
 
 .benefit {
-    padding: var(--spacing-xl);
-    background: linear-gradient(145deg, var(--white) 0%, rgba(75, 138, 138, 0.02) 100%);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
+    padding: 0;
     transition: all 0.3s ease;
-    text-align: center;
-    border: 1px solid rgba(75, 138, 138, 0.1);
-}
-
-.benefit:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--cta);
 }
 
 .benefit-icon {
@@ -3246,7 +3215,6 @@ body {
 
 .benefit:hover .benefit-icon {
     color: var(--warm-teal);
-    transform: scale(1.1);
 }
 
 .benefit h3 {
