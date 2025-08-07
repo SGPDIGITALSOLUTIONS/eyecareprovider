@@ -329,6 +329,47 @@ body {
     box-shadow: var(--shadow-lg);
 }
 
+/* Navigation Cards for Carousel */
+.carousel-nav-card {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--headers);
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 3;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.carousel-nav-card:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+    color: var(--cta);
+}
+
+.carousel-nav-card::after {
+    content: '→';
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+.carousel-nav-card:hover::after {
+    transform: translateX(2px);
+    opacity: 1;
+}
+
 .image-indicators {
     position: absolute;
     bottom: 2rem;
@@ -3608,6 +3649,273 @@ body {
     font-size: 0.85rem;
     color: var(--text-light);
     text-align: left;
+}
+
+/* Page Sitemap Navigation */
+.page-sitemap {
+    background: var(--light-gray);
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--navigation);
+    position: sticky;
+    top: 70px;
+    z-index: 100;
+}
+
+.sitemap-nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.sitemap-link {
+    color: var(--headers);
+    text-decoration: none;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.sitemap-link:hover {
+    background: var(--cta);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+
+/* Equipment Section */
+.equipment-section {
+    padding: var(--spacing-2xl) 0;
+    background: var(--white);
+}
+
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.equipment-card {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(215, 221, 225, 0.3);
+}
+
+.equipment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.equipment-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.equipment-card h3 {
+    color: var(--headers);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.equipment-card p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.equipment-features {
+    list-style: none;
+    padding: 0;
+}
+
+.equipment-features li {
+    padding: var(--spacing-xs) 0;
+    color: var(--text-warm);
+    position: relative;
+    padding-left: var(--spacing-md);
+}
+
+.equipment-features li::before {
+    content: '✓';
+    color: var(--cta);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Featured Equipment Card with Image */
+.featured-equipment {
+    background: var(--gradient-card);
+    border: 2px solid var(--cta);
+    text-align: center;
+}
+
+.featured-equipment:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-warm);
+}
+
+.equipment-image {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.equipment-image img {
+    width: 100%;
+    max-width: 280px;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--radius-sm);
+}
+
+.featured-equipment h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--headers);
+    margin-bottom: var(--spacing-xs);
+}
+
+.equipment-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: var(--spacing-md) !important;
+}
+
+.learn-more-link {
+    display: inline-block;
+    background: var(--cta);
+    color: var(--white);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.learn-more-link:hover {
+    background: var(--headers);
+    transform: translateY(-1px);
+}
+
+/* Clinical Standards Section */
+.clinical-standards {
+    padding: var(--spacing-2xl) 0;
+    background: var(--navigation);
+}
+
+.standards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.standard-item {
+    background: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.standard-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.standard-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.standard-item h3 {
+    color: var(--headers);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.standard-item p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Specialized Care Section */
+.specialized-care {
+    padding: var(--spacing-2xl) 0;
+    background: var(--white);
+}
+
+.specialized-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.specialized-card {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(215, 221, 225, 0.3);
+}
+
+.specialized-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.specialized-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.specialized-card h3 {
+    color: var(--headers);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.specialized-card p {
+    color: var(--text-light);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.specialized-features {
+    list-style: none;
+    padding: 0;
+}
+
+.specialized-features li {
+    padding: var(--spacing-xs) 0;
+    color: var(--text-warm);
+    position: relative;
+    padding-left: var(--spacing-md);
+}
+
+.specialized-features li::before {
+    content: '✓';
+    color: var(--cta);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
 }
 
 /* Footer Styles */
