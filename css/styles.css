@@ -511,6 +511,34 @@ body {
     margin-bottom: var(--spacing-xl);
 }
 
+/* Enhanced hero button styling for maximum contrast */
+.hero .cta-button.primary {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero .cta-button.primary:hover {
+    background: linear-gradient(135deg, #E55A2B 0%, #E8851C 100%);
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.7);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.hero .cta-button.secondary {
+    background: rgba(255, 255, 255, 0.98);
+    color: #FF6B35;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+    font-weight: 700;
+}
+
+.hero .cta-button.secondary:hover {
+    background: var(--white);
+    color: #E55A2B;
+    border-color: var(--white);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.4);
+}
+
 .cta-button {
     display: inline-flex;
     align-items: center;
@@ -518,18 +546,19 @@ body {
     padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--radius-lg);
     font-weight: 600;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
 }
 
 .cta-button.primary {
-    background: var(--gradient-cta);
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
     color: var(--white);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
     position: relative;
     overflow: hidden;
     font-weight: 700;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 2px solid transparent;
 }
 
 .cta-button.primary::before {
@@ -539,14 +568,14 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.5s ease;
 }
 
 .cta-button.primary:hover {
-    background: linear-gradient(135deg, #1E4040 0%, #2D5A5A 100%);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-warm);
+    background: linear-gradient(135deg, #E55A2B 0%, #E8851C 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6);
 }
 
 .cta-button.primary:hover::before {
@@ -554,14 +583,19 @@ body {
 }
 
 .cta-button.secondary {
-    background: var(--white);
-    color: var(--cta);
-    border-color: var(--cta);
+    background: rgba(255, 255, 255, 0.95);
+    color: #2D5A5A;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    font-weight: 600;
 }
 
 .cta-button.secondary:hover {
-    background: var(--cta);
-    color: var(--white);
+    background: var(--white);
+    color: #1E4040;
+    border-color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 }
 
 .cta-button.large {
