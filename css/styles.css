@@ -964,24 +964,22 @@ body {
     color: var(--text-light);
 }
 
-/* Profile Section (About Page) */
-.profile-section {
+/* About Page - Clean Formatting */
+
+/* Profile Introduction */
+.profile-intro {
     padding: var(--spacing-2xl) 0;
     background: var(--white);
 }
 
-.profile-content {
+.intro-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: var(--spacing-2xl);
-    align-items: start;
+    align-items: center;
 }
 
-.profile-image {
-    position: relative;
-}
-
-.profile-image img {
+.intro-image img {
     width: 100%;
     height: 400px;
     object-fit: cover;
@@ -989,6 +987,265 @@ body {
     box-shadow: var(--shadow-lg);
 }
 
+.intro-text h2 {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--headers);
+    margin-bottom: var(--spacing-xs);
+}
+
+.intro-text h3 {
+    font-size: 1.25rem;
+    color: var(--cta);
+    margin-bottom: var(--spacing-lg);
+    font-weight: var(--font-weight-medium);
+}
+
+.intro-text blockquote {
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-warm);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-md);
+    border-left: 4px solid var(--cta);
+}
+
+.credentials-summary {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.credential-item {
+    text-align: center;
+}
+
+.credential-item .number {
+    display: block;
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--cta);
+    margin-bottom: var(--spacing-xs);
+}
+
+.credential-item .label {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Professional Journey Timeline */
+.professional-journey {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(135deg, var(--background) 0%, var(--light-gray) 100%);
+}
+
+.professional-journey h2 {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--headers);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.professional-journey > .container > p {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.6;
+}
+
+.journey-timeline {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 50px;
+    top: 60px;
+    bottom: -30px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--cta), var(--warm-teal));
+}
+
+.timeline-year {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--cta);
+    text-align: center;
+    padding: var(--spacing-sm);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    height: fit-content;
+}
+
+.timeline-content h4 {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--headers);
+    margin-bottom: var(--spacing-sm);
+}
+
+.timeline-content p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Qualifications Section */
+.qualifications-section {
+    padding: var(--spacing-2xl) 0;
+    background: var(--white);
+}
+
+.qualifications-section h2 {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--headers);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.qualifications-section > .container > p {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.6;
+}
+
+.qualifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.qualification {
+    padding: 0;
+}
+
+.qualification h4 {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--headers);
+    margin-bottom: var(--spacing-sm);
+}
+
+.qualification p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Values Section */
+.values-section {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(135deg, var(--background) 0%, rgba(75, 138, 138, 0.03) 100%);
+}
+
+.values-section h2 {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--headers);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.values-section > .container > p {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.6;
+}
+
+.values-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.value-item {
+    padding: 0;
+}
+
+.value-item h3 {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--headers);
+    margin-bottom: var(--spacing-sm);
+}
+
+.value-item p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Patient Testimonials */
+.patient-testimonials {
+    padding: var(--spacing-2xl) 0;
+    background: var(--white);
+}
+
+.patient-testimonials h2 {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--headers);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.patient-testimonials > .container > p {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.6;
+}
+
+.testimonials-clean {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.testimonial-quote {
+    padding: var(--spacing-lg) 0;
+}
+
+.testimonial-quote blockquote {
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-warm);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    border-left: 4px solid var(--cta);
+}
+
+.testimonial-quote cite {
+    font-weight: var(--font-weight-semibold);
+    color: var(--headers);
+    font-style: normal;
+    margin-left: var(--spacing-md);
+}
+
+/* Legacy Profile Section Support */
 .profile-credentials {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -3540,6 +3797,34 @@ body {
     .why-choose-us h2,
     .ready-to-transform h2 {
         font-size: 1.75rem;
+    }
+    
+    /* About page responsive */
+    .intro-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .intro-image img {
+        height: 300px;
+    }
+    
+    .timeline-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .timeline-item::after {
+        display: none;
+    }
+    
+    .qualifications-grid,
+    .values-list,
+    .testimonials-clean {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
     }
     
     .cta-button {
