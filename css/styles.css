@@ -3737,7 +3737,7 @@ body {
     
     .hero-image-section {
         width: 100%;
-        height: 40vh;
+        height: 50vh;
         margin: 0 var(--spacing-sm);
     }
     
@@ -3746,7 +3746,7 @@ body {
         border: 4px solid var(--white);
         border-radius: var(--radius-lg);
         height: 100%;
-        min-height: 200px;
+        min-height: 250px;
     }
     
     .hero-image-section {
@@ -3756,7 +3756,7 @@ body {
     .image-slide img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         object-position: center;
     }
     
@@ -4136,7 +4136,7 @@ body {
 /* Medium mobile devices */
 @media (max-width: 640px) {
     .hero-image-section {
-        height: 38vh;
+        height: 45vh;
         padding: var(--spacing-sm) !important;
     }
     
@@ -4175,7 +4175,7 @@ body {
     
     /* Extra Small Mobile Carousel */
     .hero-image-section {
-        height: 35vh;
+        height: 42vh;
         margin: 0 var(--spacing-xs);
         padding: var(--spacing-xs) !important;
     }
