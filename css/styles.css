@@ -109,6 +109,31 @@ body {
     height: 70px;
 }
 
+.nav-logo {
+    flex-shrink: 0;
+}
+
+.nav-logo .logo {
+    height: 50px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.nav-logo a {
+    display: block;
+    text-decoration: none;
+}
+
+/* Footer Logo Styling */
+.footer-logo {
+    height: 60px;
+    width: auto;
+    max-width: 250px;
+    object-fit: contain;
+    margin-bottom: var(--spacing-sm);
+}
+
 
 
 .nav-links {
