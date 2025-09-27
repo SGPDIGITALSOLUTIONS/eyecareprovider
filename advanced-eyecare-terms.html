@@ -127,6 +127,44 @@
                     </div>
                 </div>
 
+                <!-- WhatsApp Fair Usage Policy -->
+                <div class="whatsapp-policy-section">
+                    <div class="whatsapp-policy-header" onclick="toggleWhatsAppPolicy()">
+                        <div class="whatsapp-icon">📱</div>
+                        <h4>Please expand to read WhatsApp Fair Usage Policy</h4>
+                        <div class="dropdown-arrow" id="whatsapp-arrow">▼</div>
+                    </div>
+                    <div class="whatsapp-policy-content" id="whatsapp-policy-content">
+                        <div class="whatsapp-policy-text">
+                            <h3>WhatsApp Support – Fair Usage Policy</h3>
+                            
+                            <p>We're committed to making our WhatsApp support service convenient, reliable, and fair for all users. To keep it effective, please follow these guidelines:</p>
+                            
+                            <div class="policy-section">
+                                <h4>1. Purpose of WhatsApp Support</h4>
+                                <p>WhatsApp support is for quick questions, troubleshooting, and essential updates.</p>
+                                <p>For more complex issues that need detailed review or records, we may ask you to use email or arrange a call.</p>
+                            </div>
+                            
+                            <div class="policy-section">
+                                <h4>2. Availability & Response Times</h4>
+                                <p>Support hours: 8:00am – 8:00pm, 7 days a week.</p>
+                                <p>We aim to respond within a reasonable timeframe during these hours.</p>
+                                <p>Messages sent outside these times will be picked up the next day.</p>
+                            </div>
+                            
+                            <div class="policy-section">
+                                <h4>3. Fair Usage</h4>
+                                <p>To ensure everyone gets timely support:</p>
+                                <ul>
+                                    <li>Please keep messages clear and focused on one issue at a time.</li>
+                                    <li>Avoid sending repeated follow-ups within short periods unless urgent.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Agreement Form -->
                 <div class="agreement-form">
                     <div class="checkbox-group">
@@ -225,6 +263,20 @@
     <script src="js/stripe-integration.js"></script>
     
     <script>
+        // WhatsApp policy dropdown toggle
+        function toggleWhatsAppPolicy() {
+            const content = document.getElementById('whatsapp-policy-content');
+            const arrow = document.getElementById('whatsapp-arrow');
+            
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                arrow.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        }
+
         // Terms agreement functionality
         document.addEventListener('DOMContentLoaded', function() {
             const termsCheckbox = document.getElementById('terms-agreement');
