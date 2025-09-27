@@ -22,12 +22,30 @@ class StripeIntegration {
         if (secondaryCheckoutBtn) {
             secondaryCheckoutBtn.addEventListener('click', (e) => this.handleCheckout(e));
         }
+
+        // Terms page proceed to payment button
+        const proceedToPaymentBtn = document.getElementById('proceed-to-payment');
+        if (proceedToPaymentBtn) {
+            proceedToPaymentBtn.addEventListener('click', (e) => this.handleCheckout(e));
+        }
     }
 
     async handleCheckout(event) {
         event.preventDefault();
         
         const button = event.target;
+        
+        // If this is the terms page, check that agreements are checked
+        if (button.id === 'proceed-to-payment') {
+            const termsCheckbox = document.getElementById('terms-agreement');
+            const privacyCheckbox = document.getElementById('privacy-agreement');
+            
+            if (!termsCheckbox || !privacyCheckbox || !termsCheckbox.checked || !privacyCheckbox.checked) {
+                alert('Please read and accept both the Terms & Conditions and Privacy Policy before proceeding.');
+                return;
+            }
+        }
+        
         const productName = button.dataset.productName;
         const amount = button.dataset.amount;
         const currency = button.dataset.currency;
