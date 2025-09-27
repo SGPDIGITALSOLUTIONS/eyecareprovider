@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Care Services Providers Ltd - Professional Eye Health Experts</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="description" content="Professional eye health experts providing comprehensive home visit eye examinations, dispensing services, and premium eyewear. Better service, better prices, convenient care.">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="assets/images/gallery/eyecareproviderlogo.jpg" alt="Eye Care Provider - I Care Services" class="logo">
+                </a>
+            </div>
+            <button class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-item active">Home</a>
+                <a href="about.html" class="nav-item">About</a>
+                <a href="advancedeyecare.html" class="nav-item">Eyecare</a>
+                <a href="advanced-eyecare-plan.html" class="nav-item">Advanced Plan</a>
+                <a href="products.html" class="nav-item">Products</a>
+                <a href="contact.html" class="nav-item">Contact</a>
+                <a href="contact.html" class="nav-item cta-nav">Request an Appointment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-diagonal-container">
+            <div class="hero-content-section">
+                <div class="hero-content">
+                    <span class="category-tag">PROFESSIONAL EYE HEALTH EXPERTS</span>
+                    <h1>Comprehensive Eye Care<br>In Your Home</h1>
+                    <p class="hero-description">
+                        Professional eye health experts bringing comprehensive care directly to you. 
+                        We offer exceptional service at competitive prices, with the convenience of home visits, 
+                        Advanced Care Plan subscriptions, and premium Hoya lens technology.
+                    </p>
+                    
+                    <!-- Area Coverage Search -->
+                    <div class="area-search">
+                        <h3>Check if we cover your area</h3>
+                        <div class="search-container">
+                            <input type="text" id="postcodeSearch" placeholder="Enter your postcode (e.g. BD1 2AB)" class="search-input">
+                            <button type="button" class="search-button" onclick="checkCoverage()">Check Coverage</button>
+                        </div>
+                        <div id="coverageResult" class="coverage-result"></div>
+                    </div>
+                    
+                    <div class="hero-buttons">
+                        <a href="contact.html" class="cta-button primary">Request an Appointment</a>
+                        <a href="advancedeyecare.html" class="cta-button secondary">Our Services</a>
+                    </div>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <span>Home Visits</span>
+                        </div>
+                        <div class="feature">
+                            <span>NHS & Private</span>
+                        </div>
+                        <div class="feature">
+                            <span>Expert Care</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-section">
+                <div class="rotating-images">
+                    <div class="image-slide active">
+                        <img src="assets/images/gallery/petrufinzl.jpg" alt="Petru" />
+                        <a href="about.html" class="carousel-nav-card">Meet Petru</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/Hoya.jpg" alt="Premium Hoya Lenses" />
+                        <a href="hoya-lenses.html" class="carousel-nav-card">Hoya Lenses</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/eye-health.jpg" alt="Eye health assessment" />
+                        <div class="image-caption">Comprehensive Eye Health</div>
+                        <a href="advancedeyecare.html" class="carousel-nav-card">Our Services</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/personal-care.jpg" alt="Personal care approach" />
+                        <div class="image-caption">Personal Attention</div>
+                        <a href="contact.html" class="carousel-nav-card">Book Now</a>
+                    </div>
+                </div>
+                <div class="image-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                    <span class="indicator" data-slide="2"></span>
+                    <span class="indicator" data-slide="3"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do">
+        <div class="container">
+            <h2>What Does Professional Home Eye Care Include?</h2>
+            <p>We bring comprehensive eye health services directly to your home, providing the same clinical standards as a traditional practice with the added convenience of not having to travel.</p>
+            
+            <div class="section-cta" style="text-align: center; margin: 2rem 0;">
+                <a href="advancedeyecare.html" class="btn-primary">Learn More About Our Services</a>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Professional Eye Examinations & Consultation</h3>
+                    <p>Complete eye health assessments using professional diagnostic equipment, with expert advice on eye health, prescription updates, and personalized care plans.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                            <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                        </svg>
+                    </div>
+                    <h3>Prescription & Premium Technology</h3>
+                    <p>Professional eyewear consultations with fitting services, premium Hoya lens technologies, and state-of-the-art portable diagnostic equipment.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Specialized Care Services</h3>
+                    <p>MECS services, glaucoma monitoring, and diabetic eye screening for ongoing eye health management. These specialized services are available privately.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Advanced Care Plan</h3>
+                    <p>Subscription-based comprehensive eye care with regular check-ups, priority booking, and ongoing professional support for your eye health journey.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Services Showcase -->
+    <section class="premium-services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Premium Eye Care Solutions</h2>
+                <p>Discover our Advanced Care Plan and cutting-edge Hoya lens technology</p>
+            </div>
+            
+            <div class="premium-grid">
+                <!-- Advanced Care Plan -->
+                <div class="premium-card featured">
+                    <div class="premium-header">
+                        <div class="premium-icon">⚡</div>
+                        <div class="premium-badge">Most Popular</div>
+                    </div>
+                    <div class="premium-content">
+                        <h3>Advanced Care Plan</h3>
+                        <p class="premium-subtitle">24/7 Eye Care Support from £10/month</p>
+                        <div class="premium-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">📱</span>
+                                <span>7/7 WhatsApp Support (8am-8pm)</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">📞</span>
+                                <span>6/7 Phone Consultations</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🏠</span>
+                                <span>Annual Home Visits Included</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">👁️</span>
+                                <span>Professional Triage & Advice</span>
+                            </div>
+                        </div>
+                        <div class="premium-pricing">
+                            <div class="price-options">
+                                <div class="price-option">
+                                    <span class="price">£10</span>
+                                    <span class="period">/month</span>
+                                    <span class="description">Couples</span>
+                                </div>
+                                <div class="price-option">
+                                    <span class="price">£15</span>
+                                    <span class="period">/month</span>
+                                    <span class="description">Families (up to 4)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="advanced-eyecare-plan.html" class="premium-cta">Learn More About Advanced Care</a>
+                    </div>
+                </div>
+
+                <!-- Hoya Lenses -->
+                <div class="premium-card">
+                    <div class="premium-header">
+                        <div class="premium-icon">🔬</div>
+                    </div>
+                    <div class="premium-content">
+                        <h3>Premium Hoya Lens Technology</h3>
+                        <p class="premium-subtitle">World-leading optical innovation for superior vision</p>
+                        <div class="premium-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">✨</span>
+                                <span>Hi-Vision Meiryo Coating</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🌞</span>
+                                <span>Sensity Photochromic Lenses</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">💪</span>
+                                <span>PNX Impact-Resistant Technology</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🖥️</span>
+                                <span>Specialized Occupational Lenses</span>
+                            </div>
+                        </div>
+                        <div class="hoya-benefits">
+                            <div class="benefit-stat">
+                                <span class="stat-number">56%</span>
+                                <span class="stat-text">Less Reflectance</span>
+                            </div>
+                            <div class="benefit-stat">
+                                <span class="stat-number">2.5x</span>
+                                <span class="stat-text">More Scratch Resistant</span>
+                            </div>
+                            <div class="benefit-stat">
+                                <span class="stat-number">5x</span>
+                                <span class="stat-text">Stays Clean Longer</span>
+                            </div>
+                        </div>
+                        <a href="hoya-lenses.html" class="premium-cta">Explore Hoya Technology</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Combined CTA -->
+            <div class="premium-combined-cta">
+                <div class="combined-cta-content">
+                    <h3>Experience the Best of Both Worlds</h3>
+                    <p>Combine our Advanced Care Plan with premium Hoya lens technology for unmatched eye care excellence</p>
+                    <div class="combined-cta-buttons">
+                        <a href="contact.html" class="cta-button primary">Book Consultation</a>
+                        <a href="advanced-eyecare-plan.html" class="cta-button secondary">Start Advanced Plan</a>
+                    </div>
+                    <p class="billing-link">If you have an Advanced Plan and want to manage billing <a href="https://billing.stripe.com/p/login/test_cNi5kD8T2fYz3uS5yg67S00" target="_blank">click here</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="home-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Experience Professional Eye Care at Home?</h2>
+                <p>Request your appointment today and discover the convenience of expert eye health services in your own home.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="cta-button primary large">Request Appointment Now</a>
+                    <a href="about.html" class="cta-button secondary large">Meet Your Optometrist</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>I Care Services Providers Ltd</h4>
+                    <p>Professional eye health experts providing comprehensive home visit services with expertise, convenience, and personalized care.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="advancedeyecare.html">NHS Home Visits</a></li>
+                        <li><a href="advancedeyecare.html">Private Examinations</a></li>
+                        <li><a href="advanced-eyecare-plan.html">Advanced Care Plan</a></li>
+                        <li><a href="advancedeyecare.html">MECS Services</a></li>
+                        <li><a href="advancedeyecare.html">Home Dispensing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Premium Products</h4>
+                    <ul>
+                        <li><a href="hoya-lenses.html">Hoya Lens Technology</a></li>
+                        <li><a href="products.html">Eyewear Collections</a></li>
+                        <li><a href="about.html">About Petru Pavalasc</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>Email: info@icareservices.co.uk</p>
+                    <p>Phone: 07737886713</p>
+                    <p>Professional eye health experts serving your area</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal & Compliance</h4>
+                    <ul>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="data-protection.html">Data Protection</a></li>
+                        <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+                        <li><a href="complaints-procedure.html">Complaints Procedure</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 I Care Services Providers Ltd. All rights reserved. | Professional eye health experts | GDPR Compliant</p>
+                <p>Website built and managed by <a href="https://www.sgpdigitalsolutions.co.uk" target="_blank" rel="noopener">SGP Digital Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cookie-consent.js"></script>
+</body>
+</html> 

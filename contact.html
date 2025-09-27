@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - I Care Services Providers Ltd</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="description" content="Contact I Care Services for professional eye care appointments, consultations, and inquiries. Request your home visit or clinic appointment today.">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="assets/images/gallery/eyecareproviderlogo.jpg" alt="Eye Care Provider - I Care Services" class="logo">
+                </a>
+            </div>
+            <button class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="about.html" class="nav-item">About</a>
+                <a href="advancedeyecare.html" class="nav-item">Eyecare</a>
+                <a href="advanced-eyecare-plan.html" class="nav-item">Advanced Plan</a>
+                <a href="products.html" class="nav-item">Products</a>
+                <a href="contact.html" class="nav-item active">Contact</a>
+                <a href="contact.html" class="nav-item cta-nav">Request an Appointment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Hero -->
+    <section class="page-hero contact-hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="category-tag">GET IN TOUCH</span>
+                <h1>Contact Us</h1>
+                <p>Ready to experience professional eye care? Get in touch with us today to request an appointment or ask any questions about our services.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Triage Section -->
+    <section class="emergency-triage-section">
+        <div class="container">
+            <div class="triage-card">
+                <div class="triage-card-header">
+                    <div class="triage-icon-card">⚠️</div>
+                    <h3>Worried About Your Eye Symptoms?</h3>
+                </div>
+                <div class="triage-card-content">
+                    <p>If you're experiencing concerning eye symptoms, our quick triage form can help determine the urgency of your situation and get you the right care quickly.</p>
+                    <button class="btn-primary triage-btn" onclick="openTriageModal()">
+                        Complete Symptom Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <div class="form-header">
+                        <h2>Get in Touch</h2>
+                        <p>Have a question or need more information? Fill out the form below and we'll get back to you within 24 hours.</p>
+                    </div>
+                    
+                    <form class="contact-form" id="contactForm" action="#" method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required 
+                                       pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                       title="Please enter a valid email address (e.g., name@example.com)">
+                                <span class="validation-message" id="email-error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                       pattern="^(\+44\s?7\d{9}|\+44\s?[1-9]\d{8,10}|07\d{9}|0[1-9]\d{8,9})$"
+                                       placeholder="e.g., 07700 123456 or +44 7700 123456"
+                                       title="Please enter a valid UK phone number (mobile: 07xxx xxxxxx, landline: 01xxx xxxxxx, or international: +44 7xxx xxxxxx)"
+                                       maxlength="18">
+                                <span class="validation-message" id="phone-error"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address" placeholder="Your full address for home visits">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="inquiryType">What can we help you with? *</label>
+                            <select id="inquiryType" name="inquiryType" required>
+                                <option value="">Select an option</option>
+                                <option value="service-information">Service Information</option>
+                                <option value="pricing-costs">Pricing & Costs</option>
+                                <option value="advanced-care-plan">Advanced Eye Care Plan</option>
+                                <option value="home-visit-info">Home Visit Information</option>
+                                <option value="nhs-eligibility">NHS Eligibility</option>
+                                <option value="appointment-booking">Request an Appointment</option>
+                                <option value="product-info">Product Information</option>
+                                <option value="online-glasses-ordering">Online Glasses Ordering</option>
+                                <option value="coverage-area">Coverage Area Query</option>
+                                <option value="online-glasses-ordering">Online Glasses Ordering</option>
+                                <option value="general-inquiry">General Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message *</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Please tell us more about your inquiry, question, or how we can help you" required></textarea>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="nhsPrivate" name="nhsPrivate" value="nhs">
+                                <span class="checkmark"></span>
+                                I'm interested in NHS services (if eligible)
+                            </label>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privayPolicy" name="privacyPolicy" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#" target="_blank">Privacy Policy</a> and consent to being contacted *
+                            </label>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+                                <span class="checkmark"></span>
+                                I'd like to receive updates about new services and eye health tips
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary form-submit">
+                            <span class="btn-text">Send Enquiry</span>
+                            <span class="btn-loading" style="display: none;">Sending...</span>
+                        </button>
+                    </form>
+                </div>
+                <!-- Contact Information -->
+                <div class="contact-info-container">
+                    <div class="contact-info-card">
+                        <h3>Contact Information</h3>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <h4>Phone</h4>
+                                <p><a href="tel:+447737886713">07737886713</a></p>
+                                <p class="contact-note">For appointments and general enquiries</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <p><a href="mailto:info@icareservices.co.uk">info@icareservices.co.uk</a></p>
+                                <p class="contact-note">We'll respond within 24 hours</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h4>Service Areas</h4>
+                                <p>West Yorkshire, North Yorkshire, Greater Manchester, Lancashire, Cumbria, Tyne & Wear, County Durham, Lincolnshire, East Riding, Sheffield (selected areas)</p>
+                                <p class="contact-note">Use our postcode checker to confirm coverage in your specific area</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business Hours -->
+                    <div class="contact-info-card">
+                        <h3>Business Hours</h3>
+                        
+                        <div class="hours-grid">
+                            <div class="hours-item">
+                                <span class="day">Monday - Friday</span>
+                                <span class="time">8:00 AM - 7:00 PM</span>
+                            </div>
+                            <div class="hours-item">
+                                <span class="day">Saturday</span>
+                                <span class="time">9:00 AM - 5:00 PM</span>
+                            </div>
+                            <div class="hours-item">
+                                <span class="day">Sunday</span>
+                                <span class="time">Emergency Only</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hours-note">
+                            <a href="advanced-eyecare-plan.html" class="btn-primary advanced-care-btn">
+                                <strong>Advanced Care Plan subscribers:</strong> WhatsApp support available 7 days a week, 8AM-8PM
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Services -->
+                    <div class="contact-info-card">
+                        <h3>Quick Services</h3>
+                        
+                        <div class="quick-services">
+                            <a href="advanced-eyecare-plan.html" class="quick-service-item">
+                                <div class="quick-service-icon">⚡</div>
+                                <div class="quick-service-text">
+                                    <h4>Advanced Care Plan</h4>
+                                    <p>24/7 support for £15/month</p>
+                                </div>
+                            </a>
+                            
+                            <a href="advancedeyecare.html" class="quick-service-item">
+                                <div class="quick-service-icon">🏠</div>
+                                <div class="quick-service-text">
+                                    <h4>Home Visits</h4>
+                                    <p>Convenient care at your doorstep</p>
+                                </div>
+                            </a>
+                            
+                            <a href="products.html" class="quick-service-item">
+                                <div class="quick-service-icon">👓</div>
+                                <div class="quick-service-text">
+                                    <h4>Premium Eyewear</h4>
+                                    <p>Latest technology and styles</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Quick answers to common questions about our services</p>
+            </div>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>How quickly can I get an appointment?</h3>
+                    <p>We typically offer appointments within 48-72 hours for routine care, and same-day emergency appointments when needed.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Do you accept NHS patients?</h3>
+                    <p>Yes, we provide both NHS and private services. NHS eligibility depends on your specific circumstances and location.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>What areas do you cover for home visits?</h3>
+                    <p>We cover West Yorkshire, North Yorkshire, Greater Manchester, Lancashire, Cumbria, Tyne & Wear, County Durham, Lincolnshire, East Riding, and selected areas of Sheffield. Use our postcode checker on the homepage to confirm if we serve your specific area.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>How much do your services cost?</h3>
+                    <p>Our prices vary by service type and whether you're NHS or private. Contact us for a detailed quote based on your needs.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>What should I expect during a home visit?</h3>
+                    <p>Our optometrist will bring all necessary equipment for a comprehensive eye examination in the comfort of your home.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Can you help with contact lens fittings?</h3>
+                    <p>Yes, we provide complete contact lens services including initial fittings, follow-ups, and ongoing care.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Triage Modal -->
+    <div id="triageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Eye Symptom Assessment</h2>
+                <span class="close" onclick="closeTriageModal()">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <div class="triage-warning">
+                    <p><strong>⚠️ Important:</strong> If you are experiencing severe eye pain, sudden vision loss, or eye injury, please seek immediate medical attention or call 999.</p>
+                </div>
+                
+                <form id="triageForm" class="triage-form">
+                    <div class="form-group">
+                        <label for="symptoms">Describe your symptoms in detail *</label>
+                        <textarea id="symptoms" name="symptoms" required rows="4" 
+                                placeholder="Please describe what you're experiencing with your eyes (e.g., pain, blurred vision, discharge, etc.)"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="symptomStart">When did symptoms start? *</label>
+                            <select id="symptomStart" name="symptomStart" required>
+                                <option value="">Select timeframe</option>
+                                <option value="today">Today</option>
+                                <option value="yesterday">Yesterday</option>
+                                <option value="2-3-days">2-3 days ago</option>
+                                <option value="1-week">About 1 week ago</option>
+                                <option value="2-weeks">About 2 weeks ago</option>
+                                <option value="1-month">About 1 month ago</option>
+                                <option value="longer">Longer than 1 month</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastEyeTest">When did you last have an eye test? *</label>
+                            <select id="lastEyeTest" name="lastEyeTest" required>
+                                <option value="">Select timeframe</option>
+                                <option value="less-6-months">Less than 6 months ago</option>
+                                <option value="6-12-months">6-12 months ago</option>
+                                <option value="1-2-years">1-2 years ago</option>
+                                <option value="2-3-years">2-3 years ago</option>
+                                <option value="more-3-years">More than 3 years ago</option>
+                                <option value="never">Never had an eye test</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Are the symptoms constant or intermittent? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="symptomPattern" value="constant" required>
+                                    <span class="radio-mark"></span>
+                                    Constant (ongoing)
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="symptomPattern" value="intermittent" required>
+                                    <span class="radio-mark"></span>
+                                    Intermittent (comes and goes)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Have you had similar symptoms in the past? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="similarPast" value="yes" required>
+                                    <span class="radio-mark"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="similarPast" value="no" required>
+                                    <span class="radio-mark"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Is the eye red? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="eyeRed" value="yes" required>
+                                    <span class="radio-mark"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="eyeRed" value="no" required>
+                                    <span class="radio-mark"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Is the eye painful? *</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="eyePainful" value="yes" required onclick="showPainScale()">
+                                    <span class="radio-mark"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="eyePainful" value="no" required onclick="hidePainScale()">
+                                    <span class="radio-mark"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="painScaleGroup" style="display: none;">
+                        <label for="painScale">Rate your pain level (1-10, where 10 is severe pain) *</label>
+                        <div class="pain-scale">
+                            <input type="range" id="painScale" name="painScale" min="1" max="10" value="5" 
+                                   oninput="updatePainValue(this.value)">
+                            <div class="pain-scale-labels">
+                                <span>1 (Mild)</span>
+                                <span id="painValue">5</span>
+                                <span>10 (Severe)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Are you more sensitive to light than usual? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="lightSensitive" value="yes" required>
+                                <span class="radio-mark"></span>
+                                Yes
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="lightSensitive" value="no" required>
+                                <span class="radio-mark"></span>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Are you a contact lens wearer? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="contactWearer" value="yes" required onclick="showContactType()">
+                                <span class="radio-mark"></span>
+                                Yes
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="contactWearer" value="no" required onclick="hideContactType()">
+                                <span class="radio-mark"></span>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="contactTypeGroup" style="display: none;">
+                        <label for="contactType">What type of contact lenses? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="contactType" value="daily">
+                                <span class="radio-mark"></span>
+                                Daily disposable
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="contactType" value="reusable">
+                                <span class="radio-mark"></span>
+                                Reusable (weekly/monthly)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Any double vision? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="doubleVision" value="yes" required onclick="showDoubleVisionStart()">
+                                <span class="radio-mark"></span>
+                                Yes
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="doubleVision" value="no" required onclick="hideDoubleVisionStart()">
+                                <span class="radio-mark"></span>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="doubleVisionStartGroup" style="display: none;">
+                        <label for="doubleVisionStart">When did the double vision start? *</label>
+                        <select id="doubleVisionStart" name="doubleVisionStart">
+                            <option value="">Select timeframe</option>
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="2-3-days">2-3 days ago</option>
+                            <option value="1-week">About 1 week ago</option>
+                            <option value="2-weeks">About 2 weeks ago</option>
+                            <option value="longer">Longer than 2 weeks</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Any new onset flashes and floaters? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="flashesFloaters" value="yes" required>
+                                <span class="radio-mark"></span>
+                                Yes
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="flashesFloaters" value="no" required>
+                                <span class="radio-mark"></span>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="symptomPhoto">Upload a picture of symptoms (if possible)</label>
+                        <input type="file" id="symptomPhoto" name="symptomPhoto" accept="image/*" 
+                               class="file-input">
+                        <div class="file-input-label">
+                            <span class="file-icon">📷</span>
+                            <span class="file-text">Choose photo or take picture</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additionalInfo">Additional information</label>
+                        <textarea id="additionalInfo" name="additionalInfo" rows="3" 
+                                placeholder="Any other relevant information about your symptoms or medical history"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactDetails">Your contact details for follow-up *</label>
+                        <div class="contact-details-row">
+                            <input type="text" id="triageName" name="triageName" placeholder="Full name" required>
+                            <input type="tel" id="triagePhone" name="triagePhone" placeholder="Phone number" required>
+                            <input type="email" id="triageEmail" name="triageEmail" placeholder="Email address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="triage-consent">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="triageConsent" name="triageConsent" required>
+                            <span class="checkmark"></span>
+                            I consent to my information being reviewed by a qualified optometrist for triage purposes and understand this is not a substitute for an in-person examination *
+                        </label>
+                    </div>
+                    
+                    <div class="triage-actions">
+                        <button type="button" class="btn-secondary" onclick="closeTriageModal()">Cancel</button>
+                        <button type="submit" class="btn-primary triage-submit">
+                            <span class="btn-text">Submit Assessment</span>
+                            <span class="btn-loading" style="display: none;">Sending...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>I Care Services Providers Ltd</h4>
+                    <p>Professional eye health experts providing comprehensive home visit services with expertise, convenience, and personalized care.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="advancedeyecare.html">NHS Home Visits</a></li>
+                        <li><a href="advancedeyecare.html">Private Examinations</a></li>
+                        <li><a href="advanced-eyecare-plan.html">Advanced Care Plan</a></li>
+                        <li><a href="advancedeyecare.html">MECS Services</a></li>
+                        <li><a href="advancedeyecare.html">Home Dispensing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Premium Products</h4>
+                    <ul>
+                        <li><a href="hoya-lenses.html">Hoya Lens Technology</a></li>
+                        <li><a href="products.html">Eyewear Collections</a></li>
+                        <li><a href="about.html">About Petru Pavalasc</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>Email: info@icareservices.co.uk</p>
+                    <p>Phone: 07737886713</p>
+                    <p>Professional eye health experts serving your area</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal & Compliance</h4>
+                    <ul>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="data-protection.html">Data Protection</a></li>
+                        <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+                        <li><a href="complaints-procedure.html">Complaints Procedure</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 I Care Services Providers Ltd. All rights reserved. | Professional eye health experts | GDPR Compliant</p>
+                <p>Website built and managed by <a href="https://www.sgpdigitalsolutions.co.uk" target="_blank" rel="noopener">SGP Digital Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cookie-consent.js"></script>
+    <script>
+        // Email and phone validation patterns
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phonePattern = /^(\+44\s?7\d{9}|\+44\s?[1-9]\d{8,10}|07\d{9}|0[1-9]\d{8,9})$/;
+        
+        // Validation functions
+        function validateEmail(email) {
+            return emailPattern.test(email);
+        }
+        
+        function validatePhone(phone) {
+            // Remove all spaces and hyphens for validation
+            const cleanPhone = phone.replace(/[\s-]/g, '');
+            return phonePattern.test(cleanPhone);
+        }
+        
+        function showValidationError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            const inputElement = document.getElementById(fieldId);
+            
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            inputElement.classList.add('validation-error');
+        }
+        
+        function clearValidationError(fieldId) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            const inputElement = document.getElementById(fieldId);
+            
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+            inputElement.classList.remove('validation-error');
+        }
+        
+        // Real-time validation
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && !validateEmail(email)) {
+                showValidationError('email', 'Please enter a valid email address (e.g., name@example.com)');
+            } else {
+                clearValidationError('email');
+            }
+        });
+        
+        document.getElementById('phone').addEventListener('blur', function() {
+            const phone = this.value.trim();
+            if (phone && !validatePhone(phone)) {
+                showValidationError('phone', 'Please enter a valid UK phone number (e.g., 07700 123456 or +44 7700 123456)');
+            } else {
+                clearValidationError('phone');
+            }
+        });
+        
+        // Clear errors on input
+        document.getElementById('email').addEventListener('input', function() {
+            if (this.classList.contains('validation-error')) {
+                clearValidationError('email');
+            }
+        });
+        
+        document.getElementById('phone').addEventListener('input', function() {
+            if (this.classList.contains('validation-error')) {
+                clearValidationError('phone');
+            }
+        });
+        
+        // Add method to submit form data to Zapier
+        HTMLFormElement.prototype.submitToZapier = async function(submitBtn, btnText, btnLoading) {
+            try {
+                // Collect all form data
+                const formData = new FormData(this);
+                
+                // Add timestamp
+                formData.append('timestamp', new Date().toISOString());
+                formData.append('formType', 'contact');
+                
+                // Log what we're sending for debugging
+                console.log('Sending contact form data to Zapier...');
+                
+                // Zapier webhook URL for contact form
+                const contactWebhookUrl = 'https://hooks.zapier.com/hooks/catch/23742018/u2c7enk/';
+                
+                // Convert FormData to URL-encoded string for Zapier
+                const urlEncodedData = new URLSearchParams(formData).toString();
+                
+                const response = await fetch(contactWebhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: urlEncodedData
+                });
+                
+                if (response.ok) {
+                    alert('Thank you for your inquiry! We\'ll get back to you within 24 hours.');
+                    this.reset();
+                    
+                    // Clear all validation errors
+                    clearValidationError('email');
+                    clearValidationError('phone');
+                } else {
+                    console.error('Zapier response:', response.status, response.statusText);
+                    throw new Error(`Failed to submit inquiry: ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('Error submitting contact form:', error);
+                alert(`There was an issue submitting your inquiry. Error: ${error.message}. Please try again or call us directly at 07737886713.`);
+            }
+            
+            // Reset button state
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+            submitBtn.disabled = false;
+        };
+
+        // Enhanced form handling with validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all required fields
+            let isValid = true;
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            // Validate email
+            if (!email) {
+                showValidationError('email', 'Email address is required');
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                showValidationError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Validate phone
+            if (!phone) {
+                showValidationError('phone', 'Phone number is required');
+                isValid = false;
+            } else if (!validatePhone(phone)) {
+                showValidationError('phone', 'Please enter a valid UK phone number');
+                isValid = false;
+            }
+            
+            // If validation fails, don't submit
+            if (!isValid) {
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = this.querySelector('.form-submit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            // Send form data to Zapier webhook
+            this.submitToZapier(submitBtn, btnText, btnLoading);
+        });
+        
+        // Format phone number as user types (optional enhancement)
+        document.getElementById('phone').addEventListener('input', function() {
+            let value = this.value;
+            
+            // Allow +44 at the start, preserve it
+            if (value.startsWith('+44')) {
+                let digits = value.substring(3).replace(/\D/g, '');
+                if (digits.length > 0) {
+                    value = '+44 ' + digits;
+                } else {
+                    value = '+44';
+                }
+            } else {
+                // Remove all non-digits except leading 0
+                let digits = value.replace(/\D/g, '');
+                
+                // Ensure it starts with 0 for UK numbers if not international
+                if (digits.length > 0 && !digits.startsWith('0')) {
+                    digits = '0' + digits;
+                }
+                
+                // Format UK numbers with spaces for readability
+                if (digits.length > 5) {
+                    value = digits.substring(0, 5) + ' ' + digits.substring(5);
+                }
+                if (digits.length > 8 && value.length > 9) {
+                    value = value.substring(0, 9) + ' ' + value.substring(9);
+                }
+            }
+            
+            // Limit total length
+            if (value.length > 18) {
+                value = value.substring(0, 18);
+            }
+            
+            this.value = value;
+        });
+        
+        // Triage Modal Functions
+        function openTriageModal() {
+            document.getElementById('triageModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeTriageModal() {
+            document.getElementById('triageModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('triageForm').reset();
+            hidePainScale();
+            hideContactType();
+            hideDoubleVisionStart();
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('triageModal');
+            if (event.target == modal) {
+                closeTriageModal();
+            }
+        }
+        
+        // Show/hide conditional fields
+        function showPainScale() {
+            document.getElementById('painScaleGroup').style.display = 'block';
+            document.getElementById('painScale').setAttribute('required', 'required');
+        }
+        
+        function hidePainScale() {
+            document.getElementById('painScaleGroup').style.display = 'none';
+            document.getElementById('painScale').removeAttribute('required');
+        }
+        
+        function showContactType() {
+            document.getElementById('contactTypeGroup').style.display = 'block';
+            const radioInputs = document.querySelectorAll('input[name="contactType"]');
+            radioInputs.forEach(input => input.setAttribute('required', 'required'));
+        }
+        
+        function hideContactType() {
+            document.getElementById('contactTypeGroup').style.display = 'none';
+            const radioInputs = document.querySelectorAll('input[name="contactType"]');
+            radioInputs.forEach(input => {
+                input.removeAttribute('required');
+                input.checked = false;
+            });
+        }
+        
+        function showDoubleVisionStart() {
+            document.getElementById('doubleVisionStartGroup').style.display = 'block';
+            document.getElementById('doubleVisionStart').setAttribute('required', 'required');
+        }
+        
+        function hideDoubleVisionStart() {
+            document.getElementById('doubleVisionStartGroup').style.display = 'none';
+            document.getElementById('doubleVisionStart').removeAttribute('required');
+        }
+        
+        function updatePainValue(value) {
+            document.getElementById('painValue').textContent = value;
+        }
+        
+        // File input handling
+        document.getElementById('symptomPhoto').addEventListener('change', function() {
+            const fileLabel = document.querySelector('.file-text');
+            if (this.files.length > 0) {
+                fileLabel.textContent = this.files[0].name;
+            } else {
+                fileLabel.textContent = 'Choose photo or take picture';
+            }
+        });
+        
+        // Triage form submission with webhook
+        document.getElementById('triageForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('.triage-submit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            // Collect form data
+            const formData = new FormData(this);
+            
+            // Convert FormData to regular object for JSON
+            const triageData = {
+                timestamp: new Date().toISOString(),
+                symptoms: formData.get('symptoms'),
+                symptomStart: formData.get('symptomStart'),
+                lastEyeTest: formData.get('lastEyeTest'),
+                symptomPattern: formData.get('symptomPattern'),
+                similarPast: formData.get('similarPast'),
+                eyeRed: formData.get('eyeRed'),
+                eyePainful: formData.get('eyePainful'),
+                painScale: formData.get('eyePainful') === 'yes' ? formData.get('painScale') : null,
+                lightSensitive: formData.get('lightSensitive'),
+                contactWearer: formData.get('contactWearer'),
+                contactType: formData.get('contactWearer') === 'yes' ? formData.get('contactType') : null,
+                doubleVision: formData.get('doubleVision'),
+                doubleVisionStart: formData.get('doubleVision') === 'yes' ? formData.get('doubleVisionStart') : null,
+                flashesFloaters: formData.get('flashesFloaters'),
+                additionalInfo: formData.get('additionalInfo'),
+                patientName: formData.get('triageName'),
+                patientPhone: formData.get('triagePhone'),
+                patientEmail: formData.get('triageEmail'),
+                hasPhoto: formData.get('symptomPhoto') ? true : false,
+                photoName: formData.get('symptomPhoto') ? formData.get('symptomPhoto').name : null
+            };
+            
+            try {
+                // Zapier webhook endpoint for medical triage
+                const webhookUrl = 'https://hooks.zapier.com/hooks/catch/23742018/u3nujo8/';
+                
+                // If there's a photo, we need to handle file upload separately
+                if (formData.get('symptomPhoto') && formData.get('symptomPhoto').size > 0) {
+                    // For now, we'll just include file info in the data
+                    // In production, you might want to upload the file to a cloud service first
+                    triageData.photoSize = formData.get('symptomPhoto').size;
+                    triageData.photoType = formData.get('symptomPhoto').type;
+                }
+                
+                // Log what we're sending for debugging
+                console.log('Sending triage data to Zapier:', triageData);
+                console.log('Zapier webhook URL:', webhookUrl);
+                
+                // Convert data to FormData for Zapier compatibility
+                const zapierFormData = new FormData();
+                Object.keys(triageData).forEach(key => {
+                    if (triageData[key] !== null && triageData[key] !== undefined) {
+                        zapierFormData.append(key, triageData[key]);
+                    }
+                });
+                
+                // Convert FormData to URL-encoded string for Zapier
+                const urlEncodedData = new URLSearchParams();
+                Object.keys(triageData).forEach(key => {
+                    if (triageData[key] !== null && triageData[key] !== undefined) {
+                        urlEncodedData.append(key, triageData[key]);
+                    }
+                });
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: urlEncodedData.toString()
+                });
+                
+                if (response.ok) {
+                    alert('Assessment submitted successfully! Petru will review your symptoms and contact you within 2 hours during business hours.');
+                    closeTriageModal();
+                } else {
+                    console.error('Zapier response:', response.status, response.statusText);
+                    throw new Error(`Failed to submit assessment: ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('Error submitting triage form:', error);
+                console.error('Triage data that failed:', triageData);
+                
+                // More detailed error message for debugging
+                alert(`There was an issue submitting your assessment. Error: ${error.message}. Please call us at 07737886713 for immediate assistance.`);
+            }
+            
+            // Reset button state
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+            submitBtn.disabled = false;
+        });
+    </script>
+</body>
+</html> 

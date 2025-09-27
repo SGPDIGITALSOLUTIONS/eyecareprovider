@@ -1,0 +1,5 @@
+[33mc29864b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m Major website improvements: Green hero theme, professional products layout, navigation updates
+[33m6c0b469[m Fix Zapier webhooks: send URL-encoded data instead of FormData
+[33mbb67768[m Add Zapier webhook to main contact form - sends FormData
+[33mde4b47b[m Fix Zapier webhook: use FormData instead of JSON, add better error logging
+[33m0e87e8a[m Update triage form to use Zapier webhook

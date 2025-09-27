@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Care Services Providers Ltd - Professional Eye Health Experts</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <meta name="description" content="Professional eye health experts providing comprehensive home visit eye examinations, dispensing services, and premium eyewear. Better service, better prices, convenient care.">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="assets/images/gallery/eyecareproviderlogo.jpg" alt="Eye Care Provider - I Care Services" class="logo">
+                </a>
+            </div>
+            <button class="mobile-nav-toggle" aria-label="Open navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-item active">Home</a>
+                <a href="about.html" class="nav-item">About</a>
+                <a href="advancedeyecare.html" class="nav-item">Eyecare</a>
+                <a href="advanced-eyecare-plan.html" class="nav-item">Advanced Plan</a>
+                <a href="products.html" class="nav-item">Products</a>
+                <a href="contact.html" class="nav-item">Contact</a>
+                <a href="contact.html" class="nav-item cta-nav">Request an Appointment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-diagonal-container">
+            <div class="hero-content-section">
+                <div class="hero-content">
+                    <h1>Comprehensive Eye Care<br>In Your Home</h1>
+                    <p class="hero-description">
+                        Professional eye health experts bringing comprehensive care directly to you. 
+                        We offer exceptional service at competitive prices, with the convenience of home visits, 
+                        Advanced Care Plan subscriptions, and premium Hoya lens technology.
+                    </p>
+                    
+                    <!-- Area Coverage Search -->
+                    <div class="area-search">
+                        <h3>Check if we cover your area</h3>
+                        <div class="search-container">
+                            <input type="text" id="postcodeSearch" placeholder="Enter your postcode (e.g. BD1 2AB)" class="search-input">
+                            <button type="button" class="search-button" onclick="checkCoverage()">Check Coverage</button>
+                        </div>
+                        <div id="coverageResult" class="coverage-result"></div>
+                    </div>
+                    
+                    <div class="hero-buttons">
+                        <a href="contact.html" class="cta-button primary">Request an Appointment</a>
+                        <a href="advancedeyecare.html" class="cta-button secondary">Our Eyecare</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-section">
+                <div class="rotating-images">
+                    <div class="image-slide active">
+                        <img src="assets/images/gallery/petrufinzl.jpg" alt="Petru" />
+                        <a href="about.html" class="carousel-nav-card">Meet Petru</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/Hoya.jpg" alt="Hoya Lenses" />
+                        <a href="hoya-lenses.html" class="carousel-nav-card">Hoya Lenses</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/TrialFrame.jpeg" alt="Trial Frame" />
+                        <a href="advancedeyecare.html" class="carousel-nav-card">Our Services</a>
+                    </div>
+                    <div class="image-slide">
+                        <img src="assets/images/carousel/careplan.jpg" alt="advanced-care-plan" />      
+                        <a href="contact.html" class="carousel-nav-card">Advanced Care Plan</a>
+                    </div>
+                </div>
+                <div class="image-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                    <span class="indicator" data-slide="2"></span>
+                    <span class="indicator" data-slide="3"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Trusted by Section -->
+    <section class="trusted-by">
+        <div class="container">
+            <h2>Trusted by Families and Care Providers Across Yorkshire</h2>
+            <p>From busy families to care homes, our clients trust I Care Services to provide professional eye care with convenience and excellence.</p>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do">
+        <div class="container">
+            <h2>What Does Professional Home Eye Care Include?</h2>
+            <p>We bring comprehensive eye health services directly to your home, providing the same clinical standards as a traditional practice with the added convenience of not having to travel.</p>
+            
+            <div class="section-cta" style="text-align: center; margin: 2rem 0;">
+                <a href="advancedeyecare.html" class="btn-primary">Learn More About Our Services</a>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Professional Eye Examinations & Consultation</h3>
+                    <p>Complete eye health assessments using professional diagnostic equipment, with expert advice on eye health, prescription updates, and personalized care plans.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                            <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                        </svg>
+                    </div>
+                    <h3>Prescription & Premium Technology</h3>
+                    <p>Professional eyewear consultations with fitting services, premium Hoya lens technologies, and state-of-the-art portable diagnostic equipment.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Specialized Care Services</h3>
+                    <p>MECS services, glaucoma monitoring, and diabetic eye screening for ongoing eye health management. These specialized services are available privately.</p>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Advanced Care Plan</h3>
+                    <p>Subscription-based comprehensive eye care with regular check-ups, priority booking, and ongoing professional support for your eye health journey.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real Results Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Real Results Delivered by Professional Eye Care</h2>
+            <p>Hear How We Have Helped Families Maintain Their Eye Health</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <div class="testimonial-quote-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
+                            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
+                        </svg>
+                    </div>
+                    <blockquote>"Having I Care Services visit our home has made eye care so much easier for our elderly mother. Professional service with genuine care."</blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SM</div>
+                        <cite>Sarah M.<br><span>Family Caregiver</span></cite>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-quote-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
+                            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
+                        </svg>
+                    </div>
+                    <blockquote>"The convenience of home visits combined with professional expertise means we never miss our eye health appointments anymore."</blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JT</div>
+                        <cite>James T.<br><span>Busy Professional</span></cite>
+                    </div>
+                </div>
+                
+                <div class="testimonial">
+                    <div class="testimonial-quote-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
+                            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>
+                        </svg>
+                    </div>
+                    <blockquote>"Petru's thorough examination detected early signs of glaucoma that might have been missed. His expertise and technology are outstanding."</blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RL</div>
+                        <cite>Rebecca L.<br><span>Healthcare Manager</span></cite>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h2>Why choose I Care Services?</h2>
+            <p>Our optometrists are GOC registered professionals with extensive experience, supported by advanced equipment and a commitment to providing the highest standards of eye care in your home.</p>
+            
+            <div class="benefits-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="showTab('expertise')">
+                        <span class="tab-icon">🏆</span>
+                        <span>Expertise</span>
+                    </button>
+                    <button class="tab-btn" onclick="showTab('technology')">
+                        <span class="tab-icon">🔬</span>
+                        <span>Technology</span>
+                    </button>
+                    <button class="tab-btn" onclick="showTab('convenience')">
+                        <span class="tab-icon">🏠</span>
+                        <span>Convenience</span>
+                    </button>
+                </div>
+                
+                <div class="tab-content active" id="expertise">
+                    <div class="tab-benefits">
+                        <div class="benefit-highlight">
+                            <div class="benefit-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3>Professional Expertise</h3>
+                            <p>GOC registered optometrists with years of experience and ongoing professional development to ensure the highest clinical standards. Our team maintains cutting-edge knowledge through continuous education and specialized training.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="technology">
+                    <div class="tab-benefits">
+                        <div class="benefit-highlight">
+                            <div class="benefit-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </div>
+                            <h3>Advanced Equipment & Technology</h3>
+                            <p>Professional-grade portable equipment including digital retinal imaging and comprehensive diagnostic tools for thorough examinations. Same clinical standards as high-street opticians, delivered to your home.</p>
+                        </div>
+                    </div>
+                    <h3>Flexible Scheduling</h3>
+                    <p>Request appointments that suit your schedule with evening and weekend availability. No long waits or travel required.</p>
+                </div>
+                
+                <div class="tab-content" id="convenience">
+                    <div class="tab-benefits">
+                        <div class="benefit-highlight">
+                            <div class="benefit-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12,6 12,12 16,14"/>
+                                </svg>
+                            </div>
+                            <h3>Ultimate Convenience & Accessibility</h3>
+                            <p>Flexible scheduling with evening and weekend availability. NHS and private options available. No travel required, no waiting rooms - professional eye care comes to you when it suits your schedule.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ready to Transform Section -->
+    <section class="ready-to-transform">
+        <div class="container">
+            <h2>Ready to Experience Professional Eye Care at Home?</h2>
+            <p>Book a free consultation to discuss your eye health needs and see how we can provide convenient, professional care in your own home.</p>
+            
+            <div class="transform-cta-buttons">
+                <a href="contact.html" class="cta-button primary large">Request an Appointment</a>
+                <a href="advancedeyecare.html" class="cta-button secondary large">Explore Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>I Care Services Providers Ltd</h4>
+                    <p>Professional eye health experts providing comprehensive home visit services with expertise, convenience, and personalized care.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="advancedeyecare.html">NHS Home Visits</a></li>
+                        <li><a href="advancedeyecare.html">Private Examinations</a></li>
+                        <li><a href="advanced-eyecare-plan.html">Advanced Care Plan</a></li>
+                        <li><a href="advancedeyecare.html">MECS Services</a></li>
+                        <li><a href="advancedeyecare.html">Home Dispensing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Premium Products</h4>
+                    <ul>
+                        <li><a href="hoya-lenses.html">Hoya Lens Technology</a></li>
+                        <li><a href="products.html">Eyewear Collections</a></li>
+                        <li><a href="about.html">About Petru Pavalasc</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>Email: info@icareservices.co.uk</p>
+                    <p>Phone: 07737886713</p>
+                    <p>Professional eye health experts serving your area</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal & Compliance</h4>
+                    <ul>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="data-protection.html">Data Protection</a></li>
+                        <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+                        <li><a href="complaints-procedure.html">Complaints Procedure</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 I Care Services Providers Ltd. All rights reserved. | Professional eye health experts | GDPR Compliant</p>
+                <p>Website built and managed by <a href="https://www.sgpdigitalsolutions.co.uk" target="_blank" rel="noopener">SGP Digital Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cookie-consent.js"></script>
+    
+    <script>
+    function showTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Remove active class from all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab and activate button
+        document.getElementById(tabName).classList.add('active');
+        event.target.closest('.tab-btn').classList.add('active');
+    }
+    </script>
+</body>
+</html> 

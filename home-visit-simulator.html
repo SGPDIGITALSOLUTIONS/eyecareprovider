@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Visit Simulator - Experience Your Eye Care Appointment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F4F7F8 0%, #E8F4F8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .simulator-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .simulator-header h1 {
+            font-size: 2.5rem;
+            color: #5B6770;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .simulator-header p {
+            font-size: 1.1rem;
+            color: #6B7B85;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .timeline-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(91, 103, 112, 0.1);
+        }
+
+        .timeline-step {
+            padding: 0.75rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #7A8B94;
+            position: relative;
+        }
+
+        .timeline-step.active {
+            background: linear-gradient(135deg, #4B8A8A 0%, #7BA3A3 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(75, 138, 138, 0.3);
+        }
+
+        .timeline-step:hover:not(.active) {
+            background: rgba(75, 138, 138, 0.1);
+            color: #4B8A8A;
+        }
+
+        .scene-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(91, 103, 112, 0.15);
+            overflow: hidden;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .scene {
+            display: none;
+            padding: 3rem;
+            position: relative;
+            min-height: 600px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .scene.active {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scene-content {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .scene h2 {
+            font-size: 2rem;
+            color: #5B6770;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .scene-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4B8A8A 0%, #7BA3A3 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .scene-description {
+            font-size: 1.1rem;
+            color: #6B7B85;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .room-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .equipment-list {
+            background: #F8FBFC;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .equipment-list h3 {
+            color: #5B6770;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .equipment-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .equipment-item:hover {
+            background: white;
+            transform: translateX(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .equipment-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4B8A8A 0%, #7BA3A3 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .patient-view {
+            background: #F8FBFC;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .patient-view h3 {
+            color: #5B6770;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .interactive-element {
+            background: linear-gradient(135deg, #E8B4A3 0%, #F7E6A3 100%);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #5B6770;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .interactive-element:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(232, 180, 163, 0.4);
+        }
+
+        .time-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(75, 138, 138, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4B8A8A 0%, #7BA3A3 100%);
+            transition: width 0.6s ease;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #4B8A8A 0%, #7BA3A3 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(75, 138, 138, 0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Room-specific backgrounds */
+        .scene-1 { background-image: linear-gradient(rgba(248, 251, 252, 0.8), rgba(248, 251, 252, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23F8FBFC"/><circle cx="20" cy="30" r="2" fill="%234B8A8A" opacity="0.3"/><circle cx="80" cy="70" r="3" fill="%237BA3A3" opacity="0.2"/></svg>'); }
+        .scene-2 { background-image: linear-gradient(rgba(251, 249, 245, 0.8), rgba(251, 249, 245, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23FBF9F5"/><rect x="10" y="40" width="30" height="20" fill="%234B8A8A" opacity="0.1"/><rect x="60" y="20" width="25" height="15" fill="%237BA3A3" opacity="0.1"/></svg>'); }
+        .scene-3 { background-image: linear-gradient(rgba(244, 247, 248, 0.8), rgba(244, 247, 248, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23F4F7F8"/><polygon points="30,20 70,20 80,40 20,40" fill="%234B8A8A" opacity="0.1"/></svg>'); }
+
+        @media (max-width: 768px) {
+            .room-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-nav {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .timeline-step {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .scene h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="simulator-container">
+        <div class="simulator-header">
+            <h1>🏠 Home Visit Simulator</h1>
+            <p>Experience exactly what happens during a professional eye care appointment in your home. Click through each step to see the complete process.</p>
+        </div>
+
+        <div class="timeline-nav">
+            <div class="timeline-step active" data-scene="1">Arrival & Setup</div>
+            <div class="timeline-step" data-scene="2">Equipment Check</div>
+            <div class="timeline-step" data-scene="3">Eye Examination</div>
+            <div class="timeline-step" data-scene="4">Results & Discussion</div>
+            <div class="timeline-step" data-scene="5">Completion</div>
+        </div>
+
+        <div class="scene-container">
+            <div class="progress-bar" style="width: 20%;"></div>
+            <div class="time-indicator">⏱️ 5-10 minutes</div>
+
+            <!-- Scene 1: Arrival & Setup -->
+            <div class="scene scene-1 active" data-scene="1">
+                <div class="scene-content">
+                    <h2>
+                        <div class="scene-icon">🚪</div>
+                        Welcome & Initial Setup
+                    </h2>
+                    <p class="scene-description">
+                        Petru arrives at your door with professional portable equipment. You choose the most comfortable room in your house - your living room, bedroom, or even the kitchen table.
+                    </p>
+                    
+                    <div class="room-layout">
+                        <div class="equipment-list">
+                            <h3>What Petru Brings</h3>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">💼</div>
+                                <span>Professional equipment case</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📋</div>
+                                <span>Patient forms & NHS documentation</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🧼</div>
+                                <span>Hand sanitizer & hygiene supplies</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">👠</div>
+                                <span>Shoe covers (optional)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-view">
+                            <h3>What You Experience</h3>
+                            <p>Petru introduces himself and explains the process. You remain in your comfortable clothes and choose where you'd like the examination to take place. No clinical gowns, no waiting rooms - just professional care in your space.</p>
+                            <button class="interactive-element" onclick="highlightEquipment()">👀 See Equipment Setup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 2: Equipment Check -->
+            <div class="scene scene-2" data-scene="2">
+                <div class="scene-content">
+                    <h2>
+                        <div class="scene-icon">🔬</div>
+                        Professional Equipment Setup
+                    </h2>
+                    <p class="scene-description">
+                        Petru sets up the same professional equipment used in high-street opticians - but in your comfortable environment. Everything is portable, clean, and calibrated for accuracy.
+                    </p>
+                    
+                    <div class="room-layout">
+                        <div class="equipment-list">
+                            <h3>Professional Equipment</h3>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">👁️</div>
+                                <span>Portable autorefractor</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🔍</div>
+                                <span>Ophthalmoscope & retinoscope</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📊</div>
+                                <span>Visual acuity charts</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">⚡</div>
+                                <span>Tonometer (pressure testing)</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🎯</div>
+                                <span>Trial frame & lens set</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-view">
+                            <h3>Setup Process</h3>
+                            <p>Equipment is set up on your table or surface of choice. Petru explains each piece of equipment and ensures you're comfortable with the lighting and positioning.</p>
+                            <button class="interactive-element" onclick="showEquipmentDemo()">🔧 Equipment Demo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 3: Eye Examination -->
+            <div class="scene scene-3" data-scene="3">
+                <div class="scene-content">
+                    <h2>
+                        <div class="scene-icon">👁️</div>
+                        Comprehensive Eye Examination
+                    </h2>
+                    <p class="scene-description">
+                        The full eye examination begins - identical to what you'd receive at Specsavers or any high-street optician, but with more time, attention, and comfort.
+                    </p>
+                    
+                    <div class="room-layout">
+                        <div class="equipment-list">
+                            <h3>Examination Steps</h3>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📖</div>
+                                <span>Visual acuity testing</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🎯</div>
+                                <span>Refraction assessment</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">👁️</div>
+                                <span>Eye health examination</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📊</div>
+                                <span>Eye pressure measurement</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🔍</div>
+                                <span>Retinal examination</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-view">
+                            <h3>Your Experience</h3>
+                            <p>Each test is explained clearly. You can ask questions at any time. No rushing - Petru takes the time needed for a thorough examination. Family members can observe if you'd like.</p>
+                            <button class="interactive-element" onclick="startExam()">👁️ Begin Eye Test</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 4: Results & Discussion -->
+            <div class="scene scene-4" data-scene="4">
+                <div class="scene-content">
+                    <h2>
+                        <div class="scene-icon">📋</div>
+                        Results & Recommendations
+                    </h2>
+                    <p class="scene-description">
+                        Petru discusses your results in detail, explains any findings, and provides clear recommendations. This is your time to ask questions and understand your eye health completely.
+                    </p>
+                    
+                    <div class="room-layout">
+                        <div class="equipment-list">
+                            <h3>What You Receive</h3>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📄</div>
+                                <span>Detailed prescription (if needed)</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📊</div>
+                                <span>Eye health report</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">💡</div>
+                                <span>Personalized recommendations</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📞</div>
+                                <span>Follow-up guidance</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">👓</div>
+                                <span>Eyewear options (if applicable)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-view">
+                            <h3>Discussion Time</h3>
+                            <p>Unlike rushed high-street appointments, you have plenty of time to discuss your results, ask questions, and understand your options. Petru explains everything in plain English.</p>
+                            <button class="interactive-element" onclick="showResults()">📊 View Sample Results</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scene 5: Completion -->
+            <div class="scene scene-5" data-scene="5">
+                <div class="scene-content">
+                    <h2>
+                        <div class="scene-icon">✅</div>
+                        Appointment Complete
+                    </h2>
+                    <p class="scene-description">
+                        Equipment is packed away, you have all your documentation, and any next steps are clearly explained. The entire process typically takes 30-45 minutes in the comfort of your home.
+                    </p>
+                    
+                    <div class="room-layout">
+                        <div class="equipment-list">
+                            <h3>Before Leaving</h3>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📋</div>
+                                <span>All paperwork completed</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">💼</div>
+                                <span>Equipment safely packed</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">🧹</div>
+                                <span>Area left clean and tidy</span>
+                            </div>
+                            <div class="equipment-item">
+                                <div class="equipment-icon">📞</div>
+                                <span>Contact details provided</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-view">
+                            <h3>What Happens Next</h3>
+                            <p>If you need glasses, Petru can arrange home dispensing. Any referrals are handled professionally. You have direct contact for any follow-up questions. Simple, convenient, professional.</p>
+                            <button class="interactive-element" onclick="bookRealVisit()">📅 Book Your Real Visit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            <button class="nav-btn" id="prevBtn" onclick="changeScene(-1)" disabled>← Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeScene(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScene = 1;
+        const totalScenes = 5;
+
+        const sceneData = {
+            1: { duration: "5-10 minutes", progress: 20 },
+            2: { duration: "5 minutes", progress: 40 },
+            3: { duration: "20-25 minutes", progress: 60 },
+            4: { duration: "10 minutes", progress: 80 },
+            5: { duration: "5 minutes", progress: 100 }
+        };
+
+        function changeScene(direction) {
+            const newScene = currentScene + direction;
+            if (newScene >= 1 && newScene <= totalScenes) {
+                showScene(newScene);
+            }
+        }
+
+        function showScene(sceneNumber) {
+            // Update active scene
+            document.querySelectorAll('.scene').forEach(scene => scene.classList.remove('active'));
+            document.querySelectorAll('.timeline-step').forEach(step => step.classList.remove('active'));
+            
+            document.querySelector(`.scene[data-scene="${sceneNumber}"]`).classList.add('active');
+            document.querySelector(`.timeline-step[data-scene="${sceneNumber}"]`).classList.add('active');
+            
+            // Update progress and time
+            const data = sceneData[sceneNumber];
+            document.querySelector('.progress-bar').style.width = data.progress + '%';
+            document.querySelector('.time-indicator').innerHTML = `⏱️ ${data.duration}`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = (sceneNumber === 1);
+            document.getElementById('nextBtn').disabled = (sceneNumber === totalScenes);
+            
+            currentScene = sceneNumber;
+        }
+
+        // Timeline navigation
+        document.querySelectorAll('.timeline-step').forEach(step => {
+            step.addEventListener('click', () => {
+                const sceneNumber = parseInt(step.getAttribute('data-scene'));
+                showScene(sceneNumber);
+            });
+        });
+
+        // Interactive elements
+        function highlightEquipment() {
+            alert('💼 Petru arrives with a compact professional case containing all necessary equipment. Everything is portable and designed for home visits - no bulky machines or uncomfortable setups!');
+        }
+
+        function showEquipmentDemo() {
+            alert('🔬 Each piece of equipment is explained before use. The autorefractor takes just seconds, the eye pressure test is gentle, and all equipment meets the same standards as high-street opticians.');
+        }
+
+        function startExam() {
+            alert('👁️ "Can you read the bottom line?" The examination begins just like any optician, but you\'re in your favorite chair, in your own lighting, with no time pressure.');
+        }
+
+        function showResults() {
+            alert('📊 Your results are explained clearly with practical advice. If you need glasses, options are discussed. Any concerns are addressed thoroughly - this is YOUR time.');
+        }
+
+        function bookRealVisit() {
+            alert('📞 Ready to experience this for real? Contact I Care Services to request your home visit appointment. NHS and private options available.');
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>I Care Services Providers Ltd</h4>
+                    <p>Professional eye health experts providing comprehensive home visit services with expertise, convenience, and personalized care.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="advancedeyecare.html">NHS Home Visits</a></li>
+                        <li><a href="advancedeyecare.html">Private Examinations</a></li>
+                        <li><a href="advanced-eyecare-plan.html">Advanced Care Plan</a></li>
+                        <li><a href="advancedeyecare.html">MECS Services</a></li>
+                        <li><a href="advancedeyecare.html">Home Dispensing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Premium Products</h4>
+                    <ul>
+                        <li><a href="hoya-lenses.html">Hoya Lens Technology</a></li>
+                        <li><a href="products.html">Eyewear Collections</a></li>
+                        <li><a href="about.html">About Petru Pavalasc</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>Email: info@icareservices.co.uk</p>
+                    <p>Phone: 07737886713</p>
+                    <p>Professional eye health experts serving your area</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal & Compliance</h4>
+                    <ul>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="data-protection.html">Data Protection</a></li>
+                        <li><a href="terms-conditions.html">Terms & Conditions</a></li>
+                        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+                        <li><a href="complaints-procedure.html">Complaints Procedure</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 I Care Services Providers Ltd. All rights reserved. | Professional eye health experts | GDPR Compliant</p>
+                <p>Website built and managed by <a href="https://www.sgpdigitalsolutions.co.uk" target="_blank" rel="noopener">SGP Digital Solutions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cookie-consent.js"></script>
+</body>
+</html> 
