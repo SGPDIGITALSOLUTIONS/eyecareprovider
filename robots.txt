@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# XML Sitemap
+Sitemap: https://www.icareservices.co.uk/sitemap.xml
+
+# Block access to sensitive areas
+Disallow: /api/
+Disallow: /server.js
+Disallow: /server.rb
+Disallow: /node_modules/
+Disallow: /stripe-cli/
+Disallow: /*.zip
+Disallow: /env.example
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /Gemfile
+Disallow: /development-checklist.md
+Disallow: /EMAIL_SETUP.md
+Disallow: /POWER_AUTOMATE_SETUP.md
+Disallow: /STRIPE_SETUP.md
+Disallow: /project-structure.md
+Disallow: /website_design_specification.md
+Disallow: /WebInspire_vs_Current_Comparison.md
+Disallow: /Planned_vs_Provided_Pages_Comparison.md
+
+# Allow important resources
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+
+# Crawl delay to be respectful
+Crawl-delay: 1

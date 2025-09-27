@@ -8,6 +8,20 @@
     box-sizing: border-box;
 }
 
+/* Global mobile overflow fix */
+html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+}
+
 :root {
     /* Core brand colors - sophisticated yet warm */
     --background: #F4F7F8;
@@ -5275,6 +5289,7 @@ body {
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
+    /* Mobile Navigation */
     .mobile-nav-toggle {
         display: flex;
     }
@@ -5293,6 +5308,43 @@ body {
     
     .nav-links.mobile-active {
         display: flex;
+    }
+    
+    /* Mobile Center Alignment for All Sections */
+    .container {
+        text-align: center;
+        padding: 0 var(--spacing-sm);
+    }
+    
+    .hero-content-section {
+        text-align: center;
+    }
+    
+    .trusted-by .container,
+    .what-we-do .container,
+    .testimonials .container,
+    .why-choose-us .container,
+    .ready-to-transform .container {
+        text-align: center;
+    }
+    
+    .services-grid {
+        text-align: center;
+    }
+    
+    .testimonials-grid {
+        text-align: center;
+    }
+    
+    .benefits-tabs {
+        text-align: center;
+    }
+    
+    .transform-cta-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
     }
     
     /* Hero Mobile Styles */
@@ -5719,10 +5771,244 @@ body {
         grid-template-columns: 1fr;
     }
     
+    /* Mobile Footer Complete Fix */
+    .footer {
+        width: 100vw;
+        max-width: 100vw;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        margin: 0;
+        padding: var(--spacing-xl) 0 var(--spacing-lg) 0;
+    }
+    
+    .footer .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0 var(--spacing-sm);
+        box-sizing: border-box;
+    }
+    
     .footer-content {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .footer-section {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
         text-align: center;
-        gap: var(--spacing-md);
+        padding: 0;
+        margin: 0;
+    }
+    
+    .footer-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: var(--spacing-sm);
+        word-wrap: break-word;
+    }
+    
+    .footer-section p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .footer-section li {
+        margin-bottom: var(--spacing-xs);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .footer-section a {
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        display: inline-block;
+        max-width: 100%;
+    }
+    
+    .footer-bottom {
+        border-top: 1px solid var(--secondary-accent);
+        padding-top: var(--spacing-md);
+        text-align: center;
+        font-size: 0.8rem;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .footer-bottom p {
+        margin: 0;
+        padding: 0 var(--spacing-xs);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+}
+
+/* Aggressive mobile footer fix for viewport constraint */
+@media (max-width: 768px) {
+    .footer {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: var(--spacing-xl) 0 var(--spacing-lg) 0 !important;
+        overflow-x: hidden !important;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
+        box-sizing: border-box;
+    }
+    
+    .footer * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    .footer .container {
+        width: 100% !important;
+        max-width: calc(100vw - 2rem) !important;
+        margin: 0 auto !important;
+        padding: 0 var(--spacing-sm) !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* Mobile Form and Checkbox Fixes */
+    .checkbox-label {
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    .checkbox-label a {
+        white-space: nowrap !important;
+        display: inline-block !important;
+    }
+    
+    .checkbox-group {
+        align-items: flex-start !important;
+        gap: var(--spacing-xs) !important;
+    }
+    
+    .checkmark {
+        min-width: 18px !important;
+        height: 18px !important;
+        margin-top: 2px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Center form submit buttons on all mobile devices */
+    .form-submit {
+        display: block !important;
+        margin: var(--spacing-lg) auto 0 auto !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        text-align: center !important;
+    }
+}
+
+/* Extra small mobile form fixes - CONSOLIDATED */
+@media (max-width: 480px) {
+    /* Reset all checkbox labels first */
+    .checkbox-label {
+        font-size: 0.75rem !important;
+        line-height: 1.2 !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: var(--spacing-xs) !important;
+        word-break: normal !important;
+        hyphens: none !important;
+        text-align: left !important;
+        width: 100% !important;
+        word-spacing: -0.02em !important;
+        letter-spacing: -0.005em !important;
+    }
+    
+    /* All checkbox links */
+    .checkbox-label a {
+        white-space: nowrap !important;
+        font-weight: 700 !important;
+        color: var(--cta) !important;
+        text-decoration: underline !important;
+        display: inline !important;
+        font-size: inherit !important;
+    }
+    
+    /* Privacy Policy specific overrides - HIGH SPECIFICITY */
+    .form-group .checkbox-label.privacy-policy-label {
+        font-size: 0.68rem !important;
+        line-height: 1.1 !important;
+        word-spacing: -0.06em !important;
+        letter-spacing: -0.015em !important;
+        gap: 6px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+    }
+    
+    .form-group .checkbox-label.privacy-policy-label a {
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        color: var(--cta) !important;
+    }
+    
+    /* Form groups */
+    .form-group.checkbox-group {
+        margin-bottom: var(--spacing-md) !important;
+    }
+    
+    /* Contact and triage form specific */
+    .contact-form .checkbox-label,
+    .triage-form .checkbox-label {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding-right: var(--spacing-xs) !important;
+    }
+    
+    /* Center form submit buttons on mobile */
+    .form-submit {
+        display: block !important;
+        margin: var(--spacing-lg) auto 0 auto !important;
+        width: 100% !important;
+        max-width: 280px !important;
+        text-align: center !important;
+    }
+    
+    .contact-form .form-submit {
+        margin: var(--spacing-lg) auto 0 auto !important;
+    }
+}
+
+/* Ultra small screens - HIGH SPECIFICITY */
+@media (max-width: 380px) {
+    .form-group .checkbox-label.privacy-policy-label {
+        font-size: 0.62rem !important;
+        line-height: 1.0 !important;
+        word-spacing: -0.08em !important;
+        letter-spacing: -0.02em !important;
+    }
+    
+    .form-group .checkbox-label.privacy-policy-label a {
+        font-size: 0.62rem !important;
     }
 }
 
@@ -6333,21 +6619,92 @@ body {
     .hero-content-section {
         padding: var(--spacing-lg) var(--spacing-sm);
         min-height: 50vh;
+        text-align: center;
     }
     
     .hero h1 {
         font-size: 2rem;
         line-height: 1.2;
+        text-align: center;
     }
     
     .hero-description {
         font-size: 1rem;
+        text-align: center;
     }
     
     .hero-buttons {
         flex-direction: column;
         gap: 1rem;
         width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Mobile body and html overflow fix */
+    body {
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    * {
+        box-sizing: border-box;
+    }
+    
+    /* Extra mobile footer fix */
+    .footer {
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+    
+    .footer .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 var(--spacing-sm);
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    /* All sections center alignment */
+    section {
+        text-align: center;
+    }
+    
+    .service-item,
+    .testimonial,
+    .benefit-highlight,
+    .tab-content {
+        text-align: center;
+    }
+    
+    .cta-button {
+        display: inline-block;
+        text-align: center;
+        margin: 0 auto;
+    }
+    
+    .area-search {
+        text-align: center;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .search-container {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+    }
+    
+    .search-input,
+    .search-button {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
     }
     
     /* Extra Small Mobile Carousel */
@@ -7217,56 +7574,7 @@ body {
     padding: var(--spacing-2xl) 0 var(--spacing-lg);
 }
 
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-}
-
-.footer-section h3 {
-    color: var(--cta);
-    font-family: var(--font-accent);
-    margin-bottom: var(--spacing-md);
-}
-
-.footer-section h4 {
-    color: var(--warm-accent);
-    margin-bottom: var(--spacing-sm);
-    font-weight: var(--font-weight-semibold);
-}
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-section ul li {
-    margin-bottom: var(--spacing-xs);
-}
-
-.footer-section ul li a {
-    color: var(--navigation);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-section ul li a:hover {
-    color: var(--white);
-}
-
-.footer-section p {
-    color: var(--navigation);
-    margin-bottom: var(--spacing-xs);
-}
-
-.footer-bottom {
-    border-top: 1px solid var(--medium-gray);
-    padding-top: var(--spacing-md);
-    text-align: center;
-    color: var(--navigation);
-    font-size: 0.9rem;
-}
+/* Duplicate footer styles removed - using consolidated styles above */
 
 /* Terms Page Styles */
 .terms-content {
@@ -7382,34 +7690,7 @@ body {
     border-top: 3px solid var(--cta);
 }
 
-.checkbox-group {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-    gap: 0.75rem;
-}
-
-.checkbox-group input[type="checkbox"] {
-    margin-top: 0.25rem;
-    transform: scale(1.2);
-    accent-color: var(--cta);
-}
-
-.checkbox-group label {
-    color: var(--text-warm);
-    line-height: 1.5;
-    font-size: 0.95rem;
-}
-
-.checkbox-group label a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-.checkbox-group label a:hover {
-    color: var(--link-hover);
-    text-decoration: underline;
-}
+/* Duplicate checkbox styles removed - using consolidated styles above */
 
 .form-actions {
     text-align: center;
