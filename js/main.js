@@ -482,7 +482,7 @@ function checkCoverage() {
         } else {
             showResult(
                 `📍 We don't currently cover ${postcode}, but we're expanding!<br>
-                <strong>Contact us:</strong> info@icareservices.co.uk<br>
+                <strong>Contact us:</strong> info@eyecareprovider.co.uk<br>
                 We'll notify you when we reach your area.`, 
                 'warning'
             );

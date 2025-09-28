@@ -17,7 +17,7 @@ const emailConfig = {
   // Email settings
   from: {
     name: 'I Care Services Providers Ltd',
-    email: process.env.EMAIL_USER || 'info@icareservices.co.uk'
+    email: process.env.EMAIL_USER || 'info@eyecareprovider.co.uk'
   },
   
   // WhatsApp contact details
@@ -126,7 +126,7 @@ const createWelcomeEmail = (customerEmail, customerName = 'Valued Customer') => 
                 <li><strong>Next Billing:</strong> Monthly on your signup date</li>
             </ul>
             
-            <p>If you have any questions or need immediate assistance, don't hesitate to reach out via WhatsApp or email us at <a href="mailto:info@icareservices.co.uk">info@icareservices.co.uk</a>.</p>
+            <p>If you have any questions or need immediate assistance, don't hesitate to reach out via WhatsApp or email us at <a href="mailto:info@eyecareprovider.co.uk">info@eyecareprovider.co.uk</a>.</p>
             
             <p>Welcome to the family!</p>
             
@@ -175,7 +175,7 @@ What's Next:
 
 Questions? Contact us:
 WhatsApp: ${emailConfig.whatsapp.number}
-Email: info@icareservices.co.uk
+Email: info@eyecareprovider.co.uk
 
 Welcome to the family!
 
