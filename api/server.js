@@ -24,6 +24,7 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'https://www.eyecareprovider.co.uk',
     'https://eyecareprovider.co.uk',
+    'https://api.eyecareprovider.co.uk',
     'https://3bbec7964f72.ngrok-free.app',
     'http://localhost:3000',
     'http://127.0.0.1:5500' // Live Server
@@ -32,16 +33,22 @@ app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    // For development and testing, allow all origins
+    // In production, you should be more restrictive
+    res.header('Access-Control-Allow-Origin', '*');
   }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
+    res.status(200).end();
+    return;
   }
+  
+  next();
 });
 
 // Your domain - dynamically set via GitHub variables
