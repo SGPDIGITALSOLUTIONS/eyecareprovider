@@ -26,8 +26,7 @@ app.use((req, res, next) => {
     'https://eyecareprovider.co.uk',
     'https://3bbec7964f72.ngrok-free.app',
     'http://localhost:3000',
-    'http://127.0.0.1:5500', // Live Server
-    'https://eyecareprovider-master.vercel.app' // Add your Vercel domain if different
+    'http://127.0.0.1:5500' // Live Server
   ];
   
   const origin = req.headers.origin;
@@ -218,18 +217,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve static files
 app.get('/', (req, res) => {
-  res.redirect('/index.html');
-});
-
-// Handle other routes that aren't API or static files
-app.get('*', (req, res) => {
-  // For any other route, try to serve the corresponding HTML file
-  const path = req.path;
-  if (path.endsWith('.html') || path === '/') {
-    res.sendFile(__dirname + (path === '/' ? '/index.html' : path));
-  } else {
-    res.status(404).send('Page not found');
-  }
+  res.redirect('/advanced-eyecare-plan.html');
 });
 
 // Start server
