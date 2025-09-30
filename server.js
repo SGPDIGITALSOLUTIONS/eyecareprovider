@@ -23,6 +23,7 @@ app.use(express.static(__dirname));
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://www.eyecareprovider.co.uk',
+    'https://eyecareprovider.co.uk',
     'https://3bbec7964f72.ngrok-free.app',
     'http://localhost:3000',
     'http://127.0.0.1:5500' // Live Server
@@ -47,7 +48,7 @@ app.use((req, res, next) => {
 const YOUR_DOMAIN = process.env.DOMAIN || 'https://eyecareprovider.co.uk';
 
 // Create checkout session
-app.post('/create-checkout-session', async (req, res) => {
+app.post('/api/create-checkout-session', async (req, res) => {
   try {
     // Build session config
     const sessionConfig = {
@@ -91,7 +92,7 @@ app.post('/create-checkout-session', async (req, res) => {
 });
 
 // Create portal session
-app.post('/create-portal-session', async (req, res) => {
+app.post('/api/create-portal-session', async (req, res) => {
   try {
     const { session_id } = req.body;
     const checkoutSession = await stripeClient.checkout.sessions.retrieve(session_id);

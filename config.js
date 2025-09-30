@@ -3,7 +3,7 @@
 
 window.CONFIG = {
     // API endpoint - will be set by deployment platform
-    API_BASE_URL: 'https://3bbec7964f72.ngrok-free.app',
+    API_BASE_URL: 'https://eyecareprovider.co.uk',
     
     // Stripe publishable key - will be injected by server
     STRIPE_PUBLISHABLE_KEY: 'pk_test_your_key_here'
