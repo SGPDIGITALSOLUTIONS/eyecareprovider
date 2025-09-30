@@ -36,18 +36,23 @@ app.use((req, res, next) => {
   console.log(`🌐 CORS Request: ${req.method} ${req.url}`);
   console.log(`   Origin: ${origin || 'No origin header'}`);
   
-  // Always set CORS headers
+  // Set CORS headers - always allow the requesting origin if it's in our list
   if (origin && allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     console.log(`   ✅ Allowed origin: ${origin}`);
+  } else if (origin) {
+    // For debugging, temporarily allow all origins but log them
+    res.header('Access-Control-Allow-Origin', origin);
+    console.log(`   🔓 Temporarily allowing origin: ${origin}`);
   } else {
-    // Allow all origins for now to fix the immediate issue
+    // No origin header (direct API calls)
     res.header('Access-Control-Allow-Origin', '*');
-    console.log(`   🔓 Using wildcard origin (origin: ${origin})`);
+    console.log(`   🔓 No origin header, using wildcard`);
   }
   
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma');
+  res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
   
   // Handle preflight requests
@@ -62,6 +67,12 @@ app.use((req, res, next) => {
 
 // Your domain - dynamically set via GitHub variables
 const YOUR_DOMAIN = process.env.DOMAIN || 'https://eyecareprovider.co.uk';
+
+// OPTIONS handler for create-checkout-session
+app.options('/api/create-checkout-session', (req, res) => {
+  console.log('🚀 Handling OPTIONS for create-checkout-session');
+  res.status(200).end();
+});
 
 // Create checkout session
 app.post('/api/create-checkout-session', async (req, res) => {
@@ -105,6 +116,12 @@ app.post('/api/create-checkout-session', async (req, res) => {
     console.error('Stripe error:', error);
     res.status(400).json({ error: { message: error.message } });
   }
+});
+
+// OPTIONS handler for create-portal-session
+app.options('/api/create-portal-session', (req, res) => {
+  console.log('🚀 Handling OPTIONS for create-portal-session');
+  res.status(200).end();
 });
 
 // Create portal session
