@@ -57,16 +57,15 @@ class StripeIntegration {
         button.textContent = 'Processing...';
 
         try {
-            // Create checkout session - use config or fallback
-            const apiUrl = window.CONFIG?.API_BASE_URL || 'https://api.eyecareprovider.co.uk';
+            // Use relative URL - works in both development and production
+            const apiEndpoint = '/api/create-checkout-session';
             
             // Add debugging
-            console.log('🔗 Making request to:', `${apiUrl}/api/create-checkout-session`);
+            console.log('🔗 Making request to:', apiEndpoint);
             console.log('🌐 Current origin:', window.location.origin);
             
-            const response = await fetch(`${apiUrl}/api/create-checkout-session`, {
+            const response = await fetch(apiEndpoint, {
                 method: 'POST',
-                mode: 'cors', // Explicitly set CORS mode
                 headers: {
                     'Content-Type': 'application/json',
                 },

@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'https://www.eyecareprovider.co.uk',
     'https://eyecareprovider.co.uk',
-    'https://api.eyecareprovider.co.uk',
     'https://3bbec7964f72.ngrok-free.app',
     'http://localhost:3000',
     'http://127.0.0.1:5500' // Live Server

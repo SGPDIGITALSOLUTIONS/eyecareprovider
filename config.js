@@ -2,8 +2,8 @@
 // This will be set by your deployment platform using environment variables
 
 window.CONFIG = {
-    // API endpoint - will be set by deployment platform
-    API_BASE_URL: 'https://api.eyecareprovider.co.uk',
+    // API endpoint - use relative URLs for same-domain deployment
+    API_BASE_URL: '', // Empty string means relative to current domain
     
     // Stripe publishable key - will be injected by server
     STRIPE_PUBLISHABLE_KEY: 'pk_test_your_actual_publishable_key_here'
