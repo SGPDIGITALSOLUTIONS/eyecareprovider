@@ -217,7 +217,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve static files
 app.get('/', (req, res) => {
-  res.redirect('/advanced-eyecare-plan.html');
+  res.redirect('/index.html');
 });
 
 // Start server

@@ -13,7 +13,7 @@
     },
     {
       "src": "/",
-      "dest": "/advanced-eyecare-plan.html"
+      "dest": "/index.html"
     },
     {
       "src": "/(.*\\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
