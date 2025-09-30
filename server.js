@@ -19,9 +19,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// CORS middleware to allow requests from localhost:3000
+// CORS middleware to allow requests from multiple domains
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  const allowedOrigins = [
+    'https://www.eyecareprovider.co.uk',
+    'https://3bbec7964f72.ngrok-free.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:5500' // Live Server
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   
@@ -33,8 +43,8 @@ app.use((req, res, next) => {
   }
 });
 
-// Your domain
-const YOUR_DOMAIN = process.env.DOMAIN || `http://localhost:${port}`;
+// Your domain - dynamically set via GitHub variables
+const YOUR_DOMAIN = process.env.DOMAIN || 'https://eyecareprovider.co.uk';
 
 // Create checkout session
 app.post('/create-checkout-session', async (req, res) => {
@@ -99,7 +109,7 @@ app.post('/create-portal-session', async (req, res) => {
 });
 
 // Webhook endpoint
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

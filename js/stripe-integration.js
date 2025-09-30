@@ -57,8 +57,9 @@ class StripeIntegration {
         button.textContent = 'Processing...';
 
         try {
-            // Create checkout session
-            const response = await fetch('http://localhost:4242/create-checkout-session', {
+            // Create checkout session - use config or fallback
+            const apiUrl = window.CONFIG?.API_BASE_URL || 'https://3bbec7964f72.ngrok-free.app';
+            const response = await fetch(`${apiUrl}/create-checkout-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

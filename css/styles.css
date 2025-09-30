@@ -22,6 +22,19 @@ body {
     position: relative;
 }
 
+/* Prevent layout shift from images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Ensure consistent button sizing */
+.cta-button, .btn-primary, .btn-secondary {
+    box-sizing: border-box;
+    min-height: 48px;
+}
+
 :root {
     /* Core brand colors - sophisticated yet warm */
     --background: #F4F7F8;
@@ -162,6 +175,8 @@ body {
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
+    /* Prevent layout shift */
+    min-height: 60px;
 }
 
 .nav-item {
@@ -216,6 +231,8 @@ body {
     align-items: center;
     padding-top: 20px;
     margin-top: 0;
+    /* Prevent layout shift */
+    contain: layout;
 }
 
 .hero-diagonal-container {
@@ -319,6 +336,13 @@ body {
     max-width: 600px;
     position: relative;
     z-index: 3;
+    /* Prevent layout shift */
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform: translateZ(0);
+    will-change: auto;
 }
 
 .hero h1 {
@@ -330,6 +354,12 @@ body {
     margin-bottom: var(--spacing-md);
     position: relative;
     z-index: 1;
+    /* Prevent layout shift */
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 
@@ -459,6 +489,11 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-lg);
     border: 1px solid rgba(215, 221, 225, 0.3);
+    /* Prevent layout shift */
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .area-search h3 {
@@ -467,6 +502,9 @@ body {
     color: var(--headers);
     margin-bottom: var(--spacing-md);
     text-align: center;
+    /* Prevent layout shift */
+    min-height: 28px;
+    line-height: 1.4;
 }
 
 .search-container {
@@ -565,6 +603,11 @@ body {
     color: var(--cta);
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);
     border: 3px solid rgba(255, 255, 255, 0.2);
+    /* Prevent layout shift */
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero .cta-button.primary:hover {
@@ -620,6 +663,9 @@ body {
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.5s ease;
+    /* Prevent layout shift */
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .cta-button.primary:hover {
