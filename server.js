@@ -216,10 +216,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static files
-app.get('/', (req, res) => {
-  res.redirect('/advanced-eyecare-plan.html');
-});
+// Serve static files - let Vercel handle static files directly
+// Only handle API routes in server.js
 
 // Start server
 app.listen(port, () => {
