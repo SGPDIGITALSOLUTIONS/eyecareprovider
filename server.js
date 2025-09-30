@@ -26,7 +26,8 @@ app.use((req, res, next) => {
     'https://eyecareprovider.co.uk',
     'https://3bbec7964f72.ngrok-free.app',
     'http://localhost:3000',
-    'http://127.0.0.1:5500' // Live Server
+    'http://127.0.0.1:5500', // Live Server
+    'https://eyecareprovider-master.vercel.app' // Add your Vercel domain if different
   ];
   
   const origin = req.headers.origin;
