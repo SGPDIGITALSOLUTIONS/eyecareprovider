@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// CORS middleware to allow requests from multiple domains
+// Enhanced CORS middleware with debugging
 app.use((req, res, next) => {
   const allowedOrigins = [
     'https://www.eyecareprovider.co.uk',
@@ -31,19 +31,28 @@ app.use((req, res, next) => {
   ];
   
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
+  
+  // Log CORS request for debugging
+  console.log(`🌐 CORS Request: ${req.method} ${req.url}`);
+  console.log(`   Origin: ${origin || 'No origin header'}`);
+  
+  // Always set CORS headers
+  if (origin && allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+    console.log(`   ✅ Allowed origin: ${origin}`);
   } else {
-    // For development and testing, allow all origins
-    // In production, you should be more restrictive
+    // Allow all origins for now to fix the immediate issue
     res.header('Access-Control-Allow-Origin', '*');
+    console.log(`   🔓 Using wildcard origin (origin: ${origin})`);
   }
+  
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Max-Age', '86400'); // Cache preflight for 24 hours
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
+    console.log(`   🚀 Handling OPTIONS preflight request`);
     res.status(200).end();
     return;
   }
@@ -220,6 +229,20 @@ app.get('/api/health', (req, res) => {
       portal: '/api/create-portal-session'
     }
   });
+});
+
+// CORS test endpoint
+app.get('/api/cors-test', (req, res) => {
+  res.json({
+    message: 'CORS is working!',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString(),
+    headers: req.headers
+  });
+});
+
+app.options('/api/cors-test', (req, res) => {
+  res.status(200).end();
 });
 
 // Serve static files
