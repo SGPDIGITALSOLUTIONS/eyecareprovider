@@ -12,12 +12,16 @@
       "dest": "/server.js"
     },
     {
+      "src": "/",
+      "dest": "/advanced-eyecare-plan.html"
+    },
+    {
       "src": "/(.*\\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
       "dest": "/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/server.js"
+      "dest": "/$1.html"
     }
   ]
 }
