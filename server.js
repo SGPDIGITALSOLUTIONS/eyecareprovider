@@ -109,7 +109,7 @@ app.post('/api/create-portal-session', async (req, res) => {
   }
 });
 
-// Webhook endpoint
+// Webhook endpoint (new API structure)
 app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -152,6 +152,14 @@ app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), asyn
   res.json({ received: true });
 });
 
+// Legacy webhook endpoint (backup)
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  console.log('⚠️  Legacy webhook endpoint called - redirecting to new endpoint');
+  // Redirect to the main webhook handler
+  req.url = '/api/webhooks/stripe';
+  return app._router.handle(req, res);
+});
+
 // Handle new subscription - send welcome email
 async function handleNewSubscription(subscription) {
   try {
@@ -192,6 +200,20 @@ async function handleNewSubscription(subscription) {
     console.error('❌ Error handling new subscription:', error);
   }
 }
+
+// Test endpoint to verify server is running
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      webhook: '/api/webhooks/stripe',
+      checkout: '/api/create-checkout-session',
+      portal: '/api/create-portal-session'
+    }
+  });
+});
 
 // Serve static files
 app.get('/', (req, res) => {

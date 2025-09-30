@@ -58,7 +58,7 @@ class StripeIntegration {
 
         try {
             // Create checkout session - use config or fallback
-            const apiUrl = window.CONFIG?.API_BASE_URL || 'https://eyecareprovider.co.uk';
+            const apiUrl = window.CONFIG?.API_BASE_URL || 'https://api.eyecareprovider.co.uk';
             const response = await fetch(`${apiUrl}/api/create-checkout-session`, {
                 method: 'POST',
                 headers: {
