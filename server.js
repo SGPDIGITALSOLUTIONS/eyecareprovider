@@ -216,8 +216,21 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static files - let Vercel handle static files directly
-// Only handle API routes in server.js
+// Serve static files
+app.get('/', (req, res) => {
+  res.redirect('/index.html');
+});
+
+// Handle other routes that aren't API or static files
+app.get('*', (req, res) => {
+  // For any other route, try to serve the corresponding HTML file
+  const path = req.path;
+  if (path.endsWith('.html') || path === '/') {
+    res.sendFile(__dirname + (path === '/' ? '/index.html' : path));
+  } else {
+    res.status(404).send('Page not found');
+  }
+});
 
 // Start server
 app.listen(port, () => {
