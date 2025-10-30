@@ -275,6 +275,61 @@ body {
     box-shadow: var(--shadow-xl);
 }
 
+/* NHS Services Banner */
+.nhs-banner {
+    background: #025aba;
+    padding: 20px 0;
+    overflow: hidden;
+}
+
+.nhs-banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nhs-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nhs-logo img {
+    height: 102px;
+    width: auto;
+    display: block;
+}
+
+.nhs-text {
+    text-align: center;
+}
+
+.nhs-text p {
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+@media (max-width: 768px) {
+    .nhs-banner {
+        padding: 15px 0;
+    }
+    
+    .nhs-logo img {
+        height: 38px;
+    }
+    
+    .nhs-text p {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+}
+
 .page-hero {
     background: var(--cta);
     padding: var(--spacing-xl) 0;
