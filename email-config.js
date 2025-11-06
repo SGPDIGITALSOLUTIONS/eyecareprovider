@@ -16,7 +16,7 @@ const emailConfig = {
   
   // Email settings
   from: {
-    name: 'I Care Services Providers Ltd',
+    name: 'I Care Service Provider Ltd',
     email: process.env.EMAIL_USER || 'info@eyecareprovider.co.uk'
   },
   
@@ -132,11 +132,11 @@ const createWelcomeEmail = (customerEmail, customerName = 'Valued Customer') => 
             
             <p><strong>Petru Pavalasc</strong><br>
             Professional Optometrist<br>
-            I Care Services Providers Ltd</p>
+            I Care Service Provider Ltd</p>
         </div>
         
         <div class="footer">
-            <p>© 2025 I Care Services Providers Ltd. All rights reserved.</p>
+            <p>© 2025 I Care Service Provider Ltd. All rights reserved.</p>
             <p>You received this email because you subscribed to our Advanced Eye Care Plan.</p>
             <p><a href="https://billing.stripe.com/p/login/test_cNi5kD8T2fYz3uS5yg67S00">Manage your subscription</a></p>
         </div>
@@ -181,7 +181,7 @@ Welcome to the family!
 
 Petru Pavalasc
 Professional Optometrist
-I Care Services Providers Ltd
+I Care Service Provider Ltd
 `;
 
   return {

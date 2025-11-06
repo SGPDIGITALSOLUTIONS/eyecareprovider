@@ -204,6 +204,18 @@ body {
     background: var(--headers) !important;
 }
 
+.nav-nhs-logo {
+    display: flex;
+    align-items: center;
+    margin-left: var(--spacing-md);
+}
+
+.nav-nhs-logo img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
 .mobile-nav-toggle {
     display: none;
     flex-direction: column;
@@ -277,7 +289,7 @@ body {
 
 /* NHS Services Banner */
 .nhs-banner {
-    background: #025aba;
+    background: white;
     padding: 20px 0;
     overflow: hidden;
 }
@@ -285,19 +297,19 @@ body {
 .nhs-banner-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-end;
     gap: 10px;
 }
 
 .nhs-logo {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .nhs-logo img {
-    height: 102px;
+    height: 133px;
     width: auto;
     display: block;
 }
@@ -321,7 +333,7 @@ body {
     }
     
     .nhs-logo img {
-        height: 38px;
+        height: 49px;
     }
     
     .nhs-text p {
@@ -5409,6 +5421,16 @@ body {
     
     .nav-links.mobile-active {
         display: flex;
+    }
+    
+    .nav-nhs-logo {
+        margin-left: 0;
+        margin-top: var(--spacing-sm);
+        justify-content: center;
+    }
+    
+    .nav-nhs-logo img {
+        height: 40px;
     }
     
     /* Mobile Center Alignment for All Sections */
