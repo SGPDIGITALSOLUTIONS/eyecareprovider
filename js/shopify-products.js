@@ -136,18 +136,37 @@ function renderProductGrid(products, containerId) {
  * Initialize product preview
  */
 async function initProductPreview(containerId = 'products-preview', limit = 6) {
+  // Wait for credentials to be available
+  let attempts = 0;
+  while ((!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) && attempts < 50) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    attempts++;
+  }
+  
+  // Update config with loaded credentials
+  SHOPIFY_CONFIG.domain = window.SHOPIFY_STORE_DOMAIN || '';
+  SHOPIFY_CONFIG.accessToken = window.SHOPIFY_STOREFRONT_TOKEN || '';
+  
+  // Fetch products
   const products = await fetchProducts(limit);
+  
+  // Render the grid
   renderProductGrid(products, containerId);
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+// Wait for DOM and credentials, then initialize
+function startInit() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initProductPreview();
+    });
+  } else {
     initProductPreview();
-  });
-} else {
-  initProductPreview();
+  }
 }
+
+// Start initialization
+startInit();
 
 // Export for manual initialization if needed
 window.initShopifyProducts = initProductPreview;
