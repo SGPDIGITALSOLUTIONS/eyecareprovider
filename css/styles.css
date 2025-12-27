@@ -2277,6 +2277,51 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Shop Page Filters */
+.shop-filters {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid #d7dde1;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #5b6770;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.filter-btn:hover {
+    background: #f4f7f8;
+    border-color: #4b8a8a;
+}
+
+.filter-btn.active {
+    background: #4b8a8a;
+    color: white;
+    border-color: #4b8a8a;
+}
+
+.shop-products-container {
+    margin: 2rem 0;
+}
+
+.shop-results-count {
+    text-align: center;
+    color: #5B6770;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .product-preview-info {
         padding: 1rem;

@@ -1,25 +1,25 @@
 /**
- * Shopify Products Preview
- * Fetches and displays product previews on products.html
+ * Shopify Shop Page
+ * Displays all products with filtering
  */
 
 // Shopify API Configuration
-// These should be set in your environment or passed from server
 const SHOPIFY_CONFIG = {
-  domain: window.SHOPIFY_STORE_DOMAIN || '', // Set via script tag
-  accessToken: window.SHOPIFY_STOREFRONT_TOKEN || '', // Set via script tag
+  domain: window.SHOPIFY_STORE_DOMAIN || '',
+  accessToken: window.SHOPIFY_STOREFRONT_TOKEN || '',
   apiVersion: '2025-01',
 };
 
-// GraphQL Query for Products
+// GraphQL Query for Products with Tag Filtering
 const PRODUCTS_QUERY = `
-  query getProducts($first: Int!) {
-    products(first: $first) {
+  query getProducts($first: Int!, $query: String) {
+    products(first: $first, query: $query) {
       edges {
         node {
           id
           title
           handle
+          tags
           featuredImage {
             url
             altText
@@ -36,15 +36,19 @@ const PRODUCTS_QUERY = `
   }
 `;
 
+let allProducts = [];
+let currentFilter = 'all';
+
 /**
  * Fetch products from Shopify Storefront API
  */
-async function fetchProducts(limit = 6) {
+async function fetchProducts(limit = 50, tag = null) {
   if (!SHOPIFY_CONFIG.domain || !SHOPIFY_CONFIG.accessToken) {
     console.warn('Shopify credentials not configured');
     return [];
   }
 
+  const query = tag ? `tag:${tag}` : undefined;
   const endpoint = `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`;
 
   try {
@@ -56,7 +60,7 @@ async function fetchProducts(limit = 6) {
       },
       body: JSON.stringify({
         query: PRODUCTS_QUERY,
-        variables: { first: limit },
+        variables: { first: limit, query },
       }),
     });
 
@@ -91,8 +95,7 @@ function renderProductGrid(products, containerId) {
   if (products.length === 0) {
     container.innerHTML = `
       <div class="products-preview-empty">
-        <p>Products will appear here once Shopify is configured.</p>
-        <p><a href="/frames-store/shop" class="btn-primary">Browse Full Store</a></p>
+        <p>No products found in this category.</p>
       </div>
     `;
     return;
@@ -126,49 +129,71 @@ function renderProductGrid(products, containerId) {
     <div class="products-preview-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; gap: 2rem !important; margin-bottom: 2rem; width: 100%;">
       ${productsHTML}
     </div>
-    <div class="products-preview-footer">
-      <a href="shop.html" class="btn-primary">View All Frames</a>
+    <div class="shop-results-count" style="text-align: center; color: #5B6770; margin-top: 1rem;">
+      Showing ${products.length} ${products.length === 1 ? 'product' : 'products'}
     </div>
   `;
 }
 
 /**
- * Initialize product preview
+ * Filter products by tag
  */
-async function initProductPreview(containerId = 'products-preview', limit = 6) {
-  // Wait for credentials to be available
+function filterProducts(tag) {
+  currentFilter = tag;
+  
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.filter === tag) {
+      btn.classList.add('active');
+    }
+  });
+
+  // Filter products
+  let filtered = allProducts;
+  if (tag !== 'all') {
+    filtered = allProducts.filter(product => 
+      product.tags && product.tags.includes(tag)
+    );
+  }
+
+  // Render filtered products
+  renderProductGrid(filtered, 'shop-products');
+}
+
+/**
+ * Initialize shop page
+ */
+async function initShop() {
+  // Wait for credentials
   let attempts = 0;
   while ((!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) && attempts < 50) {
     await new Promise(resolve => setTimeout(resolve, 100));
     attempts++;
   }
-  
-  // Update config with loaded credentials
+
+  // Update config
   SHOPIFY_CONFIG.domain = window.SHOPIFY_STORE_DOMAIN || '';
   SHOPIFY_CONFIG.accessToken = window.SHOPIFY_STOREFRONT_TOKEN || '';
-  
-  // Fetch products
-  const products = await fetchProducts(limit);
-  
-  // Render the grid
-  renderProductGrid(products, containerId);
-}
 
-// Wait for DOM and credentials, then initialize
-function startInit() {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      initProductPreview();
+  // Fetch all products
+  allProducts = await fetchProducts(100);
+  
+  // Render all products
+  renderProductGrid(allProducts, 'shop-products');
+
+  // Set up filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterProducts(btn.dataset.filter);
     });
-  } else {
-    initProductPreview();
-  }
+  });
 }
 
-// Start initialization
-startInit();
-
-// Export for manual initialization if needed
-window.initShopifyProducts = initProductPreview;
-
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initShop);
+} else {
+  initShop();
+}
 
