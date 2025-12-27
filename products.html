@@ -234,6 +234,7 @@
             if (config.domain && config.token) {
               window.SHOPIFY_STORE_DOMAIN = config.domain;
               window.SHOPIFY_STOREFRONT_TOKEN = config.token;
+              console.log('Shopify credentials loaded');
             } else {
               console.warn('Shopify credentials not configured. Set Vercel environment variables.');
             }
