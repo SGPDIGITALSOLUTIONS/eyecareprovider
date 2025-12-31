@@ -354,9 +354,15 @@ function renderProductDetail(product) {
         <!-- Price Display -->
         <div class="price-display">
           <div class="price-breakdown">
-            <div>Frame: £${basePrice.toFixed(2)}</div>
+            <div>
+              <span>Frame:</span>
+              <strong>£${basePrice.toFixed(2)}</strong>
+            </div>
             <div id="lens-price-display"></div>
-            <div class="total-price-display">Total: £<span id="total-price">${totalPrice.toFixed(2)}</span></div>
+            <div class="total-price-display">
+              <span>Total:</span>
+              <strong>£<span id="total-price">${totalPrice.toFixed(2)}</span></strong>
+            </div>
           </div>
         </div>
 
