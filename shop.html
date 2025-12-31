@@ -142,20 +142,26 @@
     
     <!-- Shopify Products Shop Page -->
     <script>
-        // Fetch credentials from server
+        // LOCALHOST: Uncomment these lines and add your credentials for local testing
+        // window.SHOPIFY_STORE_DOMAIN = 'your-store.myshopify.com';
+        // window.SHOPIFY_STOREFRONT_TOKEN = 'your-token-here';
+        
+        // PRODUCTION: Fetch from server (Vercel)
         fetch('/api/shopify-config')
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+          })
           .then(config => {
             if (config.domain && config.token) {
               window.SHOPIFY_STORE_DOMAIN = config.domain;
               window.SHOPIFY_STOREFRONT_TOKEN = config.token;
-              console.log('Shopify credentials loaded');
-            } else {
-              console.warn('Shopify credentials not configured.');
+              console.log('Shopify credentials loaded from server');
             }
           })
           .catch(err => {
-            console.error('Failed to load Shopify config:', err);
+            console.log('Using localhost credentials (if set)');
+            // If credentials are set above, they'll be used
           });
     </script>
     <script src="js/shopify-shop.js"></script>
@@ -167,4 +173,6 @@
     <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
+
+
 

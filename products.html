@@ -227,22 +227,29 @@
     <script>
         // Fetch credentials from server (keeps them secure)
         // For Vercel: Set environment variables in Vercel dashboard
+        // For localhost: Set credentials directly below (uncomment and fill in)
+        
+        // LOCALHOST: Uncomment these lines and add your credentials for local testing
+        // window.SHOPIFY_STORE_DOMAIN = 'your-store.myshopify.com';
+        // window.SHOPIFY_STOREFRONT_TOKEN = 'your-token-here';
+        
+        // PRODUCTION: Fetch from server (Vercel)
         fetch('/api/shopify-config')
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+          })
           .then(config => {
             if (config.domain && config.token) {
               window.SHOPIFY_STORE_DOMAIN = config.domain;
               window.SHOPIFY_STOREFRONT_TOKEN = config.token;
-              console.log('Shopify credentials loaded');
-            } else {
-              console.warn('Shopify credentials not configured. Set Vercel environment variables.');
+              console.log('Shopify credentials loaded from server');
             }
           })
           .catch(err => {
-            console.error('Failed to load Shopify config:', err);
-            // Fallback: You can set directly here for local testing
-            // window.SHOPIFY_STORE_DOMAIN = 'your-store.myshopify.com';
-            // window.SHOPIFY_STOREFRONT_TOKEN = 'your-token';
+            console.log('Using localhost credentials (if set)');
+            // If credentials are set above, they'll be used
+            // Otherwise, products won't load (expected on localhost without credentials)
           });
     </script>
     <script src="js/shopify-products.js"></script>
