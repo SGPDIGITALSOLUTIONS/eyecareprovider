@@ -3,25 +3,31 @@
  * Handles variant selection, lens options, prescription form, and add to cart
  */
 
-// Lens Options Configuration
-const LENS_TYPES = [
-  { id: 'singleVision', label: 'Single Vision', priceDelta: 0 },
-  { id: 'varifocal', label: 'Varifocal', priceDelta: 50 },
-  { id: 'bifocal', label: 'Bifocal', priceDelta: 30 },
-];
+// Lens Options Configuration (matching shopify_lenses_and_prescription.md spec)
+const LENS_OPTIONS = {
+  type: [
+    { code: 'SV', label: 'Single Vision', price: 60 },
+    { code: 'VARI', label: 'Varifocal', price: 120 },
+    { code: 'BIF', label: 'Bifocal', price: 110 },
+  ],
+  index: [
+    { code: '1.50', label: 'Standard (1.50)', price: 0 },
+    { code: '1.60', label: 'Thin (1.60)', price: 25 },
+    { code: '1.67', label: 'Ultra-thin (1.67)', price: 45 },
+  ],
+  coatings: [
+    { code: 'AR', label: 'Anti-reflective', price: 20 },
+    { code: 'BL', label: 'Blue light filter', price: 25 },
+    { code: 'TR', label: 'Transitions', price: 60 },
+  ],
+};
 
-const LENS_THICKNESS = [
-  { id: 'standard', label: 'Standard', priceDelta: 0 },
-  { id: 'thin', label: 'Thin', priceDelta: 25 },
-  { id: 'ultraThin', label: 'Ultra Thin', priceDelta: 50 },
-];
-
+// Backward compatibility aliases
+const LENS_TYPES = LENS_OPTIONS.type.map(t => ({ id: t.code.toLowerCase(), label: t.label, priceDelta: t.price, code: t.code }));
+const LENS_THICKNESS = LENS_OPTIONS.index.map(i => ({ id: i.code, label: i.label, priceDelta: i.price, code: i.code }));
 const LENS_COATINGS = [
-  { id: 'none', label: 'No Coating', priceDelta: 0 },
-  { id: 'ar', label: 'Anti-Reflective (AR)', priceDelta: 30 },
-  { id: 'blueLight', label: 'Blue Light Filter', priceDelta: 40 },
-  { id: 'transitions', label: 'Transitions (Photochromic)', priceDelta: 60 },
-  { id: 'arBlueLight', label: 'AR + Blue Light', priceDelta: 65 },
+  { id: 'none', label: 'No Coating', priceDelta: 0, code: '' },
+  ...LENS_OPTIONS.coatings.map(c => ({ id: c.code.toLowerCase(), label: c.label, priceDelta: c.price, code: c.code }))
 ];
 
 // Shopify API Configuration
@@ -88,10 +94,20 @@ let currentProduct = null;
 let selectedVariantId = '';
 let selectedColour = '';
 let lensOptions = {
-  lensType: 'singleVision',
-  thickness: 'standard',
-  coatings: [],
-  prescription: {}
+  lensType: 'SV', // code: SV, VARI, BIF
+  lensIndex: '1.50', // code: 1.50, 1.60, 1.67
+  coatings: [], // array of codes: ['AR', 'BL', 'TR']
+  prescription: {
+    r_sph: '',
+    r_cyl: '',
+    r_axis: '',
+    l_sph: '',
+    l_cyl: '',
+    l_axis: '',
+    pd: '',
+    add: '',
+    notes: ''
+  }
 };
 
 /**
@@ -156,24 +172,24 @@ function calculateTotalPrice() {
   const basePrice = parseFloat(variant.price.amount);
   
   // Add lens type price
-  const lensType = LENS_TYPES.find(lt => lt.id === lensOptions.lensType);
-  const lensTypePrice = lensType ? lensType.priceDelta : 0;
+  const lensType = LENS_OPTIONS.type.find(lt => lt.code === lensOptions.lensType);
+  const lensTypePrice = lensType ? lensType.price : 0;
   
-  // Add thickness price
-  const thickness = LENS_THICKNESS.find(t => t.id === lensOptions.thickness);
-  const thicknessPrice = thickness ? thickness.priceDelta : 0;
+  // Add lens index price
+  const lensIndex = LENS_OPTIONS.index.find(i => i.code === lensOptions.lensIndex);
+  const lensIndexPrice = lensIndex ? lensIndex.price : 0;
   
   // Add coating prices
-  const coatingPrice = lensOptions.coatings.reduce((sum, coatingId) => {
-    const coating = LENS_COATINGS.find(c => c.id === coatingId);
-    return sum + (coating ? coating.priceDelta : 0);
+  const coatingPrice = lensOptions.coatings.reduce((sum, coatingCode) => {
+    const coating = LENS_OPTIONS.coatings.find(c => c.code === coatingCode);
+    return sum + (coating ? coating.price : 0);
   }, 0);
 
-  return basePrice + lensTypePrice + thicknessPrice + coatingPrice;
+  return basePrice + lensTypePrice + lensIndexPrice + coatingPrice;
 }
 
 /**
- * Format lens options for cart attributes
+ * Format lens options for cart attributes (matching shopify_lenses_and_prescription.md spec)
  */
 function formatAttributes() {
   const attributes = [];
@@ -183,49 +199,50 @@ function formatAttributes() {
     attributes.push({ key: 'Colour', value: selectedColour });
   }
 
-  // Lens type
-  const lensType = LENS_TYPES.find(lt => lt.id === lensOptions.lensType);
+  // Lens Type (both code and label)
+  const lensType = LENS_OPTIONS.type.find(lt => lt.code === lensOptions.lensType);
   if (lensType) {
+    attributes.push({ key: 'Lens Type Code', value: lensType.code });
     attributes.push({ key: 'Lens Type', value: lensType.label });
   }
 
-  // Thickness
-  const thickness = LENS_THICKNESS.find(t => t.id === lensOptions.thickness);
-  if (thickness) {
-    attributes.push({ key: 'Lens Thickness', value: thickness.label });
+  // Lens Index (both code and label)
+  const lensIndex = LENS_OPTIONS.index.find(i => i.code === lensOptions.lensIndex);
+  if (lensIndex) {
+    attributes.push({ key: 'Lens Index Code', value: lensIndex.code });
+    attributes.push({ key: 'Lens Index', value: lensIndex.label });
   }
 
   // Coatings
   if (lensOptions.coatings.length > 0) {
     const coatingLabels = lensOptions.coatings
-      .map(id => LENS_COATINGS.find(c => c.id === id)?.label)
+      .map(code => {
+        const coating = LENS_OPTIONS.coatings.find(c => c.code === code);
+        return coating ? coating.label : null;
+      })
       .filter(Boolean);
-    attributes.push({ key: 'Coatings', value: coatingLabels.join(', ') });
+    if (coatingLabels.length > 0) {
+      attributes.push({ key: 'Coatings', value: coatingLabels.join(', ') });
+    }
   }
 
-  // Prescription
+  // Prescription (matching spec naming: Rx R SPH, Rx L SPH, etc.)
   const rx = lensOptions.prescription;
-  if (rx.rightSph || rx.rightCyl) {
-    const rightRx = [rx.rightSph, rx.rightCyl, rx.rightAxis].filter(Boolean).join(' / ');
-    if (rightRx) attributes.push({ key: 'Right Eye (OD)', value: rightRx });
-  }
-
-  if (rx.leftSph || rx.leftCyl) {
-    const leftRx = [rx.leftSph, rx.leftCyl, rx.leftAxis].filter(Boolean).join(' / ');
-    if (leftRx) attributes.push({ key: 'Left Eye (OS)', value: leftRx });
-  }
-
-  if (rx.pd) {
-    attributes.push({ key: 'PD (Pupillary Distance)', value: rx.pd });
-  }
-
-  if (rx.add) {
-    attributes.push({ key: 'ADD', value: rx.add });
-  }
-
-  if (rx.notes) {
-    attributes.push({ key: 'Prescription Notes', value: rx.notes });
-  }
+  
+  // Right Eye
+  if (rx.r_sph) attributes.push({ key: 'Rx R SPH', value: rx.r_sph });
+  if (rx.r_cyl) attributes.push({ key: 'Rx R CYL', value: rx.r_cyl });
+  if (rx.r_axis) attributes.push({ key: 'Rx R AXIS', value: rx.r_axis });
+  
+  // Left Eye
+  if (rx.l_sph) attributes.push({ key: 'Rx L SPH', value: rx.l_sph });
+  if (rx.l_cyl) attributes.push({ key: 'Rx L CYL', value: rx.l_cyl });
+  if (rx.l_axis) attributes.push({ key: 'Rx L AXIS', value: rx.l_axis });
+  
+  // Additional
+  if (rx.pd) attributes.push({ key: 'PD', value: rx.pd });
+  if (rx.add) attributes.push({ key: 'ADD', value: rx.add });
+  if (rx.notes) attributes.push({ key: 'Rx Notes', value: rx.notes });
 
   return attributes;
 }
@@ -362,18 +379,18 @@ function renderProductDetail(product) {
         <div class="option-section">
           <label>Lens Type</label>
           <select id="lens-type" class="form-select">
-            ${LENS_TYPES.map(type => `
-              <option value="${type.id}">${type.label} ${type.priceDelta > 0 ? `(+£${type.priceDelta})` : ''}</option>
+            ${LENS_OPTIONS.type.map(type => `
+              <option value="${type.code}">${type.label} ${type.price > 0 ? `(+£${type.price})` : ''}</option>
             `).join('')}
           </select>
         </div>
 
-        <!-- Lens Thickness -->
+        <!-- Lens Index -->
         <div class="option-section">
-          <label>Lens Thickness</label>
-          <select id="lens-thickness" class="form-select">
-            ${LENS_THICKNESS.map(thickness => `
-              <option value="${thickness.id}">${thickness.label} ${thickness.priceDelta > 0 ? `(+£${thickness.priceDelta})` : ''}</option>
+          <label>Lens Index</label>
+          <select id="lens-index" class="form-select">
+            ${LENS_OPTIONS.index.map(index => `
+              <option value="${index.code}">${index.label} ${index.price > 0 ? `(+£${index.price})` : ''}</option>
             `).join('')}
           </select>
         </div>
@@ -382,10 +399,10 @@ function renderProductDetail(product) {
         <div class="option-section">
           <label>Coatings</label>
           <div class="coating-checkboxes">
-            ${LENS_COATINGS.filter(c => c.id !== 'none').map(coating => `
+            ${LENS_OPTIONS.coatings.map(coating => `
               <label class="checkbox-label">
-                <input type="checkbox" value="${coating.id}" class="coating-checkbox">
-                <span>${coating.label} ${coating.priceDelta > 0 ? `(+£${coating.priceDelta})` : ''}</span>
+                <input type="checkbox" value="${coating.code}" class="coating-checkbox">
+                <span>${coating.label} ${coating.price > 0 ? `(+£${coating.price})` : ''}</span>
               </label>
             `).join('')}
           </div>
@@ -488,19 +505,19 @@ function setupEventListeners() {
 
   // Lens type change
   document.getElementById('lens-type')?.addEventListener('change', (e) => {
-    lensOptions.lensType = e.target.value;
+    lensOptions.lensType = e.target.value; // Store code (SV, VARI, BIF)
     updatePriceDisplay();
     
     // Show/hide ADD field for varifocal/bifocal
     const addField = document.getElementById('add-field');
     if (addField) {
-      addField.style.display = (e.target.value === 'varifocal' || e.target.value === 'bifocal') ? 'block' : 'none';
+      addField.style.display = (e.target.value === 'VARI' || e.target.value === 'BIF') ? 'block' : 'none';
     }
   });
 
-  // Lens thickness change
-  document.getElementById('lens-thickness')?.addEventListener('change', (e) => {
-    lensOptions.thickness = e.target.value;
+  // Lens index change
+  document.getElementById('lens-index')?.addEventListener('change', (e) => {
+    lensOptions.lensIndex = e.target.value; // Store code (1.50, 1.60, 1.67)
     updatePriceDisplay();
   });
 
@@ -508,27 +525,32 @@ function setupEventListeners() {
   document.querySelectorAll('.coating-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', (e) => {
       if (e.target.checked) {
-        lensOptions.coatings.push(e.target.value);
+        lensOptions.coatings.push(e.target.value); // Store code (AR, BL, TR)
       } else {
-        lensOptions.coatings = lensOptions.coatings.filter(id => id !== e.target.value);
+        lensOptions.coatings = lensOptions.coatings.filter(code => code !== e.target.value);
       }
       updatePriceDisplay();
     });
   });
 
-  // Prescription inputs
-  ['right-sph', 'right-cyl', 'right-axis', 'left-sph', 'left-cyl', 'left-axis', 'pd', 'add', 'prescription-notes'].forEach(id => {
-    const input = document.getElementById(id);
+  // Prescription inputs (matching spec: r_sph, r_cyl, l_sph, etc.)
+  const prescriptionFields = {
+    'right-sph': 'r_sph',
+    'right-cyl': 'r_cyl',
+    'right-axis': 'r_axis',
+    'left-sph': 'l_sph',
+    'left-cyl': 'l_cyl',
+    'left-axis': 'l_axis',
+    'pd': 'pd',
+    'add': 'add',
+    'prescription-notes': 'notes'
+  };
+
+  Object.keys(prescriptionFields).forEach(inputId => {
+    const input = document.getElementById(inputId);
     if (input) {
       input.addEventListener('input', (e) => {
-        const field = id.replace('right-', '').replace('left-', '').replace('prescription-', '');
-        if (id.startsWith('right-')) {
-          lensOptions.prescription[`right${field.charAt(0).toUpperCase() + field.slice(1)}`] = e.target.value;
-        } else if (id.startsWith('left-')) {
-          lensOptions.prescription[`left${field.charAt(0).toUpperCase() + field.slice(1)}`] = e.target.value;
-        } else {
-          lensOptions.prescription[field] = e.target.value;
-        }
+        lensOptions.prescription[prescriptionFields[inputId]] = e.target.value;
       });
     }
   });
@@ -556,6 +578,10 @@ function updatePriceDisplay() {
       lensPriceDisplay.innerHTML = '';
     }
   }
+  
+  // Update lens type display if needed
+  const lensType = LENS_OPTIONS.type.find(lt => lt.code === lensOptions.lensType);
+  const lensIndex = LENS_OPTIONS.index.find(i => i.code === lensOptions.lensIndex);
   
   const totalPriceDisplay = document.getElementById('total-price');
   if (totalPriceDisplay) {
