@@ -102,7 +102,7 @@ function renderProductGrid(products, containerId) {
     .map(
       (product) => `
       <div class="product-preview-card" style="background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s; display: flex; flex-direction: column;">
-        <a href="/frames-store/product/${product.handle}" class="product-preview-link" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
+        <a href="frame.html?handle=${product.handle}" class="product-preview-link" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
           <div class="product-preview-image" style="width: 100%; aspect-ratio: 1; overflow: hidden; background: #F4F7F8; display: flex; align-items: center; justify-content: center;">
             ${
               product.featuredImage
