@@ -349,7 +349,7 @@ function updateLensIllustration() {
   const selectedConfig = LENS_OPTIONS.lensConfigs.find(c => c.code === lensOptions.lensConfig);
   const imagePath = getLensIllustrationPath(selectedConfig, lensOptions.transitions);
   
-  container.innerHTML = `<img src="${imagePath}" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
+  container.innerHTML = `<img src="${imagePath}" alt="Lens option illustration" loading="lazy" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
 }
 
 /**
@@ -442,7 +442,7 @@ function renderProductDetail(product) {
         <!-- Main Image on Left -->
         <div class="product-main-image-wrapper" style="display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: flex-start !important; width: 100% !important;">
           <div class="product-main-image" style="width: 100% !important; aspect-ratio: 1 !important; max-height: 500px !important; background: linear-gradient(135deg, #f8fbfc 0%, #f5f7f9 50%, #ffffff 100%) !important; border-radius: 16px !important; overflow: hidden !important; display: flex !important; align-items: center !important; justify-content: center !important; border: 1px solid #e8ecef !important; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04) !important; margin-bottom: 2rem !important; padding: 2rem !important;">
-            ${displayImage ? `<img src="${displayImage}" alt="${product.title}" id="product-main-img" style="width: 100%; height: 100%; object-fit: contain; padding: 0; transition: opacity 0.3s ease; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));">` : '<div class="no-image">No Image</div>'}
+            ${displayImage ? `<img src="${displayImage}" alt="${product.title}" id="product-main-img" loading="lazy" style="width: 100%; height: 100%; object-fit: contain; padding: 0; transition: opacity 0.3s ease; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));">` : '<div class="no-image">No Image</div>'}
           </div>
           <div style="margin-bottom: 0.5rem !important;">
             <label class="variant-thumbnails-label" style="display: block !important; font-weight: 600 !important; color: #5B6770 !important; margin-bottom: 0.25rem !important; font-size: 0.85rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; width: 100% !important;">Select Colour</label>
@@ -692,7 +692,7 @@ function renderProductDetail(product) {
                 ${(() => {
                   const selectedConfig = LENS_OPTIONS.lensConfigs.find(c => c.code === lensOptions.lensConfig);
                   if (!selectedConfig) {
-                    return '<img src="assets/images/gallery/lens_option_1.png" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />';
+                    return '<img src="assets/images/gallery/lens_option_1.png" alt="Lens option illustration" loading="lazy" style="max-width: 100%; height: auto; border-radius: 8px;" />';
                   }
                   
                   // Check if transitions are selected and valid
@@ -701,12 +701,12 @@ function renderProductDetail(product) {
                   
                   // If transitions are selected and valid, show transitions illustration
                   if (hasTransitions && !transitionsDisabled) {
-                    return '<img src="assets/images/gallery/lens_option_5.png" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />';
+                    return '<img src="assets/images/gallery/lens_option_5.png" alt="Lens option illustration" loading="lazy" style="max-width: 100%; height: auto; border-radius: 8px;" />';
                   }
                   
                   // If transitions are selected but disabled, show "not available" illustration
                   if (hasTransitions && transitionsDisabled) {
-                    return '<img src="assets/images/gallery/lens_option_6.png" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />';
+                    return '<img src="assets/images/gallery/lens_option_6.png" alt="Lens option illustration" loading="lazy" style="max-width: 100%; height: auto; border-radius: 8px;" />';
                   }
                   
                   // Map lens configurations to illustrations
@@ -728,7 +728,7 @@ function renderProductDetail(product) {
                       break;
                   }
                   
-                  return `<img src="${imagePath}" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
+                  return `<img src="${imagePath}" alt="Lens option illustration" loading="lazy" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
                 })()}
               </div>
             </div>
