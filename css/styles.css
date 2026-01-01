@@ -2528,7 +2528,12 @@ body {
     }
 }
 
+/* Mobile-first responsive product grid */
 .shop-products-container {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    width: 100%;
     margin: 2rem 0;
 }
 
@@ -2540,18 +2545,34 @@ body {
 }
 
 /* Specsavers-style Product Cards */
+/* Base (mobile-first: 1 column) */
+/* Base: mobile (1 column) */
 .products-grid-specsavers {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: 1fr;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+    .products-grid-specsavers {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 1024px) {
+    .products-grid-specsavers {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .product-card-specsavers {
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    border: 1px solid #d1d5db !important;
+    border-radius: 12px;
+    overflow: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -2560,7 +2581,28 @@ body {
 
 .product-card-specsavers:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+    border-color: #9ca3af !important;
+}
+
+/* Ensure border and shadow are visible on desktop */
+@media (min-width: 1024px) {
+    .product-card-specsavers {
+        border: 1px solid #d1d5db !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        overflow: visible;
+    }
+    
+    .product-card-specsavers:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+        border-color: #9ca3af !important;
+    }
+}
+
+.product-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
 }
 
 .product-card-link {
@@ -2580,16 +2622,28 @@ body {
     position: relative;
 }
 
-.product-card-image img {
+.product-main-img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     padding: 1rem;
-    transition: transform 0.3s ease;
+    display: block;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.product-card-specsavers:hover .product-card-image img {
+.product-card-specsavers:hover .product-main-img {
     transform: scale(1.05);
+}
+
+.product-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #A3B8C2;
+    font-size: 0.9rem;
+    background: #F8F9FA;
 }
 
 .favorite-btn {
@@ -2628,6 +2682,10 @@ body {
     flex-direction: column;
 }
 
+.product-card-info-header {
+    margin-bottom: 0.5rem;
+}
+
 .product-brand {
     font-size: 0.85rem;
     color: #6C757D;
@@ -2649,47 +2707,43 @@ body {
     overflow: hidden;
 }
 
+.product-card-footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid #E9ECEF;
+}
+
 .product-price {
     font-size: 1.1rem;
     font-weight: 700;
     color: #212529;
-    margin: 0;
+    margin: 0 0 0.5rem 0;
 }
 
-.color-swatches {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
+.shop-results-count {
+    text-align: center;
+    color: #5B6770;
+    margin-top: 1rem;
+    font-size: 0.95rem;
 }
 
-.color-swatch {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid #d7dde1;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 0;
-    flex-shrink: 0;
-    position: relative;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+/* Tablet: 2 columns (640px and above) */
+@media (min-width: 640px) {
+    .shop-products-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
-.color-swatch:hover {
-    transform: scale(1.15);
-    border-color: #4b8a8a;
+/* Desktop: 3 columns (1024px and above) */
+@media (min-width: 1024px) {
+    .shop-products-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
-.color-swatch.active {
-    border-color: #4b8a8a;
-    border-width: 3px;
-    box-shadow: 0 0 0 2px rgba(75, 138, 138, 0.15), inset 0 0 0 1px rgba(0,0,0,0.1);
-}
-
-@media (max-width: 768px) {
-    .products-grid-specsavers {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+/* Mobile adjustments (below 640px) */
+@media (max-width: 639px) {
+    .shop-products-container {
         gap: 1rem;
     }
     
@@ -9425,4 +9479,66 @@ body {
     .policy-section {
         padding: 0.75rem;
     }
+}
+
+/* FORCE product grid layout (override any generic div rules) */
+.shop-products-container > .products-grid-specsavers {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .shop-products-container > .products-grid-specsavers {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .shop-products-container > .products-grid-specsavers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- Variant thumbnails strip (cards) --- */
+.product-card-specsavers .variant-thumbnails-strip{
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+  margin-top:.75rem;
+  flex-wrap:wrap;
+}
+
+.product-card-specsavers .variant-thumbnail-btn{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  border:1px solid #e3e7eb;
+  background:#fff;
+  padding:0;
+  overflow:hidden;
+  cursor:pointer;
+  line-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.product-card-specsavers .variant-thumbnail-btn img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.product-card-specsavers .variant-thumbnail-btn.active{
+  outline:2px solid #111;
+  outline-offset:2px;
+}
+
+.product-card-specsavers .variant-thumbnail-btn:hover:not(.active) {
+  border-color: #4b8a8a;
+  transform: scale(1.05);
 } 

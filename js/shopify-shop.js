@@ -53,6 +53,8 @@ const PRODUCTS_QUERY = `
 
 let allProducts = [];
 let currentFilter = 'all';
+let currentPage = 1;
+let productsPerPage = 20;
 
 /**
  * Fetch products from Shopify Storefront API
@@ -257,29 +259,100 @@ function changeProductImage(productId, imageUrl, event) {
     }, 150);
   }
   
-  // Update active swatch
-  const swatches = card.querySelectorAll('.color-swatch');
-  swatches.forEach(swatch => {
-    swatch.classList.remove('active');
-    swatch.style.borderColor = '#d7dde1';
-    swatch.style.borderWidth = '2px';
+  // Update active thumbnail
+  const thumbnails = card.querySelectorAll('.variant-thumbnail-btn');
+  thumbnails.forEach(thumb => {
+    thumb.classList.remove('active');
   });
   event.currentTarget.classList.add('active');
-  event.currentTarget.style.borderColor = '#4b8a8a';
-  event.currentTarget.style.borderWidth = '3px';
 }
 
 /**
- * Render product grid
+ * Optimize image URL for better performance
  */
-function renderProductGrid(products, containerId) {
+function getOptimizedImageUrl(url, width = 400) {
+  if (!url) return '';
+  // Shopify image transformation - add width parameter
+  if (url.includes('cdn.shopify.com')) {
+    return url.replace(/\?.*$/, '') + `?width=${width}&height=${width}&fit=crop`;
+  }
+  return url;
+}
+
+/**
+ * Render product card HTML
+ */
+function renderProductCard(product, favorites) {
+  const brand = getBrand(product);
+  const isFavorite = favorites.includes(product.id);
+  const price = parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2);
+  const colorVariants = getColorVariants(product);
+  const defaultImage = product.featuredImage?.url || '';
+  const firstColorImage = colorVariants.length > 0 ? colorVariants[0].image : defaultImage;
+  const displayImage = firstColorImage || defaultImage;
+  const optimizedImage = getOptimizedImageUrl(displayImage, 400);
+  
+  let variantsHTML = '';
+  if (colorVariants.length > 1) {
+    variantsHTML = colorVariants.map((variant, index) => {
+      const variantImage = getOptimizedImageUrl(variant.image, 80);
+      return `
+        <button 
+          class="variant-thumbnail-btn ${index === 0 ? 'active' : ''}" 
+          data-image-url="${variant.image}"
+          onclick="window.changeProductImage('${product.id}', '${variant.image}', event)"
+          title="${variant.color}"
+        >
+          <img src="${variantImage}" alt="${variant.color}" loading="lazy">
+        </button>
+      `;
+    }).join('');
+  }
+  
+  return `
+    <div class="product-card-specsavers" data-product-id="${product.id}">
+      <div class="product-card-image-wrapper">
+        <a href="frame.html?handle=${product.handle}" class="product-card-link">
+          <div class="product-card-image">
+            ${displayImage
+              ? `<img src="${optimizedImage}" alt="${product.featuredImage?.altText || product.title}" loading="lazy" class="product-main-img">`
+              : `<div class="product-placeholder">No Image</div>`
+            }
+          </div>
+        </a>
+        <button 
+          class="favorite-btn" 
+          data-product-id="${product.id}"
+          onclick="window.toggleFavorite('${product.id}', event)"
+        >
+          <span class="favorite-icon">${isFavorite ? '❤️' : '🤍'}</span>
+        </button>
+      </div>
+      <div class="product-card-info">
+        <div class="product-card-info-header">
+          <p class="product-brand">${brand}</p>
+          <h3 class="product-title">${product.title}</h3>
+        </div>
+        <div class="product-card-footer">
+          <p class="product-price">£${price}</p>
+          ${variantsHTML ? `<div class="variant-thumbnails-strip">${variantsHTML}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Render product grid with pagination
+ */
+function renderProductGrid(products, containerId, append = false) {
   const container = document.getElementById(containerId);
   if (!container) {
     console.error(`Container #${containerId} not found`);
     return;
   }
 
-  if (products.length === 0) {
+  if (products.length === 0 && !append) {
     container.innerHTML = `
       <div class="products-preview-empty">
         <p>No products found in this category.</p>
@@ -289,96 +362,148 @@ function renderProductGrid(products, containerId) {
   }
 
   const favorites = getFavorites();
-
-  const productsHTML = products
-    .map(
-      (product) => {
-        const brand = getBrand(product);
-        const isFavorite = favorites.includes(product.id);
-        const price = parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2);
-        const colorVariants = getColorVariants(product);
-        const defaultImage = product.featuredImage?.url || '';
-        const firstColorImage = colorVariants.length > 0 ? colorVariants[0].image : defaultImage;
-        const displayImage = firstColorImage || defaultImage;
-        
-        return `
-        <div class="product-card-specsavers" data-product-id="${product.id}" style="background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; display: flex; flex-direction: column; position: relative;">
-          <div style="position: relative;">
-            <a href="frame.html?handle=${product.handle}" class="product-card-link" style="text-decoration: none; color: inherit; display: block;">
-              <div class="product-card-image" style="width: 100%; aspect-ratio: 1; overflow: hidden; background: #F8F9FA; display: flex; align-items: center; justify-content: center; position: relative;">
-                ${
-                  displayImage
-                    ? `<img src="${displayImage}" alt="${product.featuredImage?.altText || product.title}" loading="lazy" class="product-main-img" style="width: 100%; height: 100%; object-fit: contain; padding: 1rem; display: block; transition: opacity 0.3s ease;">`
-                    : `<div class="product-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #A3B8C2; font-size: 0.9rem; background: #F8F9FA;">No Image</div>`
-                }
-              </div>
-            </a>
-            <button 
-              class="favorite-btn" 
-              data-product-id="${product.id}"
-              onclick="window.toggleFavorite('${product.id}', event)"
-              style="position: absolute; top: 0.75rem; right: 0.75rem; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); transition: all 0.2s; z-index: 10; padding: 0;"
-              onmouseover="this.style.background='rgba(255, 255, 255, 1)'; this.style.transform='scale(1.1)'"
-              onmouseout="this.style.background='rgba(255, 255, 255, 0.9)'; this.style.transform='scale(1)'"
-            >
-              <span class="favorite-icon" style="font-size: 1.2rem; line-height: 1;">${isFavorite ? '❤️' : '🤍'}</span>
-            </button>
-          </div>
-          <div class="product-card-info" style="padding: 1.25rem; flex-grow: 1; display: flex; flex-direction: column;">
-            <div style="margin-bottom: 0.5rem;">
-              <p class="product-brand" style="font-size: 0.85rem; color: #6C757D; margin: 0 0 0.25rem 0; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">${brand}</p>
-              <h3 class="product-title" style="font-size: 1rem; color: #212529; margin: 0; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${product.title}</h3>
-            </div>
-            <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid #E9ECEF;">
-              <p class="product-price" style="font-size: 1.1rem; font-weight: 700; color: #212529; margin: 0 0 0.5rem 0;">
-                £${price}
-              </p>
-              ${
-                colorVariants.length > 1
-                  ? `<div class="color-swatches" style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem;">
-                      ${colorVariants.map((variant, index) => `
-                        <button 
-                          class="color-swatch ${index === 0 ? 'active' : ''}" 
-                          data-image-url="${variant.image}"
-                          onclick="window.changeProductImage('${product.id}', '${variant.image}', event)"
-                          style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid ${index === 0 ? '#4b8a8a' : '#d7dde1'}; cursor: pointer; transition: all 0.2s; padding: 0; flex-shrink: 0; position: relative; background-color: ${variant.colorValue}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);"
-                          title="${variant.color}"
-                          onmouseover="this.style.transform='scale(1.15)'; this.style.borderColor='#4b8a8a'"
-                          onmouseout="if(!this.classList.contains('active')) { this.style.transform='scale(1)'; this.style.borderColor='#d7dde1'; }"
-                        ></button>
-                      `).join('')}
-                    </div>`
-                  : ''
-              }
-            </div>
-          </div>
-        </div>
-      `;
-      }
-    )
-    .join('');
-
+  
+  // Always create fresh grid container (not appending)
   container.innerHTML = `
-    <div class="products-grid-specsavers" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important; gap: 1.5rem !important; margin-bottom: 2rem; width: 100%;">
-      ${productsHTML}
-    </div>
-    <div class="shop-results-count" style="text-align: center; color: #5B6770; margin-top: 1rem; font-size: 0.95rem;">
-      Showing ${products.length} ${products.length === 1 ? 'product' : 'products'}
+    <div class="products-grid-specsavers"></div>
+    <div class="shop-results-count"></div>
+  `;
+  
+  const gridContainer = container.querySelector('.products-grid-specsavers');
+
+  // Render products efficiently
+  const fragment = document.createDocumentFragment();
+  products.forEach((product) => {
+    const cardHTML = renderProductCard(product, favorites);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = cardHTML.trim();
+    fragment.appendChild(tempDiv.firstChild);
+  });
+  
+  gridContainer.appendChild(fragment);
+  
+  // Update results count with pagination info
+  const paginationInfo = getPaginatedProducts();
+  const resultsCount = container.querySelector('.shop-results-count');
+  resultsCount.textContent = `Showing ${paginationInfo.startIndex}-${paginationInfo.endIndex} of ${paginationInfo.total} products`;
+  
+  // Render pagination controls
+  renderPagination(containerId);
+}
+
+/**
+ * Get filtered products based on current filter
+ */
+function getFilteredProducts() {
+  if (currentFilter === 'all') {
+    return allProducts;
+  }
+  return allProducts.filter(product => 
+    product.tags && product.tags.includes(currentFilter)
+  );
+}
+
+/**
+ * Get paginated products for current page
+ */
+function getPaginatedProducts() {
+  const filtered = getFilteredProducts();
+  const totalPages = Math.ceil(filtered.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const paginatedProducts = filtered.slice(startIndex, endIndex);
+  
+  return {
+    products: paginatedProducts,
+    total: filtered.length,
+    totalPages: totalPages,
+    currentPage: currentPage,
+    startIndex: startIndex + 1,
+    endIndex: Math.min(endIndex, filtered.length)
+  };
+}
+
+/**
+ * Render pagination controls
+ */
+function renderPagination(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const paginationInfo = getPaginatedProducts();
+  const { total, totalPages, currentPage, startIndex, endIndex } = paginationInfo;
+  
+  if (totalPages <= 1) {
+    // Hide pagination if only one page
+    const paginationContainer = container.querySelector('.pagination-controls');
+    if (paginationContainer) {
+      paginationContainer.remove();
+    }
+    return;
+  }
+  
+  const hasPrev = currentPage > 1;
+  const hasNext = currentPage < totalPages;
+  
+  let paginationHTML = `
+    <div class="pagination-controls" style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 2rem; padding: 1rem;">
+      <button 
+        class="pagination-btn pagination-prev" 
+        ${!hasPrev ? 'disabled' : ''}
+        onclick="window.goToPage(${currentPage - 1})"
+        style="padding: 0.5rem 1rem; background: ${hasPrev ? '#4b8a8a' : '#e3e7eb'}; color: ${hasPrev ? 'white' : '#9ca3af'}; border: none; border-radius: 6px; cursor: ${hasPrev ? 'pointer' : 'not-allowed'}; font-weight: 600; transition: all 0.2s;"
+        onmouseover="${hasPrev ? "this.style.background='#3a6f6f'" : ""}"
+        onmouseout="${hasPrev ? "this.style.background='#4b8a8a'" : ""}"
+      >
+        ← Previous
+      </button>
+      
+      <div class="pagination-info" style="color: #5B6770; font-size: 0.95rem;">
+        Showing ${startIndex}-${endIndex} of ${total} products
+      </div>
+      
+      <button 
+        class="pagination-btn pagination-next" 
+        ${!hasNext ? 'disabled' : ''}
+        onclick="window.goToPage(${currentPage + 1})"
+        style="padding: 0.5rem 1rem; background: ${hasNext ? '#4b8a8a' : '#e3e7eb'}; color: ${hasNext ? 'white' : '#9ca3af'}; border: none; border-radius: 6px; cursor: ${hasNext ? 'pointer' : 'not-allowed'}; font-weight: 600; transition: all 0.2s;"
+        onmouseover="${hasNext ? "this.style.background='#3a6f6f'" : ""}"
+        onmouseout="${hasNext ? "this.style.background='#4b8a8a'" : ""}"
+      >
+        Next →
+      </button>
     </div>
   `;
   
-  // Add hover effects via JavaScript
-  const cards = container.querySelectorAll('.product-card-specsavers');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-4px)';
-      this.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.12)';
-    });
-    card.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
-      this.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-    });
-  });
+  const existingPagination = container.querySelector('.pagination-controls');
+  if (existingPagination) {
+    existingPagination.outerHTML = paginationHTML;
+  } else {
+    container.insertAdjacentHTML('beforeend', paginationHTML);
+  }
+}
+
+/**
+ * Navigate to specific page
+ */
+function goToPage(page) {
+  const paginationInfo = getPaginatedProducts();
+  if (page < 1 || page > paginationInfo.totalPages) return;
+  
+  currentPage = page;
+  const filtered = getFilteredProducts();
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const pageProducts = filtered.slice(startIndex, endIndex);
+  
+  renderProductGrid(pageProducts, 'shop-products', false);
+  renderPagination('shop-products');
+  
+  // Scroll to top of products section
+  const container = document.getElementById('shop-products');
+  if (container) {
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 /**
@@ -386,6 +511,7 @@ function renderProductGrid(products, containerId) {
  */
 function filterProducts(tag) {
   currentFilter = tag;
+  currentPage = 1; // Reset to first page when filtering
   
   // Update active button
   document.querySelectorAll('.filter-btn-modern').forEach(btn => {
@@ -395,16 +521,9 @@ function filterProducts(tag) {
     }
   });
 
-  // Filter products
-  let filtered = allProducts;
-  if (tag !== 'all') {
-    filtered = allProducts.filter(product => 
-      product.tags && product.tags.includes(tag)
-    );
-  }
-
-  // Render filtered products
-  renderProductGrid(filtered, 'shop-products');
+  // Get paginated products for current page
+  const paginationInfo = getPaginatedProducts();
+  renderProductGrid(paginationInfo.products, 'shop-products', false);
   updateActiveFilters();
 }
 
@@ -426,8 +545,10 @@ async function initShop() {
   // Fetch all products
   allProducts = await fetchProducts(100);
   
-  // Render all products
-  renderProductGrid(allProducts, 'shop-products');
+  // Initialize with first page
+  currentPage = 1;
+  const paginationInfo = getPaginatedProducts();
+  renderProductGrid(paginationInfo.products, 'shop-products', false);
 
   // Set up filter buttons
   document.querySelectorAll('.filter-btn-modern').forEach(btn => {
@@ -478,15 +599,13 @@ function sortProducts(sortBy) {
       break;
   }
   
-  // Apply current filter
-  let filtered = sorted;
-  if (currentFilter !== 'all') {
-    filtered = sorted.filter(product => 
-      product.tags && product.tags.includes(currentFilter)
-    );
-  }
+  // Update allProducts with sorted order
+  allProducts = sorted;
+  currentPage = 1; // Reset to first page when sorting
   
-  renderProductGrid(filtered, 'shop-products');
+  // Get paginated products for current page
+  const paginationInfo = getPaginatedProducts();
+  renderProductGrid(paginationInfo.products, 'shop-products', false);
   updateActiveFilters();
 }
 
@@ -544,10 +663,9 @@ function clearAllFilters() {
 // Make functions available globally
 window.removeFilter = removeFilter;
 window.clearAllFilters = clearAllFilters;
-
-// Make functions available globally
 window.toggleFavorite = toggleFavorite;
 window.changeProductImage = changeProductImage;
+window.goToPage = goToPage;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
