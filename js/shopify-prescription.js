@@ -29,21 +29,8 @@ const SHOPIFY_CONFIG = {
   apiVersion: '2025-01',
 };
 
-// Cart Create Mutation
-const CART_CREATE_MUTATION = `
-  mutation cartCreate($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart {
-        id
-        checkoutUrl
-      }
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
+// Cart Create Mutation (removed - using CartManager from cart.js instead)
+// const CART_CREATE_MUTATION = `...`; // Moved to cart.js
 
 let selectedVariantId = '';
 let selectedColour = '';
@@ -350,7 +337,7 @@ async function addToCart() {
     }
   }
   
-  // Add to local cart instead of redirecting to Shopify checkout
+  // Add to Shopify cart via GraphQL API
   const cartItem = {
     variantId: variantId,
     productTitle: productTitle,
@@ -364,18 +351,20 @@ async function addToCart() {
     addedAt: new Date().toISOString()
   };
   
-  // Use CartManager if available, otherwise fallback
-  if (window.CartManager) {
-    window.CartManager.add(cartItem);
-    alert(`Added to cart! You have ${window.CartManager.getCount()} item(s) in your cart.`);
-    // Optionally redirect to cart page or stay on page
-    // window.location.href = 'cart.html';
-  } else {
-    // Fallback: store in sessionStorage temporarily
-    const tempCart = JSON.parse(sessionStorage.getItem('temp_cart') || '[]');
-    tempCart.push(cartItem);
-    sessionStorage.setItem('temp_cart', JSON.stringify(tempCart));
-    alert(`Added to cart! You have ${tempCart.length} item(s) in your cart.`);
+  // Use CartManager to add to Shopify cart
+  try {
+    if (window.CartManager) {
+      await window.CartManager.add(cartItem);
+      alert(`Added to cart! You have ${window.CartManager.getCount()} item(s) in your cart.`);
+      // Optionally redirect to cart page or stay on page
+      // window.location.href = 'cart.html';
+    } else {
+      throw new Error('CartManager not available');
+    }
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    const errorMessage = error?.message || error?.toString() || 'Unknown error occurred';
+    alert('Error adding to cart: ' + errorMessage + '. Please try again.');
   }
 }
 

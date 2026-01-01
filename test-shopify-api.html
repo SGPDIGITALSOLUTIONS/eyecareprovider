@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background: #4b8a8a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #3a6f6f;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #4b8a8a;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left-color: #28a745;
+        }
+        .error {
+            border-left-color: #dc3545;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px 0;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Shopify Storefront API Test</h1>
+        
+        <label for="domain">Store Domain:</label>
+        <input type="text" id="domain" value="th09pn-qt.myshopify.com" placeholder="your-store.myshopify.com">
+        
+        <label for="token">Storefront Access Token:</label>
+        <input type="text" id="token" value="48634601834befc37161cdc52f8e01fb" placeholder="Your Storefront API token">
+        
+        <button onclick="testShopInfo()">Test Shop Info</button>
+        <button onclick="testProducts()">Test Products Query</button>
+        <button onclick="testCartCreate()">Test Cart Create</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function makeRequest(query, variables = {}) {
+            const domain = document.getElementById('domain').value.trim();
+            const token = document.getElementById('token').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!domain || !token) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = 'Please fill in both domain and token fields.';
+                return;
+            }
+            
+            const endpoint = `https://${domain}/api/2025-01/graphql.json`;
+            
+            resultDiv.textContent = 'Loading...';
+            resultDiv.className = '';
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Shopify-Storefront-Access-Token': token,
+                    },
+                    body: JSON.stringify({ query, variables }),
+                });
+                
+                const json = await response.json();
+                
+                if (!response.ok) {
+                    resultDiv.className = 'error';
+                    resultDiv.textContent = `HTTP Error ${response.status}: ${response.statusText}\n\n${JSON.stringify(json, null, 2)}`;
+                    return;
+                }
+                
+                if (json.errors) {
+                    resultDiv.className = 'error';
+                    resultDiv.textContent = `GraphQL Errors:\n\n${JSON.stringify(json.errors, null, 2)}`;
+                    return;
+                }
+                
+                resultDiv.className = 'success';
+                resultDiv.textContent = `✅ Success!\n\n${JSON.stringify(json.data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'error';
+                resultDiv.textContent = `Error: ${error.message}\n\n${error.stack || ''}`;
+            }
+        }
+        
+        function testShopInfo() {
+            const query = `
+                query {
+                    shop {
+                        name
+                        primaryDomain {
+                            url
+                        }
+                    }
+                }
+            `;
+            makeRequest(query);
+        }
+        
+        function testProducts() {
+            const query = `
+                query {
+                    products(first: 5) {
+                        edges {
+                            node {
+                                id
+                                title
+                                handle
+                            }
+                        }
+                    }
+                }
+            `;
+            makeRequest(query);
+        }
+        
+        function testCartCreate() {
+            const query = `
+                mutation cartCreate($input: CartInput!) {
+                    cartCreate(input: $input) {
+                        cart {
+                            id
+                            checkoutUrl
+                        }
+                        userErrors {
+                            field
+                            message
+                        }
+                    }
+                }
+            `;
+            const variables = {
+                input: {
+                    lines: []
+                }
+            };
+            makeRequest(query, variables);
+        }
+    </script>
+</body>
+</html>
+

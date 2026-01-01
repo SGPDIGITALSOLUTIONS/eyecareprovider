@@ -34,16 +34,13 @@ function renderCart() {
   const container = document.getElementById('cart-container');
   if (!container) return;
   
-  // Use CartManager if available, otherwise fallback to cookie
+  // Get cart items from CartManager
   let cartItems = [];
-  let cart = { items: [], cartId: null };
-  
   if (window.CartManager) {
     cartItems = window.CartManager.getItems();
-    cart = { items: cartItems, cartId: getCookie('eyecare_cart')?.cartId || null };
   } else {
-    cart = getCookie('eyecare_cart') || { items: [], cartId: null };
-    cartItems = cart.items || [];
+    // Fallback: try to load from old cookie system
+    cartItems = getCookie('eyecare_cart')?.items || [];
   }
   
   if (cartItems.length === 0) {
@@ -99,7 +96,8 @@ function renderCart() {
             <span style="color: #212529; font-weight: 600; font-size: 1.1rem;">Total:</span>
             <span style="color: #212529; font-weight: 700; font-size: 1.25rem;">£${total.toFixed(2)}</span>
           </div>
-          <button id="checkout-btn" style="width: 100%; padding: 1rem; background: #4b8a8a; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; margin-bottom: 1rem;">Proceed to Checkout</button>
+          <button id="checkout-btn" style="width: 100%; padding: 1rem; background: #4b8a8a; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; margin-bottom: 0.75rem;">Proceed to Checkout</button>
+          <button id="clear-cart-btn" style="width: 100%; padding: 0.75rem; background: #dc3545; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; margin-bottom: 0.75rem;">Clear Cart</button>
           <a href="shop.html" style="display: block; text-align: center; color: #4b8a8a; text-decoration: none; font-weight: 600;">Continue Shopping</a>
         </div>
       </div>
@@ -116,13 +114,18 @@ function renderCart() {
 function setupCartEventListeners() {
   // Remove item buttons
   document.querySelectorAll('.remove-item-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', async (e) => {
       const index = parseInt(e.target.dataset.index);
       if (window.CartManager) {
-        window.CartManager.remove(index);
-        renderCart();
-        if (window.CartManager.updateBadge) {
-          window.CartManager.updateBadge();
+        try {
+          await window.CartManager.remove(index);
+          renderCart();
+          if (window.CartManager.updateBadge) {
+            window.CartManager.updateBadge();
+          }
+        } catch (error) {
+          console.error('Error removing item:', error);
+          alert('Error removing item: ' + error.message);
         }
       }
     });
@@ -135,111 +138,56 @@ function setupCartEventListeners() {
       await proceedToCheckout();
     });
   }
+  
+  // Clear cart button
+  const clearCartBtn = document.getElementById('clear-cart-btn');
+  if (clearCartBtn) {
+    clearCartBtn.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to clear your cart? This action cannot be undone.')) {
+        try {
+          if (window.CartManager) {
+            await window.CartManager.clear();
+            renderCart(); // Re-render to show empty cart message
+            if (window.CartManager.updateBadge) {
+              window.CartManager.updateBadge();
+            }
+          }
+        } catch (error) {
+          console.error('Error clearing cart:', error);
+          alert('Error clearing cart: ' + error.message);
+        }
+      }
+    });
+  }
 }
 
 /**
  * Proceed to Shopify checkout
  */
 async function proceedToCheckout() {
-  // Use CartManager if available, otherwise fallback to cookie
-  let cartItems = [];
-  let cart = { items: [], cartId: null };
-  
-  if (window.CartManager) {
-    cartItems = window.CartManager.getItems();
-    cart = { items: cartItems, cartId: getCookie('eyecare_cart')?.cartId || null };
-  } else {
-    cart = getCookie('eyecare_cart') || { items: [], cartId: null };
-    cartItems = cart.items || [];
+  if (!window.CartManager) {
+    alert('Cart system not available. Please refresh the page.');
+    return;
   }
+  
+  const cartItems = window.CartManager.getItems();
   
   if (cartItems.length === 0) {
     alert('Your cart is empty.');
     return;
   }
   
-  // Wait for Shopify credentials
-  let attempts = 0;
-  while ((!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) && attempts < 50) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    attempts++;
-  }
-  
-  if (!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) {
-    alert('Shopify configuration not available. Please refresh the page.');
-    return;
-  }
-  
-  const SHOPIFY_CONFIG = {
-    domain: window.SHOPIFY_STORE_DOMAIN,
-    accessToken: window.SHOPIFY_STOREFRONT_TOKEN,
-    apiVersion: '2025-01',
-  };
-  
-  const CART_CREATE_MUTATION = `
-    mutation cartCreate($input: CartInput!) {
-      cartCreate(input: $input) {
-        cart {
-          id
-          checkoutUrl
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-  
   try {
-    // Create cart with all items
-    const lines = cartItems.map(item => ({
-      merchandiseId: item.variantId,
-      quantity: 1,
-      attributes: item.attributes || []
-    }));
-    
-    const response = await fetch(`https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Storefront-Access-Token': SHOPIFY_CONFIG.accessToken,
-      },
-      body: JSON.stringify({
-        query: CART_CREATE_MUTATION,
-        variables: {
-          input: { lines }
-        },
-      }),
-    });
-    
-    const json = await response.json();
-    
-    if (json.errors || json.data?.cartCreate?.userErrors?.length > 0) {
-      const errors = json.errors || json.data.cartCreate.userErrors;
-      alert('Error creating checkout: ' + errors.map(e => e.message).join(', '));
-      return;
-    }
-    
-    const shopifyCart = json.data?.cartCreate?.cart;
-    if (shopifyCart?.checkoutUrl) {
-      // Store cart ID if using CartManager
-      if (window.CartManager) {
-        const currentCart = getCookie('eyecare_cart') || { items: cartItems, cartId: null };
-        currentCart.cartId = shopifyCart.id;
-        setCookie('eyecare_cart', currentCart, 365);
-      } else {
-        cart.cartId = shopifyCart.id;
-        setCookie('eyecare_cart', cart, 365);
-      }
-      // Redirect to checkout
-      window.location.href = shopifyCart.checkoutUrl;
+    // Get checkout URL from Shopify cart
+    const checkoutUrl = await window.CartManager.getCheckoutUrl();
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
     } else {
       alert('Checkout URL not available. Please try again.');
     }
   } catch (error) {
     console.error('Checkout error:', error);
-    alert('Error proceeding to checkout. Please try again.');
+    alert('Error proceeding to checkout: ' + error.message + '. Please try again.');
   }
 }
 

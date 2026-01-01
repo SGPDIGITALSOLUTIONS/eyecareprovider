@@ -101,21 +101,8 @@ const PRODUCT_QUERY = `
   }
 `;
 
-// Cart Create Mutation
-const CART_CREATE_MUTATION = `
-  mutation cartCreate($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart {
-        id
-        checkoutUrl
-      }
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
+// Cart Create Mutation (removed - using CartManager from cart.js instead)
+// const CART_CREATE_MUTATION = `...`; // Moved to cart.js
 
 let currentProduct = null;
 let selectedVariantId = '';
@@ -308,6 +295,61 @@ async function addToCart() {
   
   // Navigate to prescription page
   window.location.href = 'prescription.html';
+}
+
+/**
+ * Determine which lens illustration image to display based on current selection
+ * @param {Object} selectedConfig - The selected lens configuration
+ * @param {string|null} transitions - Selected transitions option (TRANS_GREY, TRANS_BROWN, or null)
+ * @returns {string} Path to the appropriate illustration image
+ */
+function getLensIllustrationPath(selectedConfig, transitions) {
+  if (!selectedConfig) {
+    return 'assets/images/gallery/lens_option_1.png'; // Default to Hard Coat
+  }
+  
+  // Check if transitions are selected and valid
+  const hasTransitions = transitions !== null;
+  const transitionsDisabled = selectedConfig.thickness === '1.74' || selectedConfig.coating === 'BLUE AR';
+  
+  // If transitions are selected and valid, show transitions illustration
+  if (hasTransitions && !transitionsDisabled) {
+    return 'assets/images/gallery/lens_option_5.png'; // Transitions
+  }
+  
+  // If transitions are selected but disabled, show "not available" illustration
+  if (hasTransitions && transitionsDisabled) {
+    return 'assets/images/gallery/lens_option_6.png'; // Transitions Not Available
+  }
+  
+  // Map lens configurations to illustrations
+  switch (selectedConfig.code) {
+    case '1.5_HC':
+      return 'assets/images/gallery/lens_option_1.png'; // Hard Coat
+    case '1.5_MAR':
+      return 'assets/images/gallery/lens_option_2.png'; // MAR (Anti-Reflective)
+    case '1.5_MAR_BLUE':
+      return 'assets/images/gallery/lens_option_3.png'; // MAR Blue
+    case '1.6_MAR':
+    case '1.67_MAR':
+    case '1.74_MAR':
+      return 'assets/images/gallery/lens_option_4.png'; // Thinner, Lighter Lenses (1.6, 1.67, 1.74)
+    default:
+      return 'assets/images/gallery/lens_option_1.png'; // Default fallback
+  }
+}
+
+/**
+ * Update the lens illustration in the right panel
+ */
+function updateLensIllustration() {
+  const container = document.getElementById('lens-illustration-container');
+  if (!container) return;
+  
+  const selectedConfig = LENS_OPTIONS.lensConfigs.find(c => c.code === lensOptions.lensConfig);
+  const imagePath = getLensIllustrationPath(selectedConfig, lensOptions.transitions);
+  
+  container.innerHTML = `<img src="${imagePath}" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
 }
 
 /**
@@ -882,61 +924,6 @@ function setupEventListeners() {
     }
   }
   
-  /**
-   * Determine which lens illustration image to display based on current selection
-   * @param {Object} selectedConfig - The selected lens configuration
-   * @param {string|null} transitions - Selected transitions option (TRANS_GREY, TRANS_BROWN, or null)
-   * @returns {string} Path to the appropriate illustration image
-   */
-  function getLensIllustrationPath(selectedConfig, transitions) {
-    if (!selectedConfig) {
-      return 'assets/images/gallery/lens_option_1.png'; // Default to Hard Coat
-    }
-    
-    // Check if transitions are selected and valid
-    const hasTransitions = transitions !== null;
-    const transitionsDisabled = selectedConfig.thickness === '1.74' || selectedConfig.coating === 'BLUE AR';
-    
-    // If transitions are selected and valid, show transitions illustration
-    if (hasTransitions && !transitionsDisabled) {
-      return 'assets/images/gallery/lens_option_5.png'; // Transitions
-    }
-    
-    // If transitions are selected but disabled, show "not available" illustration
-    if (hasTransitions && transitionsDisabled) {
-      return 'assets/images/gallery/lens_option_6.png'; // Transitions Not Available
-    }
-    
-    // Map lens configurations to illustrations
-    switch (selectedConfig.code) {
-      case '1.5_HC':
-        return 'assets/images/gallery/lens_option_1.png'; // Hard Coat
-      case '1.5_MAR':
-        return 'assets/images/gallery/lens_option_2.png'; // MAR (Anti-Reflective)
-      case '1.5_MAR_BLUE':
-        return 'assets/images/gallery/lens_option_3.png'; // MAR Blue
-      case '1.6_MAR':
-      case '1.67_MAR':
-      case '1.74_MAR':
-        return 'assets/images/gallery/lens_option_4.png'; // Thinner, Lighter Lenses (1.6, 1.67, 1.74)
-      default:
-        return 'assets/images/gallery/lens_option_1.png'; // Default fallback
-    }
-  }
-  
-  /**
-   * Update the lens illustration in the right panel
-   */
-  function updateLensIllustration() {
-    const container = document.getElementById('lens-illustration-container');
-    if (!container) return;
-    
-    const selectedConfig = LENS_OPTIONS.lensConfigs.find(c => c.code === lensOptions.lensConfig);
-    const imagePath = getLensIllustrationPath(selectedConfig, lensOptions.transitions);
-    
-    container.innerHTML = `<img src="${imagePath}" alt="Lens option illustration" style="max-width: 100%; height: auto; border-radius: 8px;" />`;
-  }
-  
   // Helper function to re-render transitions section
   function renderTransitionsSection() {
     const transitionsSection = document.querySelector('.config-section:has(.transitions-cards)');
@@ -1083,39 +1070,67 @@ function updatePriceDisplay() {
  * Initialize page
  */
 async function initProductDetail() {
-  // Wait for credentials
+  const container = document.getElementById('product-detail-container');
+  if (!container) {
+    console.error('Product detail container not found');
+    return;
+  }
+
+  // Wait for credentials (with longer timeout)
   let attempts = 0;
-  while ((!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) && attempts < 50) {
+  while ((!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) && attempts < 100) {
     await new Promise(resolve => setTimeout(resolve, 100));
     attempts++;
   }
 
-  SHOPIFY_CONFIG.domain = window.SHOPIFY_STORE_DOMAIN || '';
-  SHOPIFY_CONFIG.accessToken = window.SHOPIFY_STOREFRONT_TOKEN || '';
+  if (!window.SHOPIFY_STORE_DOMAIN || !window.SHOPIFY_STOREFRONT_TOKEN) {
+    container.innerHTML = `
+      <div class="product-error" style="text-align: center; padding: 2rem;">
+        <p style="color: #dc3545; margin-bottom: 1rem;">Shopify configuration not available. Please refresh the page.</p>
+        <a href="shop.html" class="btn-primary" style="display: inline-block; padding: 0.75rem 1.5rem; background: #4b8a8a; color: white; text-decoration: none; border-radius: 8px;">Back to Shop</a>
+      </div>
+    `;
+    console.error('Shopify credentials not available after waiting');
+    return;
+  }
+
+  SHOPIFY_CONFIG.domain = window.SHOPIFY_STORE_DOMAIN;
+  SHOPIFY_CONFIG.accessToken = window.SHOPIFY_STOREFRONT_TOKEN;
 
   const handle = getProductHandle();
   if (!handle) {
-    document.getElementById('product-detail-container').innerHTML = `
-      <div class="product-error">
-        <p>Product not found. Please select a product from the shop.</p>
-        <a href="shop.html" class="btn-primary">Back to Shop</a>
+    container.innerHTML = `
+      <div class="product-error" style="text-align: center; padding: 2rem;">
+        <p style="color: #dc3545; margin-bottom: 1rem;">Product not found. Please select a product from the shop.</p>
+        <a href="shop.html" class="btn-primary" style="display: inline-block; padding: 0.75rem 1.5rem; background: #4b8a8a; color: white; text-decoration: none; border-radius: 8px;">Back to Shop</a>
       </div>
     `;
     return;
   }
 
-  const product = await fetchProduct(handle);
-  if (!product) {
-    document.getElementById('product-detail-container').innerHTML = `
-      <div class="product-error">
-        <p>Product not found or error loading product.</p>
-        <a href="shop.html" class="btn-primary">Back to Shop</a>
+  try {
+    const product = await fetchProduct(handle);
+    if (!product) {
+      container.innerHTML = `
+        <div class="product-error" style="text-align: center; padding: 2rem;">
+          <p style="color: #dc3545; margin-bottom: 1rem;">Product not found or error loading product. Please try again.</p>
+          <a href="shop.html" class="btn-primary" style="display: inline-block; padding: 0.75rem 1.5rem; background: #4b8a8a; color: white; text-decoration: none; border-radius: 8px;">Back to Shop</a>
+        </div>
+      `;
+      console.error('Failed to fetch product:', handle);
+      return;
+    }
+
+    renderProductDetail(product);
+  } catch (error) {
+    console.error('Error initializing product detail:', error);
+    container.innerHTML = `
+      <div class="product-error" style="text-align: center; padding: 2rem;">
+        <p style="color: #dc3545; margin-bottom: 1rem;">Error loading product: ${error.message}</p>
+        <a href="shop.html" class="btn-primary" style="display: inline-block; padding: 0.75rem 1.5rem; background: #4b8a8a; color: white; text-decoration: none; border-radius: 8px;">Back to Shop</a>
       </div>
     `;
-    return;
   }
-
-  renderProductDetail(product);
 }
 
 // Handle window resize to update layout

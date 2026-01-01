@@ -90,8 +90,47 @@
         </div>
     </footer>
 
+    <script src="js/main.js"></script>
+    <script src="js/cookie-consent.js"></script>
+    
+    <!-- Shopify Credentials -->
+    <script>
+        // LOCALHOST: Credentials for local testing
+        window.SHOPIFY_STORE_DOMAIN = 'th09pn-qt.myshopify.com';
+        window.SHOPIFY_STOREFRONT_TOKEN = '48634601834befc37161cdc52f8e01fb';
+        
+        // PRODUCTION: Fetch from server (Vercel)
+        fetch('/api/shopify-config')
+          .then(res => {
+            if (!res.ok) throw new Error('API not available');
+            return res.json();
+          })
+          .then(config => {
+            if (config.domain && config.token) {
+              window.SHOPIFY_STORE_DOMAIN = config.domain;
+              window.SHOPIFY_STOREFRONT_TOKEN = config.token;
+              console.log('Shopify credentials loaded from server');
+            }
+          })
+          .catch(err => {
+            // Silently use localhost credentials (expected on localhost)
+            // console.log('Using localhost credentials');
+          });
+    </script>
     <script src="js/cart.js"></script>
     <script src="js/cart-page.js"></script>
+    
+    <!-- Vercel Analytics (only on production) -->
+    <script>
+      // Only load Vercel Analytics on production (not localhost)
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        const script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      }
+    </script>
 </body>
 </html>
 
