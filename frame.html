@@ -35,6 +35,14 @@
                 <a href="products.html" class="nav-item">Products</a>
                 <a href="shop.html" class="nav-item">Shop</a>
                 <a href="contact.html" class="nav-item">Contact</a>
+                <a href="cart.html" class="nav-item cart-icon" style="position: relative; display: flex; align-items: center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span id="cart-badge" class="cart-badge" style="display: none; position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; font-weight: 700; align-items: center; justify-content: center;">0</span>
+                </a>
                 <a href="contact.html" class="nav-item cta-nav">Request an Appointment</a>
             </div>
         </div>
@@ -126,16 +134,24 @@
             }
           })
           .catch(err => {
-            console.log('Using localhost credentials');
+            // Silently use localhost credentials (expected on localhost)
+            // console.log('Using localhost credentials');
           });
     </script>
+    <script src="js/cart.js"></script>
     <script src="js/shopify-product-detail.js"></script>
     
-    <!-- Vercel Analytics -->
+    <!-- Vercel Analytics (only on production) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      // Only load Vercel Analytics on production (not localhost)
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        const script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      }
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 

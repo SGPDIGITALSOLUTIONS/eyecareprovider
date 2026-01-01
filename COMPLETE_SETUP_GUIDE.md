@@ -223,3 +223,5 @@ Once everything works locally:
 - Verify Shopify credentials
 - See `SHOPIFY_SETUP_GUIDE.md` for product configuration
 
+
+

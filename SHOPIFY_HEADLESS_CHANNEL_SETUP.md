@@ -122,3 +122,5 @@ After getting credentials:
 
 See `SHOPIFY_SETUP_GUIDE.md` for product configuration details.
 
+
+

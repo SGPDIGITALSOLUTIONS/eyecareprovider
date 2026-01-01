@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Collections - I Care Services Providers Ltd</title>
+    <title>Prescription Details - I Care Services Providers Ltd</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Browse our complete collection of premium eyewear frames. Filter by style, browse hundreds of options, and find your perfect frames.">
+    <meta name="description" content="Enter your prescription details to complete your order">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -33,7 +33,7 @@
                 <a href="advancedeyecare.html" class="nav-item">Eyecare</a>
                 <a href="advanced-eyecare-plan.html" class="nav-item">Advanced Plan</a>
                 <a href="products.html" class="nav-item">Products</a>
-                <a href="shop.html" class="nav-item active">Shop</a>
+                <a href="shop.html" class="nav-item">Shop</a>
                 <a href="contact.html" class="nav-item">Contact</a>
                 <a href="cart.html" class="nav-item cart-icon" style="position: relative; display: flex; align-items: center;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -48,74 +48,12 @@
         </div>
     </nav>
 
-    <!-- Shop Hero -->
-    <section class="page-hero">
+    <!-- Prescription Section -->
+    <section class="product-detail-section">
         <div class="container">
-            <div class="hero-content">
-                <span class="category-tag">FRAME COLLECTIONS</span>
-                <h1>Browse Our Complete Frame Range</h1>
-                <p>Explore hundreds of premium frames, designer collections, and specialized eyewear solutions</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Shop Content -->
-    <section class="products-showcase">
-        <div class="container">
-            <!-- Filter Bar -->
-            <div class="shop-filters-modern">
-                <div class="filter-group">
-                    <button class="filter-btn-modern active" data-filter="all">
-                        <span>All Frames</span>
-                    </button>
-                    <button class="filter-btn-modern" data-filter="men">
-                        <span>Men</span>
-                    </button>
-                    <button class="filter-btn-modern" data-filter="women">
-                        <span>Women</span>
-                    </button>
-                    <button class="filter-btn-modern" data-filter="unisex">
-                        <span>Unisex</span>
-                    </button>
-                </div>
-                <div class="filter-sort-group">
-                    <div class="sort-dropdown">
-                        <label for="sort-select" style="display: none;">Sort by</label>
-                        <select id="sort-select" class="sort-select">
-                            <option value="recommended">Sort by: Recommended</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name-asc">Name: A to Z</option>
-                            <option value="name-desc">Name: Z to A</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Active Filters -->
-            <div id="active-filters" class="active-filters-container" style="display: none;">
-                <div class="active-filters-tags"></div>
-                <button class="clear-all-filters" onclick="clearAllFilters()">Clear all</button>
-            </div>
-
-            <!-- Product Grid -->
-            <div id="shop-products" class="shop-products-container">
-                <div class="products-preview-loading">
-                    <p>Loading frames...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Need Help Choosing?</h2>
-                <p>Contact us for personalized frame recommendations and professional fitting services</p>
-                <div class="cta-buttons">
-                    <a href="contact.html" class="btn-primary">Book Consultation</a>
-                    <a href="products.html" class="btn-secondary">Back to Products</a>
+            <div id="prescription-container">
+                <div class="product-loading">
+                    <p>Loading prescription form...</p>
                 </div>
             </div>
         </div>
@@ -176,11 +114,9 @@
     <script src="js/main.js"></script>
     <script src="js/cookie-consent.js"></script>
     
-    <!-- Shopify Products Shop Page -->
+    <!-- Shopify Credentials -->
     <script>
         // LOCALHOST: Credentials for local testing
-        // NOTE: Storefront API tokens are SAFE for client-side use - they have limited scopes
-        // and are designed for headless storefronts. This is standard practice.
         window.SHOPIFY_STORE_DOMAIN = 'th09pn-qt.myshopify.com';
         window.SHOPIFY_STOREFRONT_TOKEN = '48634601834befc37161cdc52f8e01fb';
         
@@ -198,19 +134,24 @@
             }
           })
           .catch(err => {
-            console.log('Using localhost credentials (if set)');
-            // If credentials are set above, they'll be used
+            // Silently use localhost credentials (expected on localhost)
+            // console.log('Using localhost credentials');
           });
     </script>
-    <script src="js/shopify-shop.js"></script>
+    <script src="js/shopify-prescription-validation.js"></script>
+    <script src="js/shopify-prescription.js"></script>
     
-    <!-- Vercel Analytics -->
+    <!-- Vercel Analytics (only on production) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      // Only load Vercel Analytics on production (not localhost)
+      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        const script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      }
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
-
-
 

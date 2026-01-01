@@ -166,3 +166,5 @@ async function fetchProducts(limit = 6, tag = null) {
 4. Deploy and verify in production
 
 
+
+
