@@ -35,6 +35,17 @@ img {
     min-height: 48px;
 }
 
+/* Reset button styles to override user agent stylesheet */
+button.filter-btn-modern {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    outline: none !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
 :root {
     /* Core brand colors - sophisticated yet warm */
     --background: #F4F7F8;
@@ -2328,43 +2339,184 @@ body {
     gap: 0.75rem;
     flex-wrap: wrap;
     flex: 1;
+    align-items: center;
 }
 
+.filter-group-label {
+    font-size: 0.75rem;
+    color: #6C757D;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 0.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Base filter button styles - reset user agent first */
+button.filter-btn-modern,
 .filter-btn-modern {
-    padding: 0.625rem 1.25rem;
-    background: white;
-    border: 2px solid #E9ECEF;
-    border-radius: 6px;
-    color: #5B6770;
-    font-weight: 500;
+    /* Reset user agent stylesheet */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    outline: none !important;
+    
+    /* Base styles - matching site design system */
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--white) !important;
+    background-color: var(--white) !important;
+    border: 2px solid var(--navigation) !important;
+    border-style: solid !important;
+    border-color: var(--navigation) !important;
+    border-width: 2px !important;
+    border-radius: var(--radius-md);
+    color: var(--headers) !important;
+    font-weight: var(--font-weight-semibold) !important;
     font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
+    cursor: pointer !important;
+    transition: all 0.3s ease;
+    font-family: var(--font-primary) !important;
     position: relative;
-    display: flex;
+    display: flex !important;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    white-space: nowrap;
+    min-height: 40px;
+    box-shadow: var(--shadow-sm);
+    box-sizing: border-box !important;
 }
 
 .filter-btn-modern:hover {
-    background: #F8F9FA;
-    border-color: #4b8a8a;
-    color: #4b8a8a;
-    transform: translateY(-1px);
+    background: var(--light-gray) !important;
+    background-color: var(--light-gray) !important;
+    border-color: var(--cta) !important;
+    color: var(--cta) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .filter-btn-modern.active {
-    background: #4b8a8a;
-    color: white;
-    border-color: #4b8a8a;
-    box-shadow: 0 2px 4px rgba(75, 138, 138, 0.2);
+    background: var(--cta) !important;
+    background-color: var(--cta) !important;
+    color: var(--white) !important;
+    border-color: var(--cta) !important;
+    box-shadow: var(--shadow-md);
 }
 
 .filter-btn-modern.active:hover {
-    background: #3a6f6f;
-    border-color: #3a6f6f;
-    transform: translateY(-1px);
+    background: var(--warm-teal) !important;
+    background-color: var(--warm-teal) !important;
+    border-color: var(--warm-teal) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Desktop styles for filter buttons - matching mobile but with larger sizing */
+@media (min-width: 1024px) {
+    button.filter-btn-modern,
+    .filter-btn-modern {
+        /* Reset user agent styles */
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        margin: 0 !important;
+        outline: none !important;
+        
+        /* Override all user agent properties - match base styles exactly */
+        padding: var(--spacing-md) var(--spacing-lg) !important;
+        padding-block: var(--spacing-md) !important;
+        padding-inline: var(--spacing-lg) !important;
+        background: var(--white) !important;
+        background-color: var(--white) !important;
+        border: 2px solid var(--navigation) !important;
+        border-style: solid !important;
+        border-color: var(--navigation) !important;
+        border-width: 2px !important;
+        border-radius: var(--radius-lg) !important;
+        color: var(--headers) !important;
+        font-weight: var(--font-weight-semibold) !important;
+        font-size: 1rem !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        font-family: var(--font-primary) !important;
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: var(--spacing-xs) !important;
+        white-space: nowrap !important;
+        min-height: 44px !important;
+        box-shadow: var(--shadow-sm) !important;
+        box-sizing: border-box !important;
+        
+        /* Override all user agent font properties */
+        font-style: normal !important;
+        font-variant-ligatures: normal !important;
+        font-variant-caps: normal !important;
+        font-variant-numeric: normal !important;
+        font-variant-east-asian: normal !important;
+        font-variant-alternates: normal !important;
+        font-variant-position: normal !important;
+        font-variant-emoji: normal !important;
+        font-stretch: normal !important;
+        font-optical-sizing: auto !important;
+        font-size-adjust: none !important;
+        font-kerning: auto !important;
+        font-feature-settings: normal !important;
+        font-variation-settings: normal !important;
+        font-language-override: normal !important;
+        text-rendering: auto !important;
+        
+        /* Override user agent text properties */
+        letter-spacing: normal !important;
+        word-spacing: normal !important;
+        line-height: normal !important;
+        text-transform: none !important;
+        text-indent: 0 !important;
+        text-shadow: none !important;
+        text-align: center !important;
+    }
+    
+    .filter-btn-modern:hover {
+        background: var(--light-gray) !important;
+        background-color: var(--light-gray) !important;
+        border-color: var(--cta) !important;
+        color: var(--cta) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: var(--shadow-md) !important;
+    }
+    
+    .filter-btn-modern.active {
+        background: var(--cta) !important;
+        background-color: var(--cta) !important;
+        color: var(--white) !important;
+        border-color: var(--cta) !important;
+        box-shadow: var(--shadow-md) !important;
+    }
+    
+    .filter-btn-modern.active:hover {
+        background: var(--warm-teal) !important;
+        background-color: var(--warm-teal) !important;
+        border-color: var(--warm-teal) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: var(--shadow-lg) !important;
+    }
+    
+    .filter-group {
+        gap: 1rem;
+    }
+    
+    .filter-group-label {
+        font-size: 0.8rem;
+        margin-right: 0.75rem;
+    }
+    
+    .shop-filters-modern {
+        padding: 1.5rem 0;
+        gap: 1.5rem;
+    }
 }
 
 .filter-sort-group {

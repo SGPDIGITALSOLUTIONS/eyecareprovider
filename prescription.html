@@ -138,6 +138,36 @@
             // console.log('Using localhost credentials');
           });
     </script>
+    <!-- Lens Addon Variants Configuration -->
+    <!-- 
+      IMPORTANT: Replace these placeholder variant IDs with your actual Shopify variant IDs
+      from the "Lenses" and "Photochromic Add On" products.
+      
+      To find your variant IDs:
+      1. Go to Shopify Admin → Products → "Lenses"
+      2. For each variant (SV15HC, SV15AR, etc.), copy the variant ID from the URL or API
+      3. Format: gid://shopify/ProductVariant/123456789
+      
+      Repeat for "Photochromic Add On" product variants (PHOTOGR, PHOTOBR)
+    -->
+    <script>
+        window.SHOPIFY_LENS_ADDON_VARIANTS = {
+            // Lens variants from "Lenses" product
+            'SV15HC': 'gid://shopify/ProductVariant/56190361502076',   // Single Vision 1.5 Hardcoat
+            'SV15AR': 'gid://shopify/ProductVariant/56190361534844',    // Single Vision 1.5 MAR
+            'SV15BAR': 'gid://shopify/ProductVariant/56190361567612',  // Single Vision 1.5 Blue MAR
+            'SV16AR': 'gid://shopify/ProductVariant/56190361600380',   // Single Vision 1.6 MAR
+            'SV167AR': 'gid://shopify/ProductVariant/56190361633148', // Single Vision 1.67 MAR
+            'SV174AR': 'gid://shopify/ProductVariant/56190361665916',  // Single Vision 1.74 MAR
+            
+            // Photochromic variants from "Add Ons" product
+            'PHOTOGR': 'gid://shopify/ProductVariant/56190368612732',   // Photochromic Grey
+            'PHOTOBR': 'gid://shopify/ProductVariant/56190368645500',   // Photochromic Brown
+        };
+    </script>
+    
+    <script src="js/fetch-lens-variant-ids.js"></script>
+    <script src="js/find-addons-product.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/shopify-prescription-validation.js"></script>
     <script src="js/shopify-prescription.js"></script>

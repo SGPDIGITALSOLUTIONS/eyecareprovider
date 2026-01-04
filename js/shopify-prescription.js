@@ -22,6 +22,52 @@ const LENS_OPTIONS = {
   ],
 };
 
+/**
+ * Lens Addon Variant IDs Configuration
+ * 
+ * If you have separate "Lens Add-on" products in Shopify that need to be charged separately,
+ * configure their variant IDs here. This allows lens options to appear as separate line items
+ * at checkout, not just as attributes.
+ * 
+ * Example configuration (set this in your HTML before loading this script):
+ * 
+ * window.SHOPIFY_LENS_ADDON_VARIANTS = {
+ *   'SV': 'gid://shopify/ProductVariant/123456789',           // Single Vision addon
+ *   'VARI': 'gid://shopify/ProductVariant/123456790',         // Varifocal addon
+ *   'BIF': 'gid://shopify/ProductVariant/123456791',           // Bifocal addon
+ *   'index_1.60': 'gid://shopify/ProductVariant/123456792',   // 1.60 index upgrade
+ *   'index_1.67': 'gid://shopify/ProductVariant/123456793',   // 1.67 index upgrade
+ *   'coating_AR': 'gid://shopify/ProductVariant/123456794',   // Anti-reflective coating
+ *   'coating_BL': 'gid://shopify/ProductVariant/123456795',   // Blue light filter
+ *   'coating_TR': 'gid://shopify/ProductVariant/123456796',   // Transitions
+ * };
+ * 
+ * If not configured, lens options will still be passed as attributes on the frame line item,
+ * but won't appear as separate chargeable line items at checkout.
+ */
+
+/**
+ * Map lensConfig codes from frame.html to Shopify variant codes
+ * These codes correspond to variants in the "Lenses" product
+ */
+const LENS_CONFIG_TO_VARIANT_CODE = {
+  '1.5_HC': 'SV15HC',      // Single Vision 1.5 Hardcoat = £0
+  '1.5_MAR': 'SV15AR',    // Single Vision 1.5 MAR = £40
+  '1.5_MAR_BLUE': 'SV15BAR', // Single Vision 1.5 Blue MAR = £50
+  '1.6_MAR': 'SV16AR',     // Single Vision 1.6 MAR = £60
+  '1.67_MAR': 'SV167AR',   // Single Vision 1.67 MAR = £100
+  '1.74_MAR': 'SV174AR',   // Single Vision 1.74 MAR = £140
+};
+
+/**
+ * Map transitions codes from frame.html to Shopify variant codes
+ * These codes correspond to variants in the "Photochromic Add On" product
+ */
+const TRANSITIONS_TO_VARIANT_CODE = {
+  'TRANS_GREY': 'PHOTOGR',   // Photochromic Grey = £79
+  'TRANS_BROWN': 'PHOTOBR',  // Photochromic Brown = £79
+};
+
 // Shopify API Configuration
 const SHOPIFY_CONFIG = {
   domain: window.SHOPIFY_STORE_DOMAIN || '',
@@ -118,7 +164,9 @@ function generateAxisOptions() {
 }
 
 /**
- * Format attributes for cart (matching shopify_lenses_and_prescription.md spec)
+ * Format attributes for cart (Shopify line item properties format)
+ * Matches Shopify's recommended naming convention for lens/prescription data
+ * Handles both old format (lensType/lensIndex/coatings) and new format (lensConfig/transitions from frame.html)
  */
 function formatAttributes() {
   const attributes = [];
@@ -128,61 +176,112 @@ function formatAttributes() {
     attributes.push({ key: 'Colour', value: selectedColour });
   }
 
-  // Lens Type (both code and label)
-  const lensType = LENS_OPTIONS.type.find(lt => lt.code === lensOptions.lensType);
-  if (lensType) {
-    attributes.push({ key: 'Lens Type Code', value: lensType.code });
-    attributes.push({ key: 'Lens Type', value: lensType.label });
-  }
-
-  // Lens Index (both code and label)
-  const lensIndex = LENS_OPTIONS.index.find(i => i.code === lensOptions.lensIndex);
-  if (lensIndex) {
-    attributes.push({ key: 'Lens Index Code', value: lensIndex.code });
-    attributes.push({ key: 'Lens Index', value: lensIndex.label });
-  }
-
-  // Coatings
-  if (lensOptions.coatings.length > 0) {
-    const coatingCodes = lensOptions.coatings.map(code => {
-      const coating = LENS_OPTIONS.coatings.find(c => c.code === code);
-      return coating ? coating.code : null;
-    }).filter(Boolean);
-    const coatingLabels = lensOptions.coatings.map(code => {
-      const coating = LENS_OPTIONS.coatings.find(c => c.code === code);
-      return coating ? coating.label : null;
-    }).filter(Boolean);
-    if (coatingCodes.length > 0) {
-      attributes.push({ key: 'Coatings Code', value: coatingCodes.join(', ') });
+  // Check if we have lensConfig from frame.html (new format)
+  if (lensOptions.lensConfig) {
+    // Map lensConfig to readable label
+    const lensConfigLabels = {
+      '1.5_HC': 'Single Vision 1.5 Hardcoat',
+      '1.5_MAR': 'Single Vision 1.5 MAR',
+      '1.5_MAR_BLUE': 'Single Vision 1.5 Blue MAR',
+      '1.6_MAR': 'Single Vision 1.6 MAR',
+      '1.67_MAR': 'Single Vision 1.67 MAR',
+      '1.74_MAR': 'Single Vision 1.74 MAR',
+    };
+    
+    const lensConfigLabel = lensConfigLabels[lensOptions.lensConfig] || lensOptions.lensConfig;
+    attributes.push({ key: 'Lens: Type', value: 'Single Vision' });
+    attributes.push({ key: 'Lens: Configuration', value: lensConfigLabel });
+    
+    // Get variant code for reference
+    const variantCode = LENS_CONFIG_TO_VARIANT_CODE[lensOptions.lensConfig];
+    if (variantCode) {
+      attributes.push({ key: 'Lens: Variant Code', value: variantCode });
     }
-    if (coatingLabels.length > 0) {
-      attributes.push({ key: 'Coatings', value: coatingLabels.join(', ') });
+    
+    // Handle transitions (photochromic)
+    if (lensOptions.transitions) {
+      const transitionsLabels = {
+        'TRANS_GREY': 'Photochromic Grey',
+        'TRANS_BROWN': 'Photochromic Brown',
+      };
+      const transitionsLabel = transitionsLabels[lensOptions.transitions] || lensOptions.transitions;
+      attributes.push({ key: 'Lens: Photochromic', value: 'Yes' });
+      attributes.push({ key: 'Lens: Photochromic Type', value: transitionsLabel });
+      
+      const photochromicCode = TRANSITIONS_TO_VARIANT_CODE[lensOptions.transitions];
+      if (photochromicCode) {
+        attributes.push({ key: 'Lens: Photochromic Code', value: photochromicCode });
+      }
+    } else {
+      attributes.push({ key: 'Lens: Photochromic', value: 'No' });
     }
+  } else {
+    // Legacy format: Lens Type
+    const lensType = LENS_OPTIONS.type.find(lt => lt.code === lensOptions.lensType);
+    if (lensType) {
+      attributes.push({ key: 'Lens: Type', value: lensType.label });
+    }
+
+    // Legacy format: Lens Index (format: "1.6 AR" or just index value)
+    const lensIndex = LENS_OPTIONS.index.find(i => i.code === lensOptions.lensIndex);
+    if (lensIndex) {
+      // Build index string with coating info if available
+      let indexValue = lensIndex.code;
+      if (lensOptions.coatings && lensOptions.coatings.length > 0) {
+        const coatingLabels = lensOptions.coatings.map(code => {
+          const coating = LENS_OPTIONS.coatings.find(c => c.code === code);
+          return coating ? coating.label : null;
+        }).filter(Boolean);
+        if (coatingLabels.length > 0) {
+          indexValue = `${lensIndex.code} ${coatingLabels.join(', ')}`;
+        }
+      }
+      attributes.push({ key: 'Lens: Index', value: indexValue });
+    }
+
+    // Legacy format: Lens Coating (separate from index)
+    if (lensOptions.coatings && lensOptions.coatings.length > 0) {
+      const coatingLabels = lensOptions.coatings.map(code => {
+        const coating = LENS_OPTIONS.coatings.find(c => c.code === code);
+        return coating ? coating.label : null;
+      }).filter(Boolean);
+      if (coatingLabels.length > 0) {
+        attributes.push({ key: 'Lens: Coating', value: coatingLabels.join(', ') });
+      }
+    }
+
+    // Legacy format: Lens Photochromic (Transitions)
+    const hasTransitions = lensOptions.coatings && lensOptions.coatings.includes('TR');
+    attributes.push({ key: 'Lens: Photochromic', value: hasTransitions ? 'Yes' : 'No' });
   }
 
-  // Prescription (matching spec naming: Rx R SPH, Rx L SPH, etc.)
+  // Prescription (using RX: prefix format)
   const rx = lensOptions.prescription;
   
   // Right Eye
-  if (rx.r_sph) attributes.push({ key: 'Rx R SPH', value: rx.r_sph });
-  if (rx.r_cyl) attributes.push({ key: 'Rx R CYL', value: rx.r_cyl });
-  if (rx.r_axis) attributes.push({ key: 'Rx R AXIS', value: rx.r_axis });
+  if (rx.r_sph) attributes.push({ key: 'RX: SPH R', value: rx.r_sph });
+  if (rx.r_cyl) attributes.push({ key: 'RX: CYL R', value: rx.r_cyl });
+  if (rx.r_axis) attributes.push({ key: 'RX: AXIS R', value: rx.r_axis });
   
   // Left Eye
-  if (rx.l_sph) attributes.push({ key: 'Rx L SPH', value: rx.l_sph });
-  if (rx.l_cyl) attributes.push({ key: 'Rx L CYL', value: rx.l_cyl });
-  if (rx.l_axis) attributes.push({ key: 'Rx L AXIS', value: rx.l_axis });
+  if (rx.l_sph) attributes.push({ key: 'RX: SPH L', value: rx.l_sph });
+  if (rx.l_cyl) attributes.push({ key: 'RX: CYL L', value: rx.l_cyl });
+  if (rx.l_axis) attributes.push({ key: 'RX: AXIS L', value: rx.l_axis });
   
   // PD handling: prefer individual values, fallback to combined
   if (rx.left_pd && rx.right_pd) {
-    attributes.push({ key: 'PD Left', value: rx.left_pd });
-    attributes.push({ key: 'PD Right', value: rx.right_pd });
+    attributes.push({ key: 'PD R', value: rx.right_pd });
+    attributes.push({ key: 'PD L', value: rx.left_pd });
   } else if (rx.combined_pd) {
     attributes.push({ key: 'PD', value: rx.combined_pd });
   }
-  if (rx.intermediate_add) attributes.push({ key: 'Intermediate Add', value: rx.intermediate_add });
-  if (rx.near_add) attributes.push({ key: 'Near Add', value: rx.near_add });
-  if (rx.notes) attributes.push({ key: 'Rx Notes', value: rx.notes });
+  
+  // ADD values (for varifocals/bifocals)
+  if (rx.intermediate_add) attributes.push({ key: 'RX: ADD R', value: rx.intermediate_add });
+  if (rx.near_add) attributes.push({ key: 'RX: ADD L', value: rx.near_add });
+  
+  // Notes
+  if (rx.notes) attributes.push({ key: 'Notes', value: rx.notes });
   
   // Usage Type
   if (prescriptionUsageType) {
@@ -337,6 +436,111 @@ async function addToCart() {
     }
   }
   
+  // Build addon line items (lens addons that need to be separate line items)
+  const addonLines = [];
+  
+  // Check if lens addon variant IDs are configured
+  // window.SHOPIFY_LENS_ADDON_VARIANTS should map variant codes (e.g., 'SV15HC') to Shopify variant IDs
+  const lensAddonVariants = window.SHOPIFY_LENS_ADDON_VARIANTS || {};
+  
+  // Get lensConfig and transitions from lensOptions (saved from frame.html)
+  // lensOptions structure from frame.html: { lensType: 'SV', lensConfig: '1.5_HC', transitions: 'TRANS_GREY' }
+  const lensConfig = lensOptions.lensConfig; // e.g., '1.5_HC', '1.5_MAR', etc.
+  const transitions = lensOptions.transitions; // e.g., 'TRANS_GREY', 'TRANS_BROWN', or null
+  
+  // Map lensConfig to Shopify variant code and add as line item
+  // Include only "Lens: Configuration" attribute for display
+  if (lensConfig) {
+    const variantCode = LENS_CONFIG_TO_VARIANT_CODE[lensConfig];
+    if (variantCode && lensAddonVariants[variantCode]) {
+      const addonVariantId = lensAddonVariants[variantCode];
+      // Get the display label for the lens configuration
+      const lensConfigLabels = {
+        '1.5_HC': 'Single Vision 1.5 Hardcoat',
+        '1.5_MAR': 'Single Vision 1.5 MAR',
+        '1.5_MAR_BLUE': 'Single Vision 1.5 Blue MAR',
+        '1.6_MAR': 'Single Vision 1.6 MAR',
+        '1.67_MAR': 'Single Vision 1.67 MAR',
+        '1.74_MAR': 'Single Vision 1.74 MAR',
+      };
+      const configLabel = lensConfigLabels[lensConfig] || lensConfig;
+      
+      addonLines.push({
+        variantId: addonVariantId,
+        quantity: 1,
+        attributes: [
+          { key: 'Lens: Configuration', value: configLabel }
+        ]
+      });
+      console.log(`Added lens addon line item: ${variantCode} (${lensConfig})`);
+    } else {
+      console.warn(`Lens config ${lensConfig} not mapped to variant code or variant ID not configured`);
+    }
+  }
+  
+  // Map transitions to photochromic variant code and add as line item
+  // Include only "Lens: Photochromic Type" attribute for display
+  if (transitions) {
+    const variantCode = TRANSITIONS_TO_VARIANT_CODE[transitions];
+    if (variantCode && lensAddonVariants[variantCode]) {
+      const addonVariantId = lensAddonVariants[variantCode];
+      // Get the display label for the photochromic type
+      const transitionsLabels = {
+        'TRANS_GREY': 'Photochromic Grey',
+        'TRANS_BROWN': 'Photochromic Brown',
+      };
+      const transitionsLabel = transitionsLabels[transitions] || transitions;
+      
+      addonLines.push({
+        variantId: addonVariantId,
+        quantity: 1,
+        attributes: [
+          { key: 'Lens: Photochromic Type', value: transitionsLabel }
+        ]
+      });
+      console.log(`Added photochromic addon line item: ${variantCode} (${transitions})`);
+    } else {
+      console.warn(`Transitions ${transitions} not mapped to variant code or variant ID not configured`);
+    }
+  }
+  
+  // Legacy support: Add lens type addon if configured (for old format)
+  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  if (lensOptions.lensType && lensAddonVariants[lensOptions.lensType]) {
+    const addonVariantId = lensAddonVariants[lensOptions.lensType];
+    addonLines.push({
+      variantId: addonVariantId,
+      quantity: 1,
+      attributes: [] // No attributes on addon items
+    });
+  }
+  
+  // Legacy support: Add lens index addon if configured and not base (1.50)
+  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  if (lensOptions.lensIndex && lensOptions.lensIndex !== '1.50' && lensAddonVariants[`index_${lensOptions.lensIndex}`]) {
+    const addonVariantId = lensAddonVariants[`index_${lensOptions.lensIndex}`];
+    addonLines.push({
+      variantId: addonVariantId,
+      quantity: 1,
+      attributes: [] // No attributes on addon items
+    });
+  }
+  
+  // Legacy support: Add coating addons if configured
+  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  if (lensOptions.coatings && lensOptions.coatings.length > 0) {
+    lensOptions.coatings.forEach(coatingCode => {
+      if (lensAddonVariants[`coating_${coatingCode}`]) {
+        const addonVariantId = lensAddonVariants[`coating_${coatingCode}`];
+        addonLines.push({
+          variantId: addonVariantId,
+          quantity: 1,
+          attributes: [] // No attributes on addon items
+        });
+      }
+    });
+  }
+  
   // Add to Shopify cart via GraphQL API
   const cartItem = {
     variantId: variantId,
@@ -351,11 +555,17 @@ async function addToCart() {
     addedAt: new Date().toISOString()
   };
   
-  // Use CartManager to add to Shopify cart
+  // Use CartManager to add to Shopify cart with addon lines
   try {
     if (window.CartManager) {
-      await window.CartManager.add(cartItem);
-      alert(`Added to cart! You have ${window.CartManager.getCount()} item(s) in your cart.`);
+      // Pass addon lines as second parameter
+      await window.CartManager.add(cartItem, addonLines);
+      const totalItems = window.CartManager.getCount();
+      const addonCount = addonLines.length;
+      const message = addonCount > 0 
+        ? `Added to cart! Frame + ${addonCount} addon(s). Total: ${totalItems} item(s) in your cart.`
+        : `Added to cart! You have ${totalItems} item(s) in your cart.`;
+      alert(message);
       // Optionally redirect to cart page or stay on page
       // window.location.href = 'cart.html';
     } else {

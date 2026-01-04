@@ -65,17 +65,62 @@
             <!-- Filter Bar -->
             <div class="shop-filters-modern">
                 <div class="filter-group">
-                    <button class="filter-btn-modern active" data-filter="all">
+                    <button class="filter-btn-modern active" data-filter="all" data-category="all">
                         <span>All Frames</span>
                     </button>
-                    <button class="filter-btn-modern" data-filter="men">
+                </div>
+                <div class="filter-group">
+                    <span class="filter-group-label">Gender:</span>
+                    <button class="filter-btn-modern" data-filter=" Mens" data-category="gender">
                         <span>Men</span>
                     </button>
-                    <button class="filter-btn-modern" data-filter="women">
-                        <span>Women</span>
+                    <button class="filter-btn-modern" data-filter=" Ladies" data-category="gender">
+                        <span>Ladies</span>
                     </button>
-                    <button class="filter-btn-modern" data-filter="unisex">
+                    <button class="filter-btn-modern" data-filter=" Unisex" data-category="gender">
                         <span>Unisex</span>
+                    </button>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-group-label">Shape:</span>
+                    <button class="filter-btn-modern" data-filter=" Rectangle" data-category="shape">
+                        <span>Rectangle</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter=" Wayfare" data-category="shape">
+                        <span>Wayfare</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter=" Round" data-category="shape">
+                        <span>Round</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter="Square" data-category="shape">
+                        <span>Square</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter="Oval" data-category="shape">
+                        <span>Oval</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter="Cat Eye" data-category="shape">
+                        <span>Cat Eye</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter="Geometric" data-category="shape">
+                        <span>Geometric</span>
+                    </button>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-group-label">Material:</span>
+                    <button class="filter-btn-modern" data-filter=" Metal" data-category="material">
+                        <span>Metal</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter=" Plastic" data-category="material">
+                        <span>Plastic</span>
+                    </button>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-group-label">Frame Type:</span>
+                    <button class="filter-btn-modern" data-filter=" Full Frame" data-category="frameType">
+                        <span>Full Frame</span>
+                    </button>
+                    <button class="filter-btn-modern" data-filter="Half-Rimmed" data-category="frameType">
+                        <span>Half-Rimmed</span>
                     </button>
                 </div>
                 <div class="filter-sort-group">
@@ -202,6 +247,8 @@
             // If credentials are set above, they'll be used
           });
     </script>
+    <script src="js/fetch-lens-variant-ids.js"></script>
+    <script src="js/find-addons-product.js"></script>
     <script src="js/shopify-shop.js"></script>
     
     <!-- Vercel Analytics -->

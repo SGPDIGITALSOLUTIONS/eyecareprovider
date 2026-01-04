@@ -52,9 +52,15 @@ const PRODUCTS_QUERY = `
 `;
 
 let allProducts = [];
-let currentFilter = 'all';
+let activeFilters = {
+  gender: null,      // ' Mens', ' Ladies', ' Unisex', or null
+  shape: null,       // ' Rectangle', ' Wayfare', ' Round', 'Square', 'Oval', 'Cat Eye', 'Geometric', or null
+  material: null,    // ' Metal', ' Plastic', or null
+  frameType: null    // ' Full Frame', 'Half-Rimmed', or null
+};
 let currentPage = 1;
 let productsPerPage = 20;
+let currentSort = 'recommended';
 
 /**
  * Fetch products from Shopify Storefront API
@@ -392,22 +398,74 @@ function renderProductGrid(products, containerId, append = false) {
 }
 
 /**
- * Get filtered products based on current filter
+ * Get filtered products based on active filters
+ * Handles tags with leading/trailing spaces by trimming during comparison
  */
 function getFilteredProducts() {
-  if (currentFilter === 'all') {
+  // If no filters are active, return all products
+  const hasActiveFilters = activeFilters.gender || activeFilters.shape || activeFilters.material || activeFilters.frameType;
+  if (!hasActiveFilters) {
     return allProducts;
   }
-  return allProducts.filter(product => 
-    product.tags && product.tags.includes(currentFilter)
-  );
+  
+  // Filter products that match ALL active filters
+  return allProducts.filter(product => {
+    if (!product.tags || !Array.isArray(product.tags)) return false;
+    
+    // Normalize product tags (trim and lowercase for comparison)
+    // Keep original tags for exact matching with leading spaces
+    const productTagsNormalized = product.tags.map(tag => tag.trim().toLowerCase());
+    const productTagsOriginal = product.tags; // Keep original for exact match
+    
+    let matches = true;
+    
+    // Helper function to check if a tag matches (handles leading spaces)
+    const tagMatches = (filterTag) => {
+      const filterNormalized = filterTag.trim().toLowerCase();
+      // Check normalized match first (most common case)
+      if (productTagsNormalized.includes(filterNormalized)) {
+        return true;
+      }
+      // Also check original tags for exact match (handles leading spaces like " Mens")
+      return productTagsOriginal.some(tag => {
+        const tagTrimmed = tag.trim().toLowerCase();
+        const filterTrimmed = filterTag.trim().toLowerCase();
+        return tagTrimmed === filterTrimmed || tag === filterTag;
+      });
+    };
+    
+    // Check gender filter
+    if (activeFilters.gender) {
+      matches = matches && tagMatches(activeFilters.gender);
+    }
+    
+    // Check shape filter
+    if (activeFilters.shape) {
+      matches = matches && tagMatches(activeFilters.shape);
+    }
+    
+    // Check material filter
+    if (activeFilters.material) {
+      matches = matches && tagMatches(activeFilters.material);
+    }
+    
+    // Check frame type filter
+    if (activeFilters.frameType) {
+      matches = matches && tagMatches(activeFilters.frameType);
+    }
+    
+    return matches;
+  });
 }
 
 /**
  * Get paginated products for current page
  */
 function getPaginatedProducts() {
-  const filtered = getFilteredProducts();
+  // First filter, then sort
+  let filtered = getFilteredProducts();
+  filtered = applySorting(filtered, currentSort);
+  
   const totalPages = Math.ceil(filtered.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
@@ -507,17 +565,87 @@ function goToPage(page) {
 }
 
 /**
- * Filter products by tag
+ * Get filter category from button data-category attribute or infer from filter value
  */
-function filterProducts(tag) {
-  currentFilter = tag;
+function getFilterCategory(filterValue, buttonElement = null) {
+  // First, try to get category from button's data-category attribute
+  if (buttonElement && buttonElement.dataset.category) {
+    const category = buttonElement.dataset.category;
+    if (category !== 'all' && (category === 'gender' || category === 'shape' || category === 'material' || category === 'frameType')) {
+      return category;
+    }
+  }
+  
+  // Fallback: infer from filter value (for backwards compatibility)
+  if (filterValue === 'all') return null;
+  
+  // Gender tags (with or without leading space)
+  if (filterValue === ' Mens' || filterValue === 'Mens' || 
+      filterValue === ' Ladies' || filterValue === 'Ladies' || 
+      filterValue === ' Unisex' || filterValue === 'Unisex') {
+    return 'gender';
+  }
+  
+  // Shape tags
+  if (filterValue === ' Rectangle' || filterValue === 'Rectangle' ||
+      filterValue === ' Wayfare' || filterValue === 'Wayfare' ||
+      filterValue === ' Round' || filterValue === 'Round' ||
+      filterValue === 'Square' || filterValue === 'Oval' ||
+      filterValue === 'Cat Eye' || filterValue === 'Geometric') {
+    return 'shape';
+  }
+  
+  // Material tags (with or without leading space)
+  if (filterValue === ' Metal' || filterValue === 'Metal' ||
+      filterValue === ' Plastic' || filterValue === 'Plastic') {
+    return 'material';
+  }
+  
+  // Frame type tags
+  if (filterValue === ' Full Frame' || filterValue === 'Full Frame' ||
+      filterValue === 'Half-Rimmed') {
+    return 'frameType';
+  }
+  
+  return null;
+}
+
+/**
+ * Filter products by tag (supports multiple filters from different categories)
+ */
+function filterProducts(tag, buttonElement = null) {
+  if (tag === 'all') {
+    // Clear all filters
+    activeFilters = { gender: null, shape: null, material: null, frameType: null };
+  } else {
+    const category = getFilterCategory(tag, buttonElement);
+    if (category) {
+      // Toggle filter: if same filter clicked, clear it; otherwise set it
+      if (activeFilters[category] === tag) {
+        activeFilters[category] = null; // Deselect if already active
+      } else {
+        activeFilters[category] = tag; // Set new filter for this category
+      }
+    }
+  }
+  
   currentPage = 1; // Reset to first page when filtering
   
-  // Update active button
+  // Update active buttons based on current filters
   document.querySelectorAll('.filter-btn-modern').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.filter === tag) {
-      btn.classList.add('active');
+    const btnFilter = btn.dataset.filter;
+    if (btnFilter === 'all') {
+      // "All Frames" is active only if no filters are set
+      const hasAnyFilter = activeFilters.gender || activeFilters.shape || activeFilters.material || activeFilters.frameType;
+      btn.classList.toggle('active', !hasAnyFilter);
+    } else {
+      // Other buttons are active if their filter matches the active filter for their category
+      const category = getFilterCategory(btnFilter, btn);
+      if (category && activeFilters[category] === btnFilter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
     }
   });
 
@@ -545,6 +673,19 @@ async function initShop() {
   // Fetch all products
   allProducts = await fetchProducts(100);
   
+  // Debug: Log available tags from products
+  const allTags = new Set();
+  allProducts.forEach(product => {
+    if (product.tags && Array.isArray(product.tags)) {
+      product.tags.forEach(tag => allTags.add(tag));
+    }
+  });
+  const sortedTags = Array.from(allTags).sort();
+  console.log('%c=== SHOPIFY PRODUCT TAGS ===', 'color: #4b8a8a; font-size: 16px; font-weight: bold;');
+  console.log('Available product tags from Shopify:', sortedTags);
+  console.log('Total products loaded:', allProducts.length);
+  console.log('%c=== END TAGS ===', 'color: #4b8a8a; font-size: 16px; font-weight: bold;');
+  
   // Initialize with first page
   currentPage = 1;
   const paginationInfo = getPaginatedProducts();
@@ -553,7 +694,7 @@ async function initShop() {
   // Set up filter buttons
   document.querySelectorAll('.filter-btn-modern').forEach(btn => {
     btn.addEventListener('click', () => {
-      filterProducts(btn.dataset.filter);
+      filterProducts(btn.dataset.filter, btn);
     });
   });
   
@@ -567,10 +708,10 @@ async function initShop() {
 }
 
 /**
- * Sort products
+ * Apply sorting to products array
  */
-function sortProducts(sortBy) {
-  let sorted = [...allProducts];
+function applySorting(products, sortBy) {
+  const sorted = [...products];
   
   switch(sortBy) {
     case 'price-low':
@@ -595,15 +736,21 @@ function sortProducts(sortBy) {
       break;
     case 'recommended':
     default:
-      // Keep original order
+      // Keep original order (no sorting)
       break;
   }
   
-  // Update allProducts with sorted order
-  allProducts = sorted;
+  return sorted;
+}
+
+/**
+ * Sort products
+ */
+function sortProducts(sortBy) {
+  currentSort = sortBy;
   currentPage = 1; // Reset to first page when sorting
   
-  // Get paginated products for current page
+  // Get paginated products for current page (filtering and sorting applied)
   const paginationInfo = getPaginatedProducts();
   renderProductGrid(paginationInfo.products, 'shop-products', false);
   updateActiveFilters();
@@ -620,10 +767,47 @@ function updateActiveFilters() {
   
   const activeTags = [];
   
-  if (currentFilter !== 'all') {
+  // Helper to get display label (trim leading spaces and format nicely)
+  const getDisplayLabel = (value) => {
+    const trimmed = value.trim();
+    // Handle special cases
+    if (trimmed === 'Mens') return 'Men';
+    if (trimmed === 'Ladies') return 'Ladies';
+    if (trimmed === 'Unisex') return 'Unisex';
+    if (trimmed === 'Full Frame') return 'Full Frame';
+    return trimmed;
+  };
+  
+  // Add active filters from each category
+  if (activeFilters.gender) {
     activeTags.push({
-      label: currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1),
-      filter: currentFilter
+      label: getDisplayLabel(activeFilters.gender),
+      value: activeFilters.gender,
+      category: 'gender'
+    });
+  }
+  
+  if (activeFilters.shape) {
+    activeTags.push({
+      label: getDisplayLabel(activeFilters.shape),
+      value: activeFilters.shape,
+      category: 'shape'
+    });
+  }
+  
+  if (activeFilters.material) {
+    activeTags.push({
+      label: getDisplayLabel(activeFilters.material),
+      value: activeFilters.material,
+      category: 'material'
+    });
+  }
+  
+  if (activeFilters.frameType) {
+    activeTags.push({
+      label: getDisplayLabel(activeFilters.frameType),
+      value: activeFilters.frameType,
+      category: 'frameType'
     });
   }
   
@@ -632,7 +816,7 @@ function updateActiveFilters() {
     tagsContainer.innerHTML = activeTags.map(tag => `
       <span class="active-filter-tag">
         ${tag.label}
-        <button class="filter-tag-remove" onclick="removeFilter('${tag.filter}')" aria-label="Remove ${tag.label} filter">×</button>
+        <button class="filter-tag-remove" onclick="removeFilter('${tag.category}', '${tag.value.replace(/'/g, "\\'")}')" aria-label="Remove ${tag.label} filter">×</button>
       </span>
     `).join('');
   } else {
@@ -641,11 +825,33 @@ function updateActiveFilters() {
 }
 
 /**
- * Remove a specific filter
+ * Remove a specific filter by category
  */
-function removeFilter(filter) {
-  if (filter === currentFilter) {
-    filterProducts('all');
+function removeFilter(category, value) {
+  if (activeFilters[category] === value) {
+    activeFilters[category] = null;
+    currentPage = 1;
+    
+    // Update button states
+    document.querySelectorAll('.filter-btn-modern').forEach(btn => {
+      const btnFilter = btn.dataset.filter;
+      if (btnFilter === 'all') {
+        const hasAnyFilter = activeFilters.gender || activeFilters.shape || activeFilters.material;
+        btn.classList.toggle('active', !hasAnyFilter);
+      } else {
+        const btnCategory = getFilterCategory(btnFilter);
+        if (btnCategory && activeFilters[btnCategory] === btnFilter) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      }
+    });
+    
+    // Refresh display
+    const paginationInfo = getPaginatedProducts();
+    renderProductGrid(paginationInfo.products, 'shop-products', false);
+    updateActiveFilters();
   }
 }
 

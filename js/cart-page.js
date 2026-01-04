@@ -43,6 +43,14 @@ function renderCart() {
     cartItems = getCookie('eyecare_cart')?.items || [];
   }
   
+  // Debug: Log each frame's attributes to verify they're unique
+  console.log(`Rendering cart with ${cartItems.length} items:`);
+  cartItems.forEach((item, index) => {
+    if (!item.isAddon) {
+      console.log(`Frame ${index}: "${item.productTitle}" - ${item.attributes?.length || 0} attribute(s):`, item.attributes);
+    }
+  });
+  
   if (cartItems.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: 12px; max-width: 600px; margin: 0 auto;">
@@ -67,14 +75,39 @@ function renderCart() {
           <div id="cart-items-list">
             ${cartItems.map((item, index) => `
               <div class="cart-item" style="display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #e8ecef; ${index === cartItems.length - 1 ? 'border-bottom: none;' : ''}">
+                ${!item.isAddon ? `
                 <div style="flex-shrink: 0;">
                   ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.productTitle}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">` : '<div style="width: 120px; height: 120px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>'}
                 </div>
+                ` : ''}
                 <div style="flex: 1;">
-                  <h3 style="font-size: 1.25rem; color: #212529; margin: 0 0 0.5rem 0; font-weight: 600;">${item.productTitle}</h3>
-                  <p style="color: #5B6770; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Colour: ${item.colour || 'N/A'}</p>
+                  <h3 style="font-size: 1.25rem; color: #212529; margin: 0 0 0.5rem 0; font-weight: 600;">${item.productTitle || 'Product'}</h3>
+                  ${item.isAddon ? '' : `<p style="color: #5B6770; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Colour: ${item.colour || 'N/A'}</p>`}
+                  ${item.attributes && item.attributes.length > 0 && !item.isAddon ? (() => {
+                    // Only show attributes for frame items, not for addon items
+                    // For frame items, show all attributes except internal ones
+                    const displayableAttributes = item.attributes.filter(attr => {
+                      const key = attr.key.toLowerCase();
+                      // Hide only internal/system attributes, show all lens and prescription info
+                      if (key === 'associated frame') {
+                        return false;
+                      }
+                      return true;
+                    });
+                    
+                    if (displayableAttributes.length > 0) {
+                      return `
+                        <div style="margin: 0.5rem 0; font-size: 0.85rem; color: #6C757D; line-height: 1.6;">
+                          ${displayableAttributes.map(attr => 
+                            `<div style="margin-bottom: 0.25rem;"><strong>${attr.key}:</strong> ${attr.value}</div>`
+                          ).join('')}
+                        </div>
+                      `;
+                    }
+                    return '';
+                  })() : ''}
                   <div style="margin-top: 1rem;">
-                    <p style="color: #212529; font-size: 1.1rem; font-weight: 700; margin: 0;">£${item.price}</p>
+                    <p style="color: #212529; font-size: 1.1rem; font-weight: 700; margin: 0;">£${item.price || '0.00'}</p>
                   </div>
                 </div>
                 <div>

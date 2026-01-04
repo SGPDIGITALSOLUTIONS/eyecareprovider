@@ -207,8 +207,28 @@ const CART_QUERY = `
               ... on ProductVariant {
                 id
                 title
+                price {
+                  amount
+                  currencyCode
+                }
+                image {
+                  url
+                  altText
+                }
+                selectedOptions {
+                  name
+                  value
+                }
                 product {
                   title
+                  images(first: 1) {
+                    edges {
+                      node {
+                        url
+                        altText
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -329,18 +349,9 @@ async function ensureCredentials() {
 }
 
 /**
- * Add item to cart (syncs to Shopify)
+ * Format variant ID to GraphQL format
  */
-async function addToCart(item) {
-  await ensureCredentials();
-  
-  // Validate item
-  if (!item || !item.variantId) {
-    throw new Error('Invalid cart item: variant ID is required');
-  }
-  
-  // Ensure variant ID is in GraphQL format
-  let variantId = item.variantId;
+function formatVariantId(variantId) {
   if (typeof variantId !== 'string') {
     variantId = String(variantId);
   }
@@ -353,54 +364,296 @@ async function addToCart(item) {
     }
   }
   
-  // Attributes should already be in Shopify format [{key, value}, ...]
-  // If it's an object, convert it; otherwise use as-is
-  let attributes = [];
-  if (Array.isArray(item.attributes)) {
-    attributes = item.attributes.map(attr => ({
+  return variantId;
+}
+
+/**
+ * Format attributes to Shopify format
+ */
+function formatAttributes(attributes) {
+  if (Array.isArray(attributes)) {
+    return attributes.map(attr => ({
       key: attr.key || attr.name,
       value: String(attr.value || attr)
     }));
-  } else if (item.attributes && typeof item.attributes === 'object') {
-    attributes = Object.entries(item.attributes).map(([key, value]) => ({
+  } else if (attributes && typeof attributes === 'object') {
+    return Object.entries(attributes).map(([key, value]) => ({
       key,
       value: String(value)
     }));
   }
+  return [];
+}
+
+/**
+ * Add item to cart (syncs to Shopify)
+ * Supports adding multiple line items (e.g., frame + lens addons)
+ * 
+ * @param {Object} item - Main cart item with variantId and attributes
+ * @param {Array} additionalLines - Optional array of additional line items (e.g., lens addons)
+ */
+async function addToCart(item, additionalLines = []) {
+  await ensureCredentials();
   
-  const line = {
+  // Validate item
+  if (!item || !item.variantId) {
+    throw new Error('Invalid cart item: variant ID is required');
+  }
+  
+  // Format main variant ID
+  const variantId = formatVariantId(item.variantId);
+  
+  // Format attributes
+  const attributes = formatAttributes(item.attributes);
+  
+  // Validate attributes (ensure they're in correct format)
+  let validAttributes = [];
+  if (attributes.length > 0) {
+    console.log('Adding item with attributes:', attributes);
+    // Ensure all attributes have valid key/value
+    validAttributes = attributes.filter(attr => {
+      if (!attr.key || attr.key.trim() === '') {
+        console.warn('Skipping attribute with empty key:', attr);
+        return false;
+      }
+      if (attr.value === undefined || attr.value === null || String(attr.value).trim() === '') {
+        console.warn('Skipping attribute with empty/null value:', attr);
+        return false;
+      }
+      return true;
+    });
+    
+    if (validAttributes.length !== attributes.length) {
+      console.warn(`Filtered ${attributes.length - validAttributes.length} invalid attributes`);
+    }
+  } else {
+    console.warn('No attributes to add for item:', item);
+  }
+  
+  // Build main line item with validated attributes
+  const mainLine = {
     merchandiseId: variantId,
     quantity: 1,
-    attributes: attributes
+    attributes: validAttributes
   };
+  
+  // Log what we're adding for this specific frame
+  console.log(`Adding frame to cart - Variant ID: ${variantId}, Attributes (${validAttributes.length}):`, validAttributes);
+  
+  // Build additional line items (e.g., lens addons)
+  const allLines = [mainLine];
+  
+  if (Array.isArray(additionalLines) && additionalLines.length > 0) {
+    for (const addon of additionalLines) {
+      if (!addon || !addon.variantId) {
+        console.warn('Skipping invalid addon line item:', addon);
+        continue;
+      }
+      
+      try {
+        const addonVariantId = formatVariantId(addon.variantId);
+        // Addon items should ONLY have their specific attribute
+        // Lens addons: only "Lens: Configuration"
+        // Photochromic addons: only "Lens: Photochromic Type"
+        let addonAttributes = formatAttributes(addon.attributes || []);
+        
+        // Validate and filter addon attributes to ensure only the correct one is included
+        if (addonAttributes.length > 0) {
+          // Check which type of attribute this addon should have
+          const hasPhotochromicAttr = addonAttributes.some(attr => 
+            attr.key === 'Lens: Photochromic Type'
+          );
+          const hasConfigAttr = addonAttributes.some(attr => 
+            attr.key === 'Lens: Configuration'
+          );
+          
+          if (hasPhotochromicAttr) {
+            // Photochromic addon: keep ONLY "Lens: Photochromic Type"
+            addonAttributes = addonAttributes.filter(attr => 
+              attr.key === 'Lens: Photochromic Type'
+            );
+            console.log('Photochromic addon - filtered to only Photochromic Type attribute');
+          } else if (hasConfigAttr) {
+            // Lens addon: keep ONLY "Lens: Configuration"
+            addonAttributes = addonAttributes.filter(attr => 
+              attr.key === 'Lens: Configuration'
+            );
+            console.log('Lens addon - filtered to only Configuration attribute');
+          } else {
+            // No expected attribute found, clear all
+            console.warn('Addon has no expected attribute, clearing all attributes');
+            addonAttributes = [];
+          }
+          
+          // Log what we're sending to Shopify
+          console.log(`Adding addon line item with ${addonAttributes.length} attribute(s):`, addonAttributes);
+        }
+        
+        allLines.push({
+          merchandiseId: addonVariantId,
+          quantity: addon.quantity || 1,
+          attributes: addonAttributes // Only specific attribute for this addon
+        });
+      } catch (error) {
+        console.warn('Error formatting addon line item:', error, addon);
+        // Continue with other addons even if one fails
+      }
+    }
+  }
   
   let cartId = getCartId();
   
   try {
+    let cart;
     if (!cartId) {
-      // Create new cart
-      const cart = await createCart([line]);
+      // Create new cart with all lines
+      cart = await createCart(allLines);
       cartId = cart.id;
       localCartCache.cartId = cartId;
     } else {
-      // Add to existing cart
+      // Add all lines to existing cart
       try {
-        await addLinesToCart(cartId, [line]);
+        cart = await addLinesToCart(cartId, allLines);
       } catch (error) {
         // Cart might be invalid, create new one
         console.warn('Cart invalid, creating new cart:', error);
-        const cart = await createCart([line]);
+        cart = await createCart(allLines);
         cartId = cart.id;
         localCartCache.cartId = cartId;
       }
     }
     
-    // Update local cache
-    localCartCache.items.push({
-      ...item,
-      variantId: variantId,
-      shopifyLineId: null // Will be set when we fetch cart
-    });
+    // Fetch the cart from Shopify to get actual product/variant data
+    // This ensures we have correct titles, prices, and all variant information
+    try {
+      const verifiedCart = await getCart(cartId);
+      if (verifiedCart && verifiedCart.lines && verifiedCart.lines.edges) {
+        // Sync local cache with Shopify cart data
+        localCartCache.items = [];
+        
+        verifiedCart.lines.edges.forEach((lineEdge) => {
+          const line = lineEdge.node;
+          const variant = line.merchandise;
+          
+          // Extract colour from attributes or selectedOptions
+          let colour = 'N/A';
+          if (line.attributes && line.attributes.length > 0) {
+            const colourAttr = line.attributes.find(attr => attr.key === 'Colour');
+            if (colourAttr) {
+              colour = colourAttr.value;
+            }
+          }
+          if (colour === 'N/A' && variant.selectedOptions) {
+            const colourOpt = variant.selectedOptions.find(opt => opt.name === 'Colour');
+            if (colourOpt) {
+              colour = colourOpt.value;
+            }
+          }
+          
+          // Determine if this is an addon based on product title ONLY
+          // Frame products won't have "lens" or "add on" in the title
+          const productTitleLower = variant.product.title.toLowerCase();
+          const isLensAddon = productTitleLower === 'lenses' || productTitleLower === 'lens';
+          const isPhotochromicAddon = productTitleLower === 'add ons' || 
+                                      productTitleLower === 'add-ons' ||
+                                      productTitleLower.includes('add on') ||
+                                      productTitleLower.includes('addon');
+          const isAddon = isLensAddon || isPhotochromicAddon;
+          
+          // Build cart item from Shopify data
+          // IMPORTANT: Only filter attributes for addon items, NEVER for frames
+          let filteredAttributes = line.attributes || [];
+          if (isAddon) {
+            // For addon items, only keep their specific attribute
+            if (isPhotochromicAddon) {
+              // Photochromic addon: keep only "Lens: Photochromic Type"
+              filteredAttributes = (line.attributes || []).filter(attr => 
+                attr.key === 'Lens: Photochromic Type'
+              );
+              console.log(`Photochromic addon "${variant.product.title}" - filtered to ${filteredAttributes.length} attribute(s):`, filteredAttributes);
+            } else if (isLensAddon) {
+              // Lens addon: keep only "Lens: Configuration"
+              filteredAttributes = (line.attributes || []).filter(attr => 
+                attr.key === 'Lens: Configuration'
+              );
+              console.log(`Lens addon "${variant.product.title}" - filtered to ${filteredAttributes.length} attribute(s):`, filteredAttributes);
+              console.log(`Original attributes from Shopify:`, line.attributes);
+            } else {
+              // Unknown addon type, show nothing
+              filteredAttributes = [];
+            }
+          } else {
+            // Frame item - keep all attributes
+            console.log(`Frame "${variant.product.title}" - keeping all ${filteredAttributes.length} attribute(s)`);
+          }
+          // For frame items (not addons), keep all attributes - no filtering
+          
+          // Get image for this specific frame variant
+          // Priority: variant.image > product.images[0] > null
+          let frameImageUrl = null;
+          if (variant.image && variant.image.url) {
+            frameImageUrl = variant.image.url;
+          } else if (variant.product.images && variant.product.images.edges && variant.product.images.edges.length > 0) {
+            frameImageUrl = variant.product.images.edges[0].node.url;
+          }
+          
+          // Log image source for debugging
+          if (!isAddon) {
+            console.log(`Frame "${variant.product.title}" (${colour}) - Image: ${frameImageUrl || 'NONE'}`);
+          }
+          
+          const cartItem = {
+            variantId: variant.id,
+            productTitle: variant.product.title,
+            colour: colour,
+            price: parseFloat(variant.price.amount).toFixed(2),
+            basePrice: parseFloat(variant.price.amount).toFixed(2),
+            quantity: line.quantity,
+            shopifyLineId: line.id,
+            isAddon: isAddon,
+            attributes: filteredAttributes, // Each frame gets its own attributes from Shopify
+            imageUrl: frameImageUrl // Each frame gets its own image from Shopify
+          };
+          
+          localCartCache.items.push(cartItem);
+        });
+        
+        // Log attributes for debugging - show which frame/addon each line belongs to
+        verifiedCart.lines.edges.forEach((line, index) => {
+          const variant = line.node.merchandise;
+          const productTitle = variant.product.title;
+          const isAddon = productTitle.toLowerCase().includes('lens') || 
+                         productTitle.toLowerCase().includes('add on') ||
+                         productTitle.toLowerCase().includes('addon');
+          
+          if (line.node.attributes && line.node.attributes.length > 0) {
+            console.log(`Line ${index} (${isAddon ? 'ADDON' : 'FRAME'}): "${productTitle}" - ${line.node.attributes.length} attribute(s):`, line.node.attributes);
+          } else {
+            console.warn(`Line ${index} (${isAddon ? 'ADDON' : 'FRAME'}): "${productTitle}" - has no attributes!`, line.node);
+          }
+        });
+      }
+    } catch (verifyError) {
+      console.warn('Could not fetch cart from Shopify, using local cache:', verifyError);
+      // Fallback: Update local cache with what we have
+      localCartCache.items.push({
+        ...item,
+        variantId: variantId,
+        shopifyLineId: null
+      });
+      
+      additionalLines.forEach(addon => {
+        if (addon && addon.variantId) {
+          localCartCache.items.push({
+            ...addon,
+            variantId: formatVariantId(addon.variantId),
+            shopifyLineId: null,
+            isAddon: true
+          });
+        }
+      });
+    }
+    
     saveLocalCache();
     
     updateCartBadge();
@@ -486,6 +739,7 @@ function getCartTotal() {
 
 /**
  * Get checkout URL
+ * Fetches fresh cart data to ensure attributes are included
  */
 async function getCheckoutUrl() {
   await ensureCredentials();
@@ -496,7 +750,20 @@ async function getCheckoutUrl() {
   }
   
   try {
+    // Fetch fresh cart data to ensure all attributes are persisted
     const cart = await getCart(cartId);
+    
+    // Verify attributes are present (for debugging)
+    if (cart && cart.lines && cart.lines.edges) {
+      cart.lines.edges.forEach((line, index) => {
+        if (line.node.attributes && line.node.attributes.length > 0) {
+          console.log(`Checkout - Line ${index} has ${line.node.attributes.length} attributes:`, line.node.attributes);
+        } else {
+          console.warn(`Checkout - Line ${index} has NO attributes!`, line.node);
+        }
+      });
+    }
+    
     return cart.checkoutUrl;
   } catch (error) {
     console.error('Error getting checkout URL:', error);
