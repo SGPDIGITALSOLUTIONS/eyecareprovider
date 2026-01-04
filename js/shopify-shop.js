@@ -247,7 +247,7 @@ function getColorVariants(product) {
 /**
  * Change product image on color swatch click
  */
-function changeProductImage(productId, imageUrl, event) {
+function changeProductImage(productId, imageUrl, event, variantId = null) {
   event.preventDefault();
   event.stopPropagation();
   
@@ -271,6 +271,35 @@ function changeProductImage(productId, imageUrl, event) {
     thumb.classList.remove('active');
   });
   event.currentTarget.classList.add('active');
+  
+  // Store selected variant ID on the card for use when clicking the main image link
+  if (variantId) {
+    card.setAttribute('data-selected-variant-id', variantId);
+  }
+}
+
+/**
+ * Update product link with selected variant ID before navigation
+ */
+function updateProductLink(event, productId) {
+  const card = document.querySelector(`.product-card-specsavers[data-product-id="${productId}"]`);
+  if (!card) return true;
+  
+  const selectedVariantId = card.getAttribute('data-selected-variant-id');
+  const link = event.currentTarget;
+  
+  if (selectedVariantId) {
+    // Extract the base URL (handle parameter)
+    const currentHref = link.getAttribute('href');
+    // Handle both relative and absolute URLs
+    const url = currentHref.startsWith('http') 
+      ? new URL(currentHref)
+      : new URL(currentHref, window.location.origin);
+    url.searchParams.set('variant', selectedVariantId);
+    link.href = url.pathname + url.search;
+  }
+  
+  return true; // Allow navigation
 }
 
 /**
@@ -299,6 +328,7 @@ function renderProductCard(product, favorites) {
   const optimizedImage = getOptimizedImageUrl(displayImage, 400);
   
   let variantsHTML = '';
+  const firstVariantId = colorVariants.length > 0 ? colorVariants[0].variantId : '';
   if (colorVariants.length > 1) {
     variantsHTML = colorVariants.map((variant, index) => {
       const variantImage = getOptimizedImageUrl(variant.image, 80);
@@ -306,7 +336,8 @@ function renderProductCard(product, favorites) {
         <button 
           class="variant-thumbnail-btn ${index === 0 ? 'active' : ''}" 
           data-image-url="${variant.image}"
-          onclick="window.changeProductImage('${product.id}', '${variant.image}', event)"
+          data-variant-id="${variant.variantId}"
+          onclick="window.changeProductImage('${product.id}', '${variant.image}', event, '${variant.variantId}')"
           title="${variant.color}"
         >
           <img src="${variantImage}" alt="${variant.color}" loading="lazy">
@@ -316,9 +347,9 @@ function renderProductCard(product, favorites) {
   }
   
   return `
-    <div class="product-card-specsavers" data-product-id="${product.id}">
+    <div class="product-card-specsavers" data-product-id="${product.id}" data-selected-variant-id="${firstVariantId}">
       <div class="product-card-image-wrapper">
-        <a href="frame.html?handle=${product.handle}" class="product-card-link">
+        <a href="frame.html?handle=${product.handle}" class="product-card-link" onclick="return window.updateProductLink(event, '${product.id}')">
           <div class="product-card-image">
             ${displayImage
               ? `<img src="${optimizedImage}" alt="${product.featuredImage?.altText || product.title}" loading="lazy" class="product-main-img">`
@@ -871,6 +902,7 @@ window.removeFilter = removeFilter;
 window.clearAllFilters = clearAllFilters;
 window.toggleFavorite = toggleFavorite;
 window.changeProductImage = changeProductImage;
+window.updateProductLink = updateProductLink;
 window.goToPage = goToPage;
 
 // Initialize when DOM is ready

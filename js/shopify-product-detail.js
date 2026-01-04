@@ -371,11 +371,23 @@ function renderProductDetail(product) {
     )
   );
 
-  // Set first available variant
-  const firstVariant = product.variants.nodes.find(v => v.availableForSale);
-  if (firstVariant) {
-    selectedVariantId = firstVariant.id;
-    const colourOpt = firstVariant.selectedOptions.find(opt => opt.name === 'Colour');
+  // Check if variant ID is provided in URL (from shop page color selection)
+  const urlParams = new URLSearchParams(window.location.search);
+  const variantParam = urlParams.get('variant');
+  
+  // Set variant from URL parameter if provided, otherwise use first available
+  let targetVariant = null;
+  if (variantParam) {
+    targetVariant = product.variants.nodes.find(v => v.id === variantParam && v.availableForSale);
+  }
+  
+  if (!targetVariant) {
+    targetVariant = product.variants.nodes.find(v => v.availableForSale);
+  }
+  
+  if (targetVariant) {
+    selectedVariantId = targetVariant.id;
+    const colourOpt = targetVariant.selectedOptions.find(opt => opt.name === 'Colour');
     if (colourOpt) {
       selectedColour = colourOpt.value;
     }
@@ -446,7 +458,7 @@ function renderProductDetail(product) {
           </div>
           <div style="margin-bottom: 0.5rem !important;">
             <label class="variant-thumbnails-label" style="display: block !important; font-weight: 600 !important; color: #5B6770 !important; margin-bottom: 0.25rem !important; font-size: 0.85rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; width: 100% !important;">Select Colour</label>
-            <p style="font-size: 0.8rem !important; color: #6C757D !important; margin: 0 0 0.75rem 0 !important; font-style: italic !important;">Shown in ${selectedColour || variantThumbnails[0]?.colour || 'selected colour'}</p>
+            <p id="shown-in-colour-text" style="font-size: 0.8rem !important; color: #6C757D !important; margin: 0 0 0.75rem 0 !important; font-style: italic !important;">Shown in ${selectedColour || variantThumbnails[0]?.colour || 'selected colour'}</p>
           </div>
           <div class="variant-thumbnails-vertical" style="${thumbnailsStyle} ${thumbnailsContainerStyle}">
             ${variantThumbnails.map(variant => {
@@ -783,6 +795,12 @@ function setupEventListeners() {
             img.alt = `${currentProduct.title} - ${colour}`;
             img.style.opacity = '1';
           }, 150);
+        }
+        
+        // Update "Shown in" text
+        const shownInText = document.getElementById('shown-in-colour-text');
+        if (shownInText) {
+          shownInText.textContent = `Shown in ${colour}`;
         }
         
         updatePriceDisplay();
