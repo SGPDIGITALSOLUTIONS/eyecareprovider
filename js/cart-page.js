@@ -65,19 +65,76 @@ function renderCart() {
   const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
   
   container.innerHTML = `
+    <style>
+      .cart-layout-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .cart-order-summary {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        height: fit-content;
+        position: sticky;
+        top: 2rem;
+      }
+      
+      @media (max-width: 768px) {
+        .cart-layout-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        
+        .cart-order-summary {
+          position: static;
+          order: 2;
+        }
+        
+        .cart-items-container {
+          order: 1;
+          padding: 1.5rem !important;
+        }
+        
+        .cart-item {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .cart-item > div:first-child {
+          align-self: center;
+          width: 100px !important;
+          height: 100px !important;
+        }
+        
+        .cart-item > div:last-child {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+        }
+        
+        h1 {
+          font-size: 1.5rem !important;
+          padding: 0 1rem;
+        }
+      }
+    </style>
     <div style="max-width: 1200px; margin: 0 auto;">
       <h1 style="font-size: 2rem; color: #212529; margin-bottom: 2rem; font-weight: 700;">Shopping Cart</h1>
       
-      <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem; margin-bottom: 2rem;">
+      <div class="cart-layout-grid">
         <!-- Cart Items -->
-        <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
+        <div class="cart-items-container" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
           <h2 style="font-size: 1.5rem; color: #212529; margin-bottom: 1.5rem; font-weight: 700;">Items (${cartItems.length})</h2>
           <div id="cart-items-list">
             ${cartItems.map((item, index) => `
-              <div class="cart-item" style="display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #e8ecef; ${index === cartItems.length - 1 ? 'border-bottom: none;' : ''}">
+              <div class="cart-item" style="display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid #e8ecef; ${index === cartItems.length - 1 ? 'border-bottom: none;' : ''} flex-wrap: wrap;">
                 ${!item.isAddon ? `
-                <div style="flex-shrink: 0;">
-                  ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.productTitle}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;">` : '<div style="width: 120px; height: 120px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>'}
+                <div style="flex-shrink: 0; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px; overflow: hidden;">
+                  ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.productTitle}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px;">` : '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #999;">No Image</div>'}
                 </div>
                 ` : ''}
                 <div style="flex: 1;">
@@ -119,7 +176,7 @@ function renderCart() {
         </div>
         
         <!-- Order Summary -->
-        <div style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); height: fit-content; position: sticky; top: 2rem;">
+        <div class="cart-order-summary">
           <h2 style="font-size: 1.5rem; color: #212529; margin-bottom: 1.5rem; font-weight: 700;">Order Summary</h2>
           <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
             <span style="color: #5B6770;">Subtotal:</span>

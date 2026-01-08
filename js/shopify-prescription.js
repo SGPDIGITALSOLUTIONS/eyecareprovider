@@ -469,7 +469,8 @@ async function addToCart() {
         variantId: addonVariantId,
         quantity: 1,
         attributes: [
-          { key: 'Lens: Configuration', value: configLabel }
+          { key: 'Lens: Configuration', value: configLabel },
+          { key: 'Associated Frame', value: variantId }
         ]
       });
       console.log(`Added lens addon line item: ${variantCode} (${lensConfig})`);
@@ -495,7 +496,8 @@ async function addToCart() {
         variantId: addonVariantId,
         quantity: 1,
         attributes: [
-          { key: 'Lens: Photochromic Type', value: transitionsLabel }
+          { key: 'Lens: Photochromic Type', value: transitionsLabel },
+          { key: 'Associated Frame', value: variantId }
         ]
       });
       console.log(`Added photochromic addon line item: ${variantCode} (${transitions})`);
@@ -505,29 +507,33 @@ async function addToCart() {
   }
   
   // Legacy support: Add lens type addon if configured (for old format)
-  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  // Include Associated Frame attribute to link to frame
   if (lensOptions.lensType && lensAddonVariants[lensOptions.lensType]) {
     const addonVariantId = lensAddonVariants[lensOptions.lensType];
     addonLines.push({
       variantId: addonVariantId,
       quantity: 1,
-      attributes: [] // No attributes on addon items
+      attributes: [
+        { key: 'Associated Frame', value: variantId }
+      ]
     });
   }
   
   // Legacy support: Add lens index addon if configured and not base (1.50)
-  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  // Include Associated Frame attribute to link to frame
   if (lensOptions.lensIndex && lensOptions.lensIndex !== '1.50' && lensAddonVariants[`index_${lensOptions.lensIndex}`]) {
     const addonVariantId = lensAddonVariants[`index_${lensOptions.lensIndex}`];
     addonLines.push({
       variantId: addonVariantId,
       quantity: 1,
-      attributes: [] // No attributes on addon items
+      attributes: [
+        { key: 'Associated Frame', value: variantId }
+      ]
     });
   }
   
   // Legacy support: Add coating addons if configured
-  // Note: No attributes on addon items - all lens/prescription info goes on the frame only
+  // Include Associated Frame attribute to link to frame
   if (lensOptions.coatings && lensOptions.coatings.length > 0) {
     lensOptions.coatings.forEach(coatingCode => {
       if (lensAddonVariants[`coating_${coatingCode}`]) {
@@ -535,7 +541,9 @@ async function addToCart() {
         addonLines.push({
           variantId: addonVariantId,
           quantity: 1,
-          attributes: [] // No attributes on addon items
+          attributes: [
+            { key: 'Associated Frame', value: variantId }
+          ]
         });
       }
     });
@@ -763,6 +771,10 @@ function renderPrescriptionForm() {
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button id="back-btn" class="btn-secondary" style="padding: 1rem 2rem; background: white; border: 2px solid #d7dde1; border-radius: 12px; color: #5B6770; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; flex: 1; min-width: 150px;">Back</button>
           <button type="button" id="add-to-cart-btn" class="add-to-cart-button" style="flex: 2; min-width: 200px;">Add to Cart</button>
+        </div>
+        <!-- Mobile-only Checkout Link -->
+        <div id="mobile-checkout-link" style="margin-top: 1rem; text-align: center;">
+          <a href="cart.html" style="display: inline-block; padding: 0.875rem 1.75rem; background: #FF6B35; color: white; text-decoration: none; border-radius: 12px; font-size: 1rem; font-weight: 600; transition: all 0.3s; width: 100%; text-align: center;">Go to Checkout</a>
         </div>
       </div>
     </div>

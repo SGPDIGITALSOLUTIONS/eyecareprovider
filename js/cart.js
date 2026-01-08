@@ -302,10 +302,14 @@ async function removeLineFromCart(cartId, lineId) {
 /**
  * Local cart state (for UI purposes before syncing to Shopify)
  * This is a temporary cache that gets synced to Shopify
+ * 
+ * frameAssociations: Maps frame variant IDs to arrays of associated addon variant IDs
+ * This is stored separately because Shopify doesn't persist custom attributes reliably
  */
 let localCartCache = {
   items: [],
-  cartId: null
+  cartId: null,
+  frameAssociations: {} // { frameVariantId: [addonVariantId1, addonVariantId2, ...] }
 };
 
 /**
@@ -441,6 +445,14 @@ async function addToCart(item, additionalLines = []) {
   console.log(`Adding frame to cart - Variant ID: ${variantId}, Attributes (${validAttributes.length}):`, validAttributes);
   
   // Build additional line items (e.g., lens addons)
+  // Initialize frameAssociations to track frame->addon relationships
+  if (!localCartCache.frameAssociations) {
+    localCartCache.frameAssociations = {};
+  }
+  
+  // Store association: this frame variant ID -> array of addon variant IDs
+  const associatedAddonVariantIds = [];
+  
   const allLines = [mainLine];
   
   if (Array.isArray(additionalLines) && additionalLines.length > 0) {
@@ -452,6 +464,9 @@ async function addToCart(item, additionalLines = []) {
       
       try {
         const addonVariantId = formatVariantId(addon.variantId);
+        // Track this addon as associated with the frame
+        associatedAddonVariantIds.push(addonVariantId);
+        
         // Addon items should ONLY have their specific attribute
         // Lens addons: only "Lens: Configuration"
         // Photochromic addons: only "Lens: Photochromic Type"
@@ -499,6 +514,12 @@ async function addToCart(item, additionalLines = []) {
         // Continue with other addons even if one fails
       }
     }
+  }
+  
+  // Store the frame->addon associations in local cache
+  if (associatedAddonVariantIds.length > 0) {
+    localCartCache.frameAssociations[variantId] = associatedAddonVariantIds;
+    saveLocalCache(); // Save immediately to persist associations
   }
   
   let cartId = getCartId();
@@ -562,25 +583,33 @@ async function addToCart(item, additionalLines = []) {
           
           // Build cart item from Shopify data
           // IMPORTANT: Only filter attributes for addon items, NEVER for frames
+          // BUT preserve "Associated Frame" attribute for addons so we can link them to frames
           let filteredAttributes = line.attributes || [];
           if (isAddon) {
-            // For addon items, only keep their specific attribute
+            // For addon items, keep their specific attribute AND the "Associated Frame" attribute
             if (isPhotochromicAddon) {
-              // Photochromic addon: keep only "Lens: Photochromic Type"
+              // Photochromic addon: keep "Lens: Photochromic Type" AND "Associated Frame"
               filteredAttributes = (line.attributes || []).filter(attr => 
-                attr.key === 'Lens: Photochromic Type'
+                attr.key === 'Lens: Photochromic Type' || 
+                attr.key === 'Associated Frame' ||
+                attr.key === 'associated frame'
               );
               console.log(`Photochromic addon "${variant.product.title}" - filtered to ${filteredAttributes.length} attribute(s):`, filteredAttributes);
             } else if (isLensAddon) {
-              // Lens addon: keep only "Lens: Configuration"
+              // Lens addon: keep "Lens: Configuration" AND "Associated Frame"
               filteredAttributes = (line.attributes || []).filter(attr => 
-                attr.key === 'Lens: Configuration'
+                attr.key === 'Lens: Configuration' || 
+                attr.key === 'Associated Frame' ||
+                attr.key === 'associated frame'
               );
               console.log(`Lens addon "${variant.product.title}" - filtered to ${filteredAttributes.length} attribute(s):`, filteredAttributes);
               console.log(`Original attributes from Shopify:`, line.attributes);
             } else {
-              // Unknown addon type, show nothing
-              filteredAttributes = [];
+              // Unknown addon type, but still keep "Associated Frame" if present
+              filteredAttributes = (line.attributes || []).filter(attr => 
+                attr.key === 'Associated Frame' ||
+                attr.key === 'associated frame'
+              );
             }
           } else {
             // Frame item - keep all attributes
@@ -614,6 +643,11 @@ async function addToCart(item, additionalLines = []) {
             attributes: filteredAttributes, // Each frame gets its own attributes from Shopify
             imageUrl: frameImageUrl // Each frame gets its own image from Shopify
           };
+          
+          // Try to restore "Associated Frame" from frameAssociations if this is an addon
+          if (isAddon && !localCartCache.frameAssociations) {
+            localCartCache.frameAssociations = {};
+          }
           
           localCartCache.items.push(cartItem);
         });
@@ -667,14 +701,65 @@ async function addToCart(item, additionalLines = []) {
 
 /**
  * Remove item from cart
+ * If removing a frame, also removes all associated add-ons (lenses, photochromic)
  */
 async function removeFromCart(index) {
   await ensureCredentials();
   
+  // Load local cache to ensure we have the latest data
+  loadLocalCache();
+  
+  if (index >= localCartCache.items.length) {
+    console.warn('Index out of bounds');
+    return;
+  }
+  
+  const removedItem = localCartCache.items[index];
+  if (!removedItem) {
+    console.warn('Item not found at index:', index);
+    return;
+  }
+  
   const cartId = getCartId();
   if (!cartId) {
     // No cart, just remove from local cache
-    localCartCache.items.splice(index, 1);
+    if (!removedItem.isAddon) {
+      // If removing a frame, also remove associated add-ons
+      const frameVariantId = removedItem.variantId;
+      // Get associated addon variant IDs from frameAssociations
+      if (!localCartCache.frameAssociations) {
+        localCartCache.frameAssociations = {};
+      }
+      const frameAssociations = localCartCache.frameAssociations[frameVariantId] || [];
+      const associatedAddonVariantIdSet = new Set(frameAssociations);
+      
+      localCartCache.items = localCartCache.items.filter((item, idx) => {
+        if (idx === index) return false; // Remove the frame itself
+        if (item.isAddon && associatedAddonVariantIdSet.has(item.variantId)) {
+          return false; // Remove associated addon
+        }
+        return true;
+      });
+      
+      // Remove the frame association entry
+      delete localCartCache.frameAssociations[frameVariantId];
+    } else {
+      // Clean up frame associations
+      const removedAddonVariantId = removedItem.variantId;
+      if (localCartCache.frameAssociations) {
+        Object.keys(localCartCache.frameAssociations).forEach(frameVariantId => {
+          const associations = localCartCache.frameAssociations[frameVariantId];
+          if (Array.isArray(associations)) {
+            localCartCache.frameAssociations[frameVariantId] = associations.filter(id => id !== removedAddonVariantId);
+            if (localCartCache.frameAssociations[frameVariantId].length === 0) {
+              delete localCartCache.frameAssociations[frameVariantId];
+            }
+          }
+        });
+      }
+      // Just remove the single item
+      localCartCache.items.splice(index, 1);
+    }
     saveLocalCache();
     updateCartBadge();
     return;
@@ -685,19 +770,165 @@ async function removeFromCart(index) {
     const cart = await getCart(cartId);
     const lines = cart.lines.edges;
     
-    if (index < lines.length) {
-      const lineId = lines[index].node.id;
-      await removeLineFromCart(cartId, lineId);
+    // Find the Shopify line ID for the item at this index
+    // We need to match by variant ID since indices might not align
+    const frameVariantId = removedItem.variantId;
+    let removedLineId = null;
+    let removedLineIndex = -1;
+    
+    lines.forEach((lineEdge, idx) => {
+      if (lineEdge.node.merchandise.id === frameVariantId) {
+        removedLineId = lineEdge.node.id;
+        removedLineIndex = idx;
+      }
+    });
+    
+    if (!removedLineId) {
+      console.warn('Could not find line in Shopify cart for variant:', frameVariantId);
+      // Fallback to local cache removal
+      if (!removedItem.isAddon) {
+        const frameVariantId = removedItem.variantId;
+        localCartCache.items = localCartCache.items.filter((item, idx) => {
+          if (idx === index) return false;
+          if (item.isAddon) {
+            const associatedFrame = item.attributes?.find(attr => 
+              (attr.key === 'Associated Frame' || attr.key === 'associated frame') &&
+              attr.value === frameVariantId
+            );
+            return !associatedFrame;
+          }
+          return true;
+        });
+      } else {
+        localCartCache.items.splice(index, 1);
+      }
+      saveLocalCache();
+      updateCartBadge();
+      return;
     }
     
-    // Update local cache
-    localCartCache.items.splice(index, 1);
+    // Check if this is a frame (not an addon)
+    const isFrame = !removedItem.isAddon;
+    
+    // Collect all line IDs to remove (frame + associated add-ons)
+    const lineIdsToRemove = [removedLineId];
+    
+    if (isFrame) {
+      // Find all add-ons associated with this frame using frameAssociations
+      const associatedAddonVariantIds = new Set();
+      
+      // Load frameAssociations if not already loaded
+      if (!localCartCache.frameAssociations) {
+        localCartCache.frameAssociations = {};
+      }
+      
+      // Get associated addon variant IDs from frameAssociations
+      const frameAssociations = localCartCache.frameAssociations[frameVariantId] || [];
+      frameAssociations.forEach(addonVariantId => {
+        associatedAddonVariantIds.add(addonVariantId);
+      });
+      
+      // Now find the Shopify line IDs for these add-ons
+      lines.forEach((lineEdge) => {
+        if (associatedAddonVariantIds.has(lineEdge.node.merchandise.id)) {
+          console.log(`Removing associated addon from Shopify: ${lineEdge.node.merchandise.product.title}`);
+          lineIdsToRemove.push(lineEdge.node.id);
+        }
+      });
+    }
+    
+    // Remove all associated lines from Shopify cart
+    if (lineIdsToRemove.length > 1) {
+      // Use cartLinesRemove mutation with multiple line IDs
+      const data = await shopifyGraphQL(CART_LINES_REMOVE_MUTATION, {
+        cartId,
+        lineIds: lineIdsToRemove
+      });
+      
+      if (data.cartLinesRemove.userErrors?.length > 0) {
+        throw new Error(data.cartLinesRemove.userErrors.map(e => e.message).join(', '));
+      }
+    } else {
+      // Single item removal
+      await removeLineFromCart(cartId, removedLineId);
+    }
+    
+    // Update local cache - remove frame and associated add-ons
+    const itemsBeforeRemoval = localCartCache.items.length;
+    if (isFrame) {
+      // Get associated addon variant IDs from frameAssociations
+      const frameAssociations = localCartCache.frameAssociations[frameVariantId] || [];
+      const associatedAddonVariantIdSet = new Set(frameAssociations);
+      
+      // Remove frame and all associated add-ons from local cache
+      localCartCache.items = localCartCache.items.filter((item, idx) => {
+        // Remove the frame itself
+        if (idx === index) return false;
+        // If this is an addon, check if it's associated with the removed frame
+        if (item.isAddon && associatedAddonVariantIdSet.has(item.variantId)) {
+          return false; // Remove associated addon
+        }
+        return true; // Keep all other items
+      });
+      
+      // Remove the frame association entry
+      delete localCartCache.frameAssociations[frameVariantId];
+    } else {
+      // Just remove the single item (addon being removed directly)
+      // Also clean up any frame associations that reference this addon
+      const removedAddonVariantId = removedItem.variantId;
+      if (localCartCache.frameAssociations) {
+        Object.keys(localCartCache.frameAssociations).forEach(frameVariantId => {
+          const associations = localCartCache.frameAssociations[frameVariantId];
+          if (Array.isArray(associations)) {
+            localCartCache.frameAssociations[frameVariantId] = associations.filter(id => id !== removedAddonVariantId);
+            if (localCartCache.frameAssociations[frameVariantId].length === 0) {
+              delete localCartCache.frameAssociations[frameVariantId];
+            }
+          }
+        });
+      }
+      localCartCache.items.splice(index, 1);
+    }
     saveLocalCache();
     updateCartBadge();
   } catch (error) {
     console.error('Error removing from cart:', error);
-    // Fallback: just remove from local cache
-    localCartCache.items.splice(index, 1);
+    // Fallback: remove from local cache
+    if (!removedItem.isAddon) {
+      const frameVariantId = removedItem.variantId;
+      // Get associated addon variant IDs from frameAssociations
+      const frameAssociations = (localCartCache.frameAssociations || {})[frameVariantId] || [];
+      const associatedAddonVariantIdSet = new Set(frameAssociations);
+      
+      localCartCache.items = localCartCache.items.filter((item, idx) => {
+        if (idx === index) return false;
+        if (item.isAddon && associatedAddonVariantIdSet.has(item.variantId)) {
+          return false; // Remove associated addon
+        }
+        return true;
+      });
+      
+      // Remove the frame association entry
+      if (localCartCache.frameAssociations) {
+        delete localCartCache.frameAssociations[frameVariantId];
+      }
+    } else {
+      // Clean up frame associations
+      const removedAddonVariantId = removedItem.variantId;
+      if (localCartCache.frameAssociations) {
+        Object.keys(localCartCache.frameAssociations).forEach(frameVariantId => {
+          const associations = localCartCache.frameAssociations[frameVariantId];
+          if (Array.isArray(associations)) {
+            localCartCache.frameAssociations[frameVariantId] = associations.filter(id => id !== removedAddonVariantId);
+            if (localCartCache.frameAssociations[frameVariantId].length === 0) {
+              delete localCartCache.frameAssociations[frameVariantId];
+            }
+          }
+        });
+      }
+      localCartCache.items.splice(index, 1);
+    }
     saveLocalCache();
     updateCartBadge();
   }

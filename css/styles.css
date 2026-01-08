@@ -3370,6 +3370,38 @@ button.filter-btn-modern,
     transform: translateY(0);
 }
 
+/* Mobile checkout link - hidden by default, shown on mobile */
+#mobile-checkout-link {
+    display: none;
+}
+
+#mobile-checkout-link a {
+    display: inline-block;
+    padding: 0.875rem 1.75rem;
+    background: #FF6B35;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+    text-align: center;
+}
+
+#mobile-checkout-link a:hover {
+    background: #F7931E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+/* Show checkout link on mobile only */
+@media (max-width: 768px) {
+    #mobile-checkout-link {
+        display: block;
+    }
+}
+
 @media (max-width: 968px) {
     .product-detail-layout {
         grid-template-columns: 1fr;
