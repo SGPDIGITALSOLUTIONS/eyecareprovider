@@ -350,16 +350,54 @@ body {
 
 .nhs-banner-content {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
 }
 
 .nhs-logo {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+/* Voucher box – coupon style */
+.nhs-banner-voucher-box {
+    flex: 1;
+    min-width: 200px;
+    max-width: 640px;
+    padding: 0.75rem 1.25rem;
+    border: 2px dashed #FF6B35;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fff9f5 0%, #ffefe8 100%);
+    position: relative;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.12);
+}
+
+.nhs-banner-voucher-label {
+    display: inline-block;
+    position: absolute;
+    top: -0.65rem;
+    left: 1rem;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #FF6B35;
+    border-radius: 4px;
+}
+
+.nhs-banner-voucher {
+    margin: 0;
+    padding-top: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.35;
 }
 
 .nhs-logo img {
@@ -386,8 +424,27 @@ body {
         padding: var(--spacing-sm) 0;
     }
     
+    .nhs-banner-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .nhs-banner-voucher-box {
+        max-width: none;
+        order: 1;
+    }
+    
+    .nhs-logo {
+        justify-content: center;
+        order: 2;
+    }
+    
     .nhs-logo img {
         height: 49px;
+    }
+    
+    .nhs-banner-voucher {
+        font-size: 0.875rem;
     }
     
     .nhs-text p {

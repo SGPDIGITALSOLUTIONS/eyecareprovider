@@ -123,3 +123,4 @@ window.findAddOnsProduct = findAddOnsProduct;
 
 console.log('Helper script loaded! Run findAddOnsProduct() in the console to find the Add Ons product.');
 
+
