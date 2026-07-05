@@ -87,132 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Contact Form Handling
-document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate form
-            if (validateContactForm()) {
-                // Show loading state
-                const submitButton = contactForm.querySelector('button[type="submit"]');
-                const originalText = submitButton.textContent;
-                submitButton.textContent = 'Sending Message...';
-                submitButton.disabled = true;
-                
-                // Simulate form submission (replace with actual API call)
-                setTimeout(() => {
-                    showSuccessMessage();
-                    contactForm.reset();
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                }, 2000);
-            }
-        });
-    }
-    
-    function validateContactForm() {
-        const requiredFields = contactForm.querySelectorAll('[required]');
-        let isValid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                showFieldError(field, 'This field is required');
-                isValid = false;
-            } else {
-                clearFieldError(field);
-            }
-        });
-        
-        // Validate email format
-        const emailField = contactForm.querySelector('input[type="email"]');
-        if (emailField && emailField.value) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(emailField.value)) {
-                showFieldError(emailField, 'Please enter a valid email address');
-                isValid = false;
-            }
-        }
-        
-        // Validate phone format (basic UK phone validation)
-        const phoneField = contactForm.querySelector('input[type="tel"]');
-        if (phoneField && phoneField.value) {
-            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-            if (!phoneRegex.test(phoneField.value)) {
-                showFieldError(phoneField, 'Please enter a valid phone number');
-                isValid = false;
-            }
-        }
-        
-        return isValid;
-    }
-    
-    function showFieldError(field, message) {
-        clearFieldError(field);
-        field.style.borderColor = '#dc2626';
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'field-error';
-        errorDiv.style.color = '#dc2626';
-        errorDiv.style.fontSize = '0.875rem';
-        errorDiv.style.marginTop = '0.25rem';
-        errorDiv.textContent = message;
-        
-        field.parentNode.appendChild(errorDiv);
-    }
-    
-    function clearFieldError(field) {
-        field.style.borderColor = '';
-        const existingError = field.parentNode.querySelector('.field-error');
-        if (existingError) {
-            existingError.remove();
-        }
-    }
-    
-    function showSuccessMessage() {
-        const successDiv = document.createElement('div');
-        successDiv.className = 'success-message';
-        successDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #059669;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        `;
-        successDiv.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>✓</span>
-                <span>Message sent successfully! We'll get back to you soon.</span>
-            </div>
-        `;
-        
-        document.body.appendChild(successDiv);
-        
-        // Animate in
-        setTimeout(() => {
-            successDiv.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Remove after 5 seconds
-        setTimeout(() => {
-            successDiv.style.transform = 'translateX(400px)';
-            setTimeout(() => {
-                if (successDiv.parentNode) {
-                    successDiv.remove();
-                }
-            }, 300);
-        }, 5000);
-    }
-});
+// Contact form submission is handled inline on contact.html
 
 // Navbar Background on Scroll
 window.addEventListener('scroll', function() {
@@ -517,6 +392,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Scrolled navigation shrink
+document.addEventListener('DOMContentLoaded', function() {
+    const mainNav = document.querySelector('.main-nav');
+    if (mainNav) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                mainNav.classList.add('nav-scrolled');
+            } else {
+                mainNav.classList.remove('nav-scrolled');
+            }
+        }, { passive: true });
+    }
+});
+
 // Console log for development
-console.log('I Care Services website loaded successfully! 🏥👁️');
+console.log('I Care Services website loaded successfully!');
 console.log('Professional eye health experts - Better service, better prices, convenient care.'); 

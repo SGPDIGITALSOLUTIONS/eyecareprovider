@@ -6,6 +6,7 @@ require('dotenv').config();
 
 // Import email functionality
 const { sendWelcomeEmail } = require('./email-config');
+const { sendContactEmail } = require('./lib/contact-email');
 
 // Initialize Express app
 const app = express();
@@ -233,6 +234,20 @@ async function handleNewSubscription(subscription) {
   }
 }
 
+// Contact form endpoint (Resend)
+app.post('/api/contact', async (req, res) => {
+  try {
+    const result = await sendContactEmail(req.body);
+    res.json(result);
+  } catch (error) {
+    console.error('Contact form error:', error);
+    res.status(error.statusCode || 500).json({
+      success: false,
+      error: error.message || 'Email failed to send.',
+    });
+  }
+});
+
 // Test endpoint to verify server is running
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -242,7 +257,8 @@ app.get('/api/health', (req, res) => {
     endpoints: {
       webhook: '/api/webhooks/stripe',
       checkout: '/api/create-checkout-session',
-      portal: '/api/create-portal-session'
+      portal: '/api/create-portal-session',
+      contact: '/api/contact'
     }
   });
 });

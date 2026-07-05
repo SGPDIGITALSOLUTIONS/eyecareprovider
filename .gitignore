@@ -5,6 +5,9 @@
 .env.test.local
 .env.production.local
 
+# Resend API key files
+.env.resend
+
 # Node modules
 node_modules/
 
