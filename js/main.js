@@ -232,8 +232,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const slides = document.querySelectorAll('.image-slide');
     const indicators = document.querySelectorAll('.indicator');
+    const pauseToggle = document.querySelector('.carousel-pause-toggle');
     let currentSlide = 0;
     let slideInterval;
+    let isCarouselPaused = false;
 
     if (slides.length > 0) {
         function showSlide(index) {
@@ -252,11 +254,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function startSlideshow() {
-            slideInterval = setInterval(nextSlide, 4000); // Change image every 4 seconds
+            stopSlideshow();
+            slideInterval = setInterval(nextSlide, 6000); // Change image every 6 seconds
         }
 
         function stopSlideshow() {
             clearInterval(slideInterval);
+        }
+
+        function updatePauseButtonLabel() {
+            if (!pauseToggle) return;
+            pauseToggle.textContent = isCarouselPaused ? 'Resume carousel' : 'Pause carousel';
+            pauseToggle.setAttribute('aria-pressed', String(isCarouselPaused));
         }
 
         // Add click handlers to indicators
@@ -264,20 +273,43 @@ document.addEventListener('DOMContentLoaded', function() {
             indicator.addEventListener('click', () => {
                 currentSlide = index;
                 showSlide(currentSlide);
-                stopSlideshow();
-                startSlideshow(); // Restart the interval
+                if (!isCarouselPaused) {
+                    stopSlideshow();
+                    startSlideshow(); // Restart the interval
+                }
             });
         });
 
         // Pause slideshow on hover
         const heroImageSection = document.querySelector('.hero-image-section');
         if (heroImageSection) {
-            heroImageSection.addEventListener('mouseenter', stopSlideshow);
-            heroImageSection.addEventListener('mouseleave', startSlideshow);
+            heroImageSection.addEventListener('mouseenter', () => {
+                if (!isCarouselPaused) {
+                    stopSlideshow();
+                }
+            });
+            heroImageSection.addEventListener('mouseleave', () => {
+                if (!isCarouselPaused) {
+                    startSlideshow();
+                }
+            });
+        }
+
+        if (pauseToggle) {
+            pauseToggle.addEventListener('click', () => {
+                isCarouselPaused = !isCarouselPaused;
+                if (isCarouselPaused) {
+                    stopSlideshow();
+                } else {
+                    startSlideshow();
+                }
+                updatePauseButtonLabel();
+            });
         }
 
         // Start the slideshow
         startSlideshow();
+        updatePauseButtonLabel();
     }
 });
 

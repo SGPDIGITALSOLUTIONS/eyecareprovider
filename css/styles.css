@@ -298,20 +298,20 @@ h1, h2 {
 /* Hero Sections - Diagonal Split Layout */
 .hero {
     background: var(--cta);
-    min-height: calc(100vh - 200px);
+    min-height: clamp(520px, 82vh, 760px);
     position: relative;
     overflow: visible;
     display: flex;
     align-items: center;
     padding-top: 0;
-    padding-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
     margin-top: 0;
 }
 
 .hero-diagonal-container {
     width: 100%;
     height: 100%;
-    min-height: 600px;
+    min-height: 540px;
     position: relative;
     display: flex;
 }
@@ -325,14 +325,14 @@ h1, h2 {
 
 .hero-content-section {
     width: 60%;
-    padding: var(--spacing-2xl) var(--spacing-2xl);
+    padding: var(--spacing-xl) var(--spacing-2xl);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     z-index: 2;
     background: transparent;
-    min-height: 600px;
+    min-height: 540px;
 }
 
 .hero-image-section {
@@ -366,26 +366,33 @@ h1, h2 {
     border-bottom: 1px solid var(--border-subtle);
 }
 
+.nhs-banner .container {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .nhs-banner-content {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
+    width: 60%;
+    padding: 0 var(--spacing-2xl);
 }
 
 .nhs-logo {
     display: flex;
     align-items: center;
+    gap: var(--spacing-sm);
     justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 /* Voucher box – subtle promo strip */
 .nhs-banner-voucher-box {
-    flex: 1;
-    min-width: 200px;
+    width: 100%;
     max-width: 640px;
+    margin: 0 auto;
     padding: 0.75rem 1.25rem;
     border-left: 4px solid var(--promo-accent);
     border-radius: var(--radius-md);
@@ -415,10 +422,10 @@ h1, h2 {
     line-height: 1.4;
 }
 
-.nhs-logo img {
-    height: 72px;
-    width: auto;
-    display: block;
+.nhs-banner-voucher-terms {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    color: var(--text-light);
 }
 
 .nhs-text {
@@ -435,31 +442,30 @@ h1, h2 {
 }
 
 @media (max-width: 768px) {
+    .nhs-banner .container {
+        max-width: 1200px;
+        padding: 0 var(--spacing-md);
+    }
+
     .nhs-banner {
         padding: var(--spacing-sm) 0;
     }
     
     .nhs-banner-content {
-        flex-direction: column;
-        align-items: stretch;
+        width: 100%;
+        padding: 0;
     }
     
     .nhs-banner-voucher-box {
         max-width: none;
-        order: 1;
-    }
-    
-    .nhs-logo {
-        justify-content: center;
-        order: 2;
-    }
-    
-    .nhs-logo img {
-        height: 49px;
     }
     
     .nhs-banner-voucher {
         font-size: 0.875rem;
+    }
+
+    .nhs-banner-voucher-terms {
+        font-size: 0.78rem;
     }
     
     .nhs-text p {
@@ -526,10 +532,10 @@ h1, h2 {
 }
 
 .hero-content {
-    max-width: 600px;
+    max-width: 640px;
     position: relative;
     z-index: 3;
-    min-height: 400px;
+    min-height: 360px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -544,18 +550,16 @@ h1, h2 {
 
 .hero h1 {
     font-family: var(--font-accent);
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: var(--font-weight-semibold);
-    line-height: 1.1;
+    line-height: 1.15;
     color: var(--white);
     margin-bottom: var(--spacing-md);
     position: relative;
     z-index: 1;
-    min-height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    min-height: 0;
+    display: block;
+    text-align: left;
 }
 
 
@@ -663,6 +667,8 @@ h1, h2 {
     height: 12px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 0;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -672,14 +678,40 @@ h1, h2 {
     transform: scale(1.2);
 }
 
+.indicator:focus-visible,
+.carousel-pause-toggle:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+}
+
+.carousel-pause-toggle {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    z-index: 4;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(17, 35, 35, 0.5);
+    color: var(--white);
+    padding: 0.45rem 0.7rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.carousel-pause-toggle:hover {
+    background: rgba(17, 35, 35, 0.72);
+}
+
 
 
 .hero-description {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: var(--spacing-xl);
-    line-height: 1.7;
-    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.65;
+    text-align: left;
+    max-width: 58ch;
 }
 
 .hero-description a {
@@ -700,27 +732,32 @@ h1, h2 {
 .area-search {
     background: rgba(255, 255, 255, 0.95);
     border-radius: var(--radius-xl);
-    padding: var(--spacing-lg);
-    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: var(--spacing-md) 0 var(--spacing-lg);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-lg);
     border: 1px solid rgba(215, 221, 225, 0.3);
-    /* Prevent layout shift */
-    min-height: 120px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: var(--spacing-xs);
 }
 
 .area-search h3 {
     font-size: 1.125rem;
     font-weight: var(--font-weight-semibold);
     color: var(--headers);
-    margin-bottom: var(--spacing-md);
-    text-align: center;
-    /* Prevent layout shift */
-    min-height: 28px;
+    margin-bottom: var(--spacing-xs);
+    text-align: left;
     line-height: 1.4;
+}
+
+.search-label {
+    display: block;
+    color: var(--headers);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    text-align: left;
 }
 
 .search-container {
@@ -749,8 +786,8 @@ h1, h2 {
 }
 
 .search-input::placeholder {
-    color: var(--text-light);
-    font-style: italic;
+    color: #58656f;
+    font-style: normal;
 }
 
 .search-button {
@@ -779,6 +816,27 @@ h1, h2 {
     min-height: 0;
     overflow: hidden;
     transition: all 0.3s ease;
+}
+
+.coverage-helper {
+    margin: 0;
+    color: var(--headers);
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.coverage-secondary-link {
+    display: inline-flex;
+    width: fit-content;
+    color: var(--headers);
+    font-weight: 600;
+    text-underline-offset: 2px;
+    margin-top: 0.25rem;
+}
+
+.coverage-secondary-link:hover {
+    color: var(--cta);
 }
 
 .coverage-result.show {
@@ -918,6 +976,33 @@ h1, h2 {
 .hero-features {
     display: flex;
     gap: var(--spacing-lg);
+}
+
+.hero-trust-bar {
+    background: #f4f8f8;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--spacing-sm) 0;
+}
+
+.hero-trust-items {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.hero-trust-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--headers);
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: var(--white);
+    border: 1px solid var(--border-subtle);
 }
 
 .feature {
@@ -7183,6 +7268,7 @@ button.filter-btn-modern,
     
     .hero h1 {
         font-size: 2.5rem;
+        text-align: center;
     }
     
     .hero-buttons {
@@ -7214,6 +7300,29 @@ button.filter-btn-modern,
     
     .search-button {
         width: 100%;
+    }
+
+    .area-search h3,
+    .search-label,
+    .hero-description,
+    .coverage-helper {
+        text-align: center;
+    }
+
+    .coverage-secondary-link {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-trust-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .carousel-pause-toggle {
+        left: 1rem;
+        bottom: 0.85rem;
+        font-size: 0.76rem;
+        padding: 0.4rem 0.6rem;
     }
     
     .profile-content {
@@ -8520,7 +8629,12 @@ button.filter-btn-modern,
         max-width: 280px;
         text-align: center;
     }
-    
+
+    .search-label,
+    .coverage-helper {
+        text-align: center;
+    }
+
     /* Extra Small Mobile Carousel */
     .hero-image-section {
         height: auto;
@@ -8593,6 +8707,17 @@ button.filter-btn-modern,
     .search-button {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: 0.9rem;
+    }
+
+    .hero-trust-items {
+        grid-template-columns: 1fr;
+    }
+
+    .carousel-pause-toggle {
+        left: 0.75rem;
+        bottom: 0.65rem;
+        font-size: 0.72rem;
+        padding: 0.35rem 0.5rem;
     }
 }
 

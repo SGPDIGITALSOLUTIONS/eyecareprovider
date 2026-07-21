@@ -66,3 +66,6 @@ Thumbs.db
 # Stripe CLI
 stripe-cli.zip
 .vercel
+
+# Documentation
+*.md
