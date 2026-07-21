@@ -1005,6 +1005,41 @@ h1, h2 {
     border: 1px solid var(--border-subtle);
 }
 
+.discount-offer-section {
+    padding: var(--spacing-lg) 0;
+    background: var(--background);
+}
+
+.discount-offer-link {
+    display: block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.discount-offer-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.discount-offer-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.discount-offer-section-shop {
+    padding: var(--spacing-md) 0 var(--spacing-lg);
+    background: var(--background);
+}
+
+.discount-offer-inline {
+    max-width: 760px;
+    margin: 0 auto var(--spacing-xl);
+}
+
 .home-visit-video {
     padding: var(--spacing-xl) 0;
     background: var(--background);
@@ -10288,6 +10323,14 @@ button.filter-btn-modern,
 @media (max-width: 768px) {
     .shop-page .shop-filters-modern {
         padding: var(--spacing-sm);
+    }
+
+    .discount-offer-section {
+        padding: var(--spacing-md) 0;
+    }
+
+    .discount-offer-inline {
+        margin-bottom: var(--spacing-lg);
     }
 }
 
