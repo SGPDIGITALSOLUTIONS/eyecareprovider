@@ -590,6 +590,11 @@ h1, h2 {
     object-position: center;
 }
 
+/* Keep Petru's head visible in first hero slide */
+.image-slide:first-child img {
+    object-position: center top;
+}
+
 .image-caption {
     position: absolute;
     bottom: 2rem;
