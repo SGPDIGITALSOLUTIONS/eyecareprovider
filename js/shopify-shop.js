@@ -167,6 +167,25 @@ function getBrand(product) {
 }
 
 /**
+ * Extract model from product title by removing make prefix.
+ */
+function getModel(product, make) {
+  const title = (product.title || '').trim();
+  const makeText = (make || '').trim();
+  if (!title) return '';
+  if (!makeText) return title;
+
+  const lowerTitle = title.toLowerCase();
+  const lowerMake = makeText.toLowerCase();
+
+  if (lowerTitle.startsWith(`${lowerMake} `)) {
+    return title.slice(makeText.length).trim();
+  }
+
+  return title;
+}
+
+/**
  * Map color names to CSS colors
  */
 function getColorValue(colorName) {
@@ -319,6 +338,7 @@ function getOptimizedImageUrl(url, width = 400) {
  */
 function renderProductCard(product, favorites) {
   const brand = getBrand(product);
+  const model = getModel(product, brand);
   const isFavorite = favorites.includes(product.id);
   const price = parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2);
   const colorVariants = getColorVariants(product);
@@ -367,8 +387,10 @@ function renderProductCard(product, favorites) {
       </div>
       <div class="product-card-info">
         <div class="product-card-info-header">
-          <p class="product-brand">${brand}</p>
-          <h3 class="product-title">${product.title}</h3>
+          <h3 class="product-name-line">
+            <span class="product-make">${brand}</span>
+            <span class="product-model">${model}</span>
+          </h3>
         </div>
         <div class="product-card-footer">
           <p class="product-price">£${price}</p>
