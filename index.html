@@ -298,61 +298,59 @@
     </section>
 
     <!-- What We Do Section -->
-    <section class="what-we-do">
+    <section class="what-we-do" id="home-services">
         <div class="container">
             <h2>What Does Professional Home Eye Care Include?</h2>
-            <p>We bring comprehensive eye health services directly to your home, providing the same clinical standards as a traditional practice with the added convenience of not having to travel.</p>
-            
-            <div class="section-cta" style="text-align: center; margin: 2rem 0;">
-                <a href="advancedeyecare.html" class="btn-primary">Learn More About Our Services</a>
-            </div>
-            
-            <div class="services-grid">
-                <div class="service-item">
+            <p>Comprehensive eye care delivered in your home, with the same professional standards you would expect from a traditional practice.</p>
+
+            <div class="clinical-services-grid">
+                <article class="service-column">
                     <div class="service-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                             <circle cx="12" cy="12" r="3"/>
                         </svg>
                     </div>
-                    <h3>Professional Eye Examinations & Consultation</h3>
-                    <p>Complete <a href="advancedeyecare.html" title="NHS and private eye examinations">eye health assessments</a> using professional diagnostic equipment, with expert advice on eye health, prescription updates, and personalized care plans. <a href="contact.html" title="Book your eye test">Book your NHS or private eye test</a> today.</p>
-                </div>
-                
-                <div class="service-item">
+                    <h3>Eye Examinations</h3>
+                    <p>Comprehensive eye assessments, clinical advice, and personalised recommendations delivered in your home.</p>
+                    <a href="contact.html" class="service-column-link">Explore eye examinations</a>
+                </article>
+
+                <article class="service-column">
                     <div class="service-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 12l2 2 4-4"/>
                             <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
                             <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
                         </svg>
                     </div>
-                    <h3>Prescription & Premium Technology</h3>
-                    <p>Professional eyewear consultations with fitting services, premium Hoya lens technologies available, and state-of-the-art portable diagnostic equipment.</p>
-                </div>
-                
-                <div class="service-item">
+                    <h3>Prescription &amp; Products</h3>
+                    <p>Premium eyewear products, accurate fitting, and tailored recommendations to suit your prescription and lifestyle.</p>
+                    <a href="products.html" class="service-column-link">View our products</a>
+                </article>
+
+                <article class="service-column">
                     <div class="service-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                             <path d="M2 17l10 5 10-5"/>
                             <path d="M2 12l10 5 10-5"/>
                         </svg>
                     </div>
-                    <h3>Specialized Care Services</h3>
-                    <p>Private MECS services, glaucoma monitoring, and diabetic eye screening for ongoing eye health management. These specialized services are available privately.</p>
-                </div>
-                
-                <div class="service-item">
-                    <div class="service-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 20A7 7 0 0 1 4 13C4 8 8 4 13 4h7v7a9 9 0 0 1-9 9z"/>
-                            <path d="M20 4c-4 0-7 3-7 7"/>
-                        </svg>
-                    </div>
-                    <h3>Net Zero</h3>
-                    <p>Our Net Zero commitment focuses on reducing emissions through smarter travel planning, paper-light delivery, and more sustainable procurement across our mobile eye care services.</p>
-                </div>
+                    <h3>Specialist Eye Care</h3>
+                    <p>Private MECS, glaucoma monitoring, and diabetic eye screening where clinically appropriate.</p>
+                    <a href="contact.html" class="service-column-link">Explore specialist care</a>
+                </article>
+            </div>
+
+            <div class="sustainability-strip">
+                <h3>Designed with sustainability in mind</h3>
+                <p>Smarter travel planning, reduced paper use, and lower-impact delivery help minimise the environmental impact of our mobile service.</p>
+                <a href="advanced-eyecare-plan.html" class="service-column-link">Our sustainability approach</a>
+            </div>
+
+            <div class="section-cta section-cta-services">
+                <a href="contact.html" class="btn-primary">Explore All Services</a>
             </div>
         </div>
     </section>
@@ -361,7 +359,7 @@
     <section class="testimonials">
         <div class="container">
             <h2>Real Results Delivered by Professional Eye Care</h2>
-            <p>Hear How We Have Helped Families Maintain Their Eye Health</p>
+            <p>Trusted feedback from families, caregivers, and patients across Yorkshire.</p>
             
             <div class="testimonials-grid">
                 <div class="testimonial featured">
@@ -433,20 +431,20 @@
     <!-- Why Choose Us Section -->
     <section class="why-choose-us">
         <div class="container">
-            <h2>Why choose I Care Service?</h2>
+            <h2>Why Choose I Care Service?</h2>
             <p>Our optometrists are qualified professionals with extensive experience, supported by advanced equipment and a commitment to providing the highest standards of eye care in your home.</p>
             
             <div class="benefits-tabs">
                 <div class="tab-buttons">
-                    <button class="tab-btn active" onclick="showTab('expertise')">
+                    <button class="tab-btn active" onclick="showTab('expertise', this)">
                         <span class="tab-icon icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
                         <span>Expertise</span>
                     </button>
-                    <button class="tab-btn" onclick="showTab('technology')">
+                    <button class="tab-btn" onclick="showTab('technology', this)">
                         <span class="tab-icon icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 9a3 3 0 0 0-6 0v9"/><path d="M12 2v2"/><path d="M4 6l2-2"/><path d="M20 6l-2-2"/></svg></span>
                         <span>Technology</span>
                     </button>
-                    <button class="tab-btn" onclick="showTab('convenience')">
+                    <button class="tab-btn" onclick="showTab('convenience', this)">
                         <span class="tab-icon icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
                         <span>Convenience</span>
                     </button>
@@ -503,11 +501,11 @@
     <section class="ready-to-transform">
         <div class="container">
             <h2>Ready to Experience Professional Eye Care at Home?</h2>
-            <p>Book a free consultation to discuss your eye health needs and see how we can provide convenient, professional care in your own home.</p>
+            <p>Book a consultation to discuss your eye health needs and arrange professional home eye care at a time that suits you.</p>
             
             <div class="transform-cta-buttons">
                 <a href="contact.html" class="cta-button primary large">Request an Appointment</a>
-                <a href="advancedeyecare.html" class="cta-button secondary large">Explore Services</a>
+                <a href="#home-services" class="cta-button secondary large">View Home Services</a>
             </div>
         </div>
     </section>
@@ -595,7 +593,7 @@
     <script src="js/cookie-consent.js"></script>
     
     <script>
-    function showTab(tabName) {
+    function showTab(tabName, triggerButton) {
         // Hide all tab contents
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.classList.remove('active');
@@ -608,7 +606,9 @@
         
         // Show selected tab and activate button
         document.getElementById(tabName).classList.add('active');
-        event.target.closest('.tab-btn').classList.add('active');
+        if (triggerButton) {
+            triggerButton.classList.add('active');
+        }
     }
     </script>
     
