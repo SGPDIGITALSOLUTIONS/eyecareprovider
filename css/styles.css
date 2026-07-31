@@ -1012,6 +1012,8 @@ h1, h2 {
 
 .discount-offer-link {
     display: block;
+    max-width: 70%;
+    margin: 0 auto;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
@@ -10331,6 +10333,10 @@ button.filter-btn-modern,
 
     .discount-offer-inline {
         margin-bottom: var(--spacing-lg);
+    }
+
+    .discount-offer-link {
+        max-width: 100%;
     }
 }
 
