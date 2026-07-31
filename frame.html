@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Details - I Care Services Providers Ltd</title>
+    <title>Frame Details | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Customize your frame with lens options and add your prescription">
+    <meta name="description" content="Configure your selected frame, lens options, and related order details.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/frame.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -175,17 +177,25 @@
     <script src="js/find-addons-product.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/shopify-product-detail.js"></script>
-    
-    <!-- Vercel Analytics (only on production) -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      // Only load Vercel Analytics on production (not localhost)
-      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
         window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-        const script = document.createElement('script');
+
+        var script = document.createElement('script');
         script.defer = true;
         script.src = '/_vercel/insights/script.js';
         document.head.appendChild(script);
-      }
+      })();
     </script>
 </body>
 </html>

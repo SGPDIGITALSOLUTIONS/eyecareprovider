@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoya Lenses - I Care Services Providers Ltd</title>
+    <title>Hoya Lenses Explained | Premium Lens Technology | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Hoya premium lens technology including Hi-Vision Meiryo coatings, Sensity photochromic lenses, PNX impact-resistant lenses, and specialized occupational solutions.">
+    <meta name="description" content="Learn about Hoya lens technology, including coatings, photochromic lenses, and specialist options to improve comfort, clarity, and everyday vision.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/hoya-lenses.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -422,11 +424,25 @@
     <script src="js/cart.js"></script>
     <script src="js/add-cart-icon.js"></script>
     <script src="js/cookie-consent.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 

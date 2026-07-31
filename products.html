@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Products - I Care Services Providers Ltd</title>
+    <title>Eyewear Products & Lens Options | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Premium eyewear products including Hoya lenses, designer frames, and specialized optical solutions. Quality eyewear for every lifestyle and need.">
+    <meta name="description" content="Discover premium eyewear products, lens upgrades, and Hoya lens options designed for comfort, clarity, and your prescription needs.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/products.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -69,7 +71,7 @@
 
             <div class="discount-offer-inline">
                 <a href="shop.html" class="discount-offer-link" aria-label="View 25 percent offer in shop">
-                    <img src="assets/images/carousel/25%25offer.png" alt="25 percent off frames and lenses until 30 September 2026" class="discount-offer-image" loading="lazy">
+                    <img src="assets/images/gallery/eyecareproviderlogo.jpg" alt="I Care Service Provider logo" class="discount-offer-image" loading="lazy">
                 </a>
             </div>
             
@@ -275,11 +277,25 @@
           });
     </script>
     <script src="js/shopify-products.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 

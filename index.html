@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Care Service Provider Ltd - Professional Eye Health Experts</title>
+    <title>Home Eye Tests in Yorkshire | NHS & Private Optician | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Professional mobile optician providing home eye tests across Yorkshire. NHS & private eye examinations, Hoya lenses, MECS services. Book your home visit today - 07737886713">
-    <meta name="keywords" content="home eye test Yorkshire, mobile optician, NHS eye test home, private eye examination, Hoya lenses, MECS services, optometrist home visit, eye care Yorkshire">
+    <meta name="description" content="Mobile optician providing home eye tests across Yorkshire. NHS and private eye examinations, glasses and Hoya lenses. Book your home visit with I Care Service.">
     <meta name="author" content="I Care Service Provider Ltd">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.icareservices.co.uk/">
@@ -255,7 +254,7 @@
     <section class="discount-offer-section">
         <div class="container">
             <a href="shop.html" class="discount-offer-link" aria-label="View 25 percent offer in shop">
-                <img src="assets/images/carousel/25%25offer.png" alt="25 percent off frames and lenses until 30 September 2026" class="discount-offer-image" loading="lazy">
+                <img src="assets/images/gallery/eyecareproviderlogo.jpg" alt="I Care Service Provider logo" class="discount-offer-image" loading="lazy">
             </a>
         </div>
     </section>
@@ -606,11 +605,25 @@
         }
     }
     </script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 

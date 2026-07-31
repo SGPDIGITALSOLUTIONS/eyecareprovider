@@ -393,12 +393,26 @@
     <script src="js/cart.js"></script>
     <script src="js/add-cart-icon.js"></script>
     <script src="js/cookie-consent.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 

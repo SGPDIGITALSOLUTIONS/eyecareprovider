@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Services - I Care Services Providers Ltd</title>
+    <title>Home Eye Care Services | NHS & Private Appointments | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Comprehensive eye care services including home visits, eye examinations, contact lens fittings, spectacle dispensing, and emergency eye care. NHS and private appointments available.">
+    <meta name="description" content="Explore our home eye care services including eye examinations, dispensing, MECS support, and follow-up care. NHS and private appointments available across Yorkshire.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/advancedeyecare.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -370,11 +372,25 @@
         });
     });
     </script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 

@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - I Care Services Providers Ltd</title>
+    <title>Contact I Care Service | Book a Home Eye Test in Yorkshire</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Contact I Care Services mobile optician Yorkshire. Book home eye test, NHS appointments, MECS services. Call 07737886713 or request appointment online. Emergency eye care available.">
-    <meta name="keywords" content="contact mobile optician Yorkshire, book home eye test, NHS eye test appointment, emergency eye care, optometrist contact Yorkshire, eye examination booking">
+    <meta name="description" content="Book a home eye test with I Care Service. Contact our Yorkshire mobile optician for NHS and private appointments, service queries, and availability in your area.">
     <meta name="author" content="I Care Services Providers Ltd">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.icareservices.co.uk/contact.html">
@@ -634,11 +633,25 @@
         });
         
     </script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 

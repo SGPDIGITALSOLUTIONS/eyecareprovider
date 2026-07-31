@@ -6,6 +6,8 @@
     <title>Data Protection - I Care Services Providers Ltd</title>
     <link rel="stylesheet" href="css/styles.css">
     <meta name="description" content="Data Protection information for I Care Services Providers Ltd - Our commitment to protecting your personal data in accordance with UK GDPR and data protection laws.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/data-protection.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -292,12 +294,26 @@
     <script src="js/cart.js"></script>
     <script src="js/add-cart-icon.js"></script>
     <script src="js/cookie-consent.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 

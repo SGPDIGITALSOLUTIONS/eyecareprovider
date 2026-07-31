@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - I Care Services Providers Ltd</title>
+    <title>Privacy Policy | I Care Service Provider Ltd</title>
     <link rel="stylesheet" href="css/styles.css">
-    <meta name="description" content="Privacy Policy for I Care Services Providers Ltd - How we collect, use, and protect your personal information in accordance with GDPR and UK data protection laws.">
+    <meta name="description" content="How I Care Service Provider Ltd collects, uses, stores, and protects personal data in line with UK GDPR and data protection regulations.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.icareservices.co.uk/privacy-policy.html">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -230,12 +232,26 @@
     <script src="js/cart.js"></script>
     <script src="js/add-cart-icon.js"></script>
     <script src="js/cookie-consent.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 

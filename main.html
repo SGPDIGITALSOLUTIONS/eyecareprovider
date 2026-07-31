@@ -90,12 +90,12 @@
                         <a href="https://www.hoyavision.com/" class="carousel-nav-card" target="_blank" rel="noopener">Hoya Lenses</a>
                     </div>
                     <div class="image-slide">
-                        <img src="assets/images/carousel/eye-health.jpg" alt="Eye health assessment" />
+                        <img src="assets/images/carousel/Hoya.jpg" alt="Eye health assessment" />
                         <div class="image-caption">Comprehensive Eye Health</div>
                         <a href="advancedeyecare.html" class="carousel-nav-card">Our Services</a>
                     </div>
                     <div class="image-slide">
-                        <img src="assets/images/carousel/personal-care.jpg" alt="Personal care approach" />
+                        <img src="assets/images/carousel/TrialFrame.jpeg" alt="Personal care approach" />
                         <div class="image-caption">Personal Attention</div>
                         <a href="contact.html" class="carousel-nav-card">Book Now</a>
                     </div>
@@ -356,11 +356,25 @@
     <script src="js/cart.js"></script>
     <script src="js/add-cart-icon.js"></script>
     <script src="js/cookie-consent.js"></script>
-    
-    <!-- Vercel Analytics -->
+
+    <!-- Vercel Analytics (host-aware) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      (function () {
+        var host = window.location.hostname;
+        var isVercelHost = host.endsWith('.vercel.app') || host.endsWith('.vercel.sh');
+        var forceEnable = window.__ENABLE_VERCEL_ANALYTICS__ === true;
+
+        if (!isVercelHost && !forceEnable) {
+          return;
+        }
+
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js';
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html> 
