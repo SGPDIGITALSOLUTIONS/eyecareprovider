@@ -130,7 +130,10 @@ let lensOptions = {
  */
 function getProductHandle() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('handle') || params.get('product');
+  return params.get('handle') || params.get('product') ||
+    (window.location.pathname.startsWith('/frames/')
+      ? decodeURIComponent(window.location.pathname.slice('/frames/'.length))
+      : null);
 }
 
 /**

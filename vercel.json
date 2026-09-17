@@ -1,4 +1,11 @@
 {
   "version": 2,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/frames/:handle", "destination": "/api/frame?handle=:handle" },
+    { "source": "/frame-sitemap.xml", "destination": "/api/frame-sitemap" }
+  ],
+  "functions": {
+    "api/frame.js": { "includeFiles": "frame.html" }
+  }
 }

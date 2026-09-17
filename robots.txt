@@ -2,7 +2,8 @@ User-agent: *
 Allow: /
 
 # XML Sitemap
-Sitemap: https://www.icareservices.co.uk/sitemap.xml
+Sitemap: https://www.eyecareprovider.co.uk/sitemap.xml
+Sitemap: https://www.eyecareprovider.co.uk/frame-sitemap.xml
 
 # Block access to sensitive areas
 Disallow: /api/

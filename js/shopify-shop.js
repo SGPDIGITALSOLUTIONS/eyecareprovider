@@ -369,7 +369,7 @@ function renderProductCard(product, favorites) {
   return `
     <div class="product-card-specsavers" data-product-id="${product.id}" data-selected-variant-id="${firstVariantId}">
       <div class="product-card-image-wrapper">
-        <a href="frame.html?handle=${product.handle}" class="product-card-link" onclick="return window.updateProductLink(event, '${product.id}')">
+        <a href="/frames/${encodeURIComponent(product.handle)}" class="product-card-link" onclick="return window.updateProductLink(event, '${product.id}')">
           <div class="product-card-image">
             ${displayImage
               ? `<img src="${optimizedImage}" alt="${product.featuredImage?.altText || product.title}" loading="lazy" class="product-main-img">`
