@@ -42,7 +42,12 @@
 .shop-page .shop-offer { padding: 0.6rem 1.25rem; }
 .shop-page .shop-offer strong {
     font: 600 1.25rem var(--font-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
 }
+.shop-page .shop-offer-icon { flex: 0 0 22px; color: var(--warm-teal); }
 .shop-page .shop-offer span {
     padding-left: 1.5rem;
     border-left: 1px solid var(--secondary-accent);
@@ -57,10 +62,27 @@
     gap: 0.65rem 1.5rem;
     padding: 0.85rem 1.25rem;
 }
-.shop-page .shop-filter-all { grid-area: all; }
+.shop-page .shop-filter-all { grid-area: all; position: relative; align-self: stretch; }
+.shop-page .shop-filter-all::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.325rem;
+    width: calc(200% + 1.5rem);
+    border-bottom: 1px solid #e3e9ec;
+    pointer-events: none;
+}
 .shop-page .shop-filter-gender { grid-area: gender; }
-.shop-page .shop-filter-material { grid-area: material; }
-.shop-page .shop-filter-shape { grid-area: shape; }
+.shop-page .shop-filter-material {
+    grid-area: material;
+    border-left: 1px solid #e3e9ec;
+    padding-left: 1.5rem;
+}
+.shop-page .shop-filter-shape {
+    grid-area: shape;
+    border-top: 1px solid #e3e9ec;
+    padding-top: 0.65rem;
+}
 .shop-page .shop-filter-type { grid-area: type; }
 .shop-page .filter-group {
     display: flex;
@@ -161,6 +183,7 @@
     .shop-page .nav-item { padding-inline: 0.4rem; font-size: 0.8rem; }
 }
 @media (max-width: 900px) {
+    .shop-page .shop-filter-material { border-left: 0; padding-left: 0; }
     .shop-page .shop-filters-modern {
         grid-template-areas: "all sort" "gender gender" "material material" "shape shape" "type type";
     }
@@ -168,6 +191,8 @@
     .shop-page .shop-help p { flex-basis: 50%; }
 }
 @media (max-width: 600px) {
+    .shop-page .shop-filter-all::after { display: none; }
+    .shop-page .filter-sort-group { border-bottom: 1px solid #e3e9ec; padding-bottom: 0.8rem; }
     .shop-page .page-hero { padding: 1.4rem 0; }
     .shop-page .page-hero p { font-size: 1rem; }
     .shop-page .shop-offer { flex-direction: column; gap: 0.2rem; text-align: center; }
