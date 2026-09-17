@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Eyewear Frames Online | I Care Service</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/shop.css">
     <meta name="description" content="Browse frame collections for men, women, and unisex styles. Choose your perfect eyewear and complete your order with tailored lens options.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.icareservices.co.uk/shop.html">
@@ -35,9 +36,9 @@
                 <a href="advancedeyecare.html" class="nav-item">Eyecare</a>
                 <a href="advanced-eyecare-plan.html" class="nav-item">Net Zero</a>
                 <a href="products.html" class="nav-item">Products</a>
-                <a href="shop.html" class="nav-item active">Shop</a>
+                <a href="shop.html" class="nav-item active" aria-current="page">Shop</a>
                 <a href="contact.html" class="nav-item">Contact</a>
-                <a href="cart.html" class="nav-item cart-icon">
+                <a href="cart.html" class="nav-item cart-icon" aria-label="Shopping cart">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
@@ -56,16 +57,17 @@
             <div class="hero-content">
                 <span class="category-tag">ONLINE FRAME SHOP</span>
                 <h1>Find Frames That Fit Your Style</h1>
-                <p>Browse our curated eyewear range and filter by shape, material, and fit to find your ideal frame.</p>
+                <p>Browse our eyewear range by shape, material and fit.</p>
             </div>
         </div>
     </section>
 
     <section class="discount-offer-section discount-offer-section-shop">
         <div class="container">
-            <a href="shop.html" class="discount-offer-link" aria-label="View 25 percent offer in shop">
-                <img src="assets/images/carousel/25%25offer.png" alt="25 percent off frames and lenses until 30 September 2026" class="discount-offer-image" loading="lazy">
-            </a>
+            <div class="shop-offer">
+                <strong>25% off frames and lenses</strong>
+                <span>Until <time datetime="2026-09-30">30 September 2026</time></span>
+            </div>
         </div>
     </section>
 
@@ -74,12 +76,12 @@
         <div class="container">
             <!-- Filter Bar -->
             <div class="shop-filters-modern">
-                <div class="filter-group">
+                <div class="filter-group shop-filter-all">
                     <button class="filter-btn-modern active" data-filter="all" data-category="all">
                         <span>All Frames</span>
                     </button>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group shop-filter-gender">
                     <span class="filter-group-label">Gender:</span>
                     <button class="filter-btn-modern" data-filter=" Mens" data-category="gender">
                         <span>Men</span>
@@ -91,7 +93,7 @@
                         <span>Unisex</span>
                     </button>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group shop-filter-shape">
                     <span class="filter-group-label">Shape:</span>
                     <button class="filter-btn-modern" data-filter=" Rectangle" data-category="shape">
                         <span>Rectangle</span>
@@ -115,7 +117,7 @@
                         <span>Geometric</span>
                     </button>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group shop-filter-material">
                     <span class="filter-group-label">Material:</span>
                     <button class="filter-btn-modern" data-filter=" Metal" data-category="material">
                         <span>Metal</span>
@@ -124,7 +126,7 @@
                         <span>Plastic</span>
                     </button>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group shop-filter-type">
                     <span class="filter-group-label">Frame Type:</span>
                     <button class="filter-btn-modern" data-filter=" Full Frame" data-category="frameType">
                         <span>Full Frame</span>
@@ -135,9 +137,9 @@
                 </div>
                 <div class="filter-sort-group">
                     <div class="sort-dropdown">
-                        <label for="sort-select" style="display: none;">Sort by</label>
+                        <label for="sort-select">Sort by:</label>
                         <select id="sort-select" class="sort-select">
-                            <option value="recommended">Sort by: Recommended</option>
+                            <option value="recommended">Recommended</option>
                             <option value="price-low">Price: Low to High</option>
                             <option value="price-high">Price: High to Low</option>
                             <option value="name-asc">Name: A to Z</option>
@@ -163,15 +165,12 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="shop-help">
         <div class="container">
-            <div class="cta-content">
-                <h2>Need Help Choosing?</h2>
-                <p>Contact us for personalized frame recommendations and professional fitting services</p>
-                <div class="cta-buttons">
-                    <a href="contact.html" class="btn-primary">Book Consultation</a>
-                    <a href="products.html" class="btn-secondary">Back to Products</a>
-                </div>
+            <div class="shop-help-content">
+                <h2>Need help choosing?</h2>
+                <p>Our friendly team is here to help you find the right frames.</p>
+                <a href="contact.html" class="btn-primary">Speak to our team</a>
             </div>
         </div>
     </section>
