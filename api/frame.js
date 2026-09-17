@@ -1,8 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import template from './frame-template.js';
 
 const site = 'https://www.eyecareprovider.co.uk';
-const template = readFileSync(fileURLToPath(new URL('../frame.html', import.meta.url)), 'utf8');
 
 const html = (value = '') => String(value).replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
